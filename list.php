@@ -135,7 +135,7 @@
 
 		<!-- TODO: LOGRAR QUE NUNCA SE SALGA DE LA PAGINA, AKA: ONE PAGE APPLICATION -->
 		<h1>List-A</h1>
-		<!-- pepe -->
+
 		<button class="sign">sign up</button>
 		<button class="sign">sign in</button>
 	</section>
