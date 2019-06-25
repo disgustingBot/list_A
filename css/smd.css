@@ -1,0 +1,417 @@
+/*___________________________________SMD = Shadow Material Design___________________________________*/
+
+
+
+:root {
+    /*VARIABLES DE PERSONALIZACION DE PAGINA*/
+    /* la idea de esto es que sean como controles con los
+    que hacer facilmente diferentes versiones de la pagina */
+
+
+
+    /* SIZES */
+    /* Al editar los tamaños, hacerlo siempre sin unidades
+    sabiendo que el numero corresponde a la cantidad de pixeles */
+    --size1a: 38; --size1b: 80; --size1c: 64; --size1d:128;
+    --size2a: 33; --size2b: 63; --size2c: 53; --size2d:100;
+    --size3a: 29; --size3b: 50; --size3c: 40; --size3d: 56;
+    --size4a: 24; --size4b: 34; --size4c: 23; --size4d: 35;
+    --size5a: 14; --size5b: 18; --size5c: 18; --size5d: 23;
+    --size6a: 14; --size6b: 16; --size6c: 14; --size6d: 19;
+    --size7a: 12; --size7b: 14; --size7c: 12; --size7d: 18;
+    --size8a: 10; --size8b: 12; --size8c: 10; --size8d: 15;
+
+
+
+    --size1: calc(var(--size1a) * 1px);
+    --size2: calc(var(--size2a) * 1px);
+    --size3: calc(var(--size3a) * 1px);
+    --size4: calc(var(--size4a) * 1px);
+    --size5: calc(var(--size5a) * 1px);
+    --size6: calc(var(--size6a) * 1px);
+    --size7: calc(var(--size7a) * 1px);
+    --size8: calc(var(--size8a) * 1px);
+}/* ------------------------------------------- MEDIA QUERIES ------------------------------------------- */
+@media     screen and (min-width: 360px)  {
+  :root {
+	  --size1: calc(calc(var(--size1a) * 1px) + (var(--size1b) - var(--size1a)) * ((100vw - 360px) / (768 - 360)));
+	  --size2: calc(calc(var(--size2a) * 1px) + (var(--size2b) - var(--size2a)) * ((100vw - 360px) / (768 - 360)));
+	  --size3: calc(calc(var(--size3a) * 1px) + (var(--size3b) - var(--size3a)) * ((100vw - 360px) / (768 - 360)));
+	  --size4: calc(calc(var(--size4a) * 1px) + (var(--size4b) - var(--size4a)) * ((100vw - 360px) / (768 - 360)));
+	  --size5: calc(calc(var(--size5a) * 1px) + (var(--size5b) - var(--size5a)) * ((100vw - 360px) / (768 - 360)));
+	  --size6: calc(calc(var(--size6a) * 1px) + (var(--size6b) - var(--size6a)) * ((100vw - 360px) / (768 - 360)));
+	  --size7: calc(calc(var(--size7a) * 1px) + (var(--size7b) - var(--size7a)) * ((100vw - 360px) / (768 - 360)));
+	  --size8: calc(calc(var(--size8a) * 1px) + (var(--size8b) - var(--size8a)) * ((100vw - 360px) / (768 - 360)));
+	}
+}@media screen and (min-width: 576px) {:root {}}
+@media screen and (min-width: 768px) {
+    :root {
+      --size1: calc(calc(var(--size1c) * 1px) + (var(--size1d) - var(--size1c)) * ((100vw - 768px) / (1200 - 768)));
+      --size2: calc(calc(var(--size2c) * 1px) + (var(--size2d) - var(--size2c)) * ((100vw - 768px) / (1200 - 768)));
+      --size3: calc(calc(var(--size3c) * 1px) + (var(--size3d) - var(--size3c)) * ((100vw - 768px) / (1200 - 768)));
+      --size4: calc(calc(var(--size4c) * 1px) + (var(--size4d) - var(--size4c)) * ((100vw - 768px) / (1200 - 768)));
+      --size5: calc(calc(var(--size5c) * 1px) + (var(--size5d) - var(--size5c)) * ((100vw - 768px) / (1200 - 768)));
+      --size6: calc(calc(var(--size6c) * 1px) + (var(--size6d) - var(--size6c)) * ((100vw - 768px) / (1200 - 768)));
+      --size7: calc(calc(var(--size7c) * 1px) + (var(--size7d) - var(--size7c)) * ((100vw - 768px) / (1200 - 768)));
+      --size8: calc(calc(var(--size8c) * 1px) + (var(--size8d) - var(--size8c)) * ((100vw - 768px) / (1200 - 768)));
+    }
+}@media screen and (min-width:  992px) {:root {}}
+@media  screen and (min-width: 1200px) {
+    :root {
+      --size1: calc(var(--size1d) * 1px);
+      --size2: calc(var(--size2d) * 1px);
+      --size3: calc(var(--size3d) * 1px);
+      --size4: calc(var(--size4d) * 1px);
+      --size5: calc(var(--size5d) * 1px);
+      --size6: calc(var(--size6d) * 1px);
+      --size7: calc(var(--size7d) * 1px);
+      --size8: calc(var(--size8d) * 1px);
+    }
+}
+
+
+
+
+/*----------------------------ESCALA MODULAR DE TAMAÑOS DE LETRAS----------------------------*/
+h1 {font-size: 22.128px;}
+@media screen and (min-width: 400px)  {h1 {font-size: calc(4.2788461538vw + 5.0126153846px);}}
+@media screen and (min-width: 1024px) {h1 {font-size: 48.828px;}}
+h2 {font-size: 20.739px;}
+@media screen and (min-width: 400px)  {h2 {font-size: calc(2.9365384615vw + 8.9928461538px);}}
+@media screen and (min-width: 1024px) {h2 {font-size: 39.063px;}}
+h3 {font-size: 19.436px;}
+@media screen and (min-width: 400px)  {h3 {font-size: calc(1.8932692308vw + 11.8629230769px);}}
+@media screen and (min-width: 1024px) {h3 {font-size: 31.25px;}}
+h4 {font-size: 18.216px;}
+@media screen and (min-width: 400px)  {h4 {font-size: calc(1.0871794872vw + 13.8672820513px);}}
+@media screen and (min-width: 1024px) {h4 {font-size: 25px;}}
+h5 {font-size: 17.072px;}
+@media screen and (min-width: 400px)  {h5 {font-size: calc(0.4692307692vw + 15.1950769231px);}}
+@media screen and (min-width: 1024px) {h5 {font-size: 20px;}}
+h5 {font-size: 16px;}
+@media screen and (min-width: 400px)  {h5 {font-size: calc(0vw + 16px);}}
+@media screen and (min-width: 1024px) {h5 {font-size: 16px;}}
+/* font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - 400px) / (1024 - 400))); */
+/*-------------------------https://codepen.io/MadeByMike/pen/PzZmWw--------------------------*/
+/*-----------------------------------FIN DE ESCALA MODULAR-----------------------------------*/
+
+
+
+
+/*___________________________________SMD = Shadow Material Design___________________________________*/
+
+
+.dp-0  {transition: 0.5s; box-shadow: 0px  0px  0px  0px rgba(0, 0, 0, 0.2),   0px 0px  0px  0px  rgba(0, 0, 0, 0.14);}
+.dp-1  {transition: 0.5s; box-shadow: 0px  1px  1px  0px rgba(0, 0, 0, 0.2),   0px 0px  4px  2px  rgba(0, 0, 0, 0.14);}
+.dp-2  {transition: 0.5s; box-shadow: 0px  2px  2px  1px rgba(0, 0, 0, 0.2),   0px 0px  8px  4px  rgba(0, 0, 0, 0.14);}
+.dp-3  {transition: 0.5s; box-shadow: 0px  3px  3px  1px rgba(0, 0, 0, 0.2),   0px 0px 12px  6px  rgba(0, 0, 0, 0.14);}
+.dp-4  {transition: 0.5s; box-shadow: 0px  4px  4px  2px rgba(0, 0, 0, 0.2),   0px 0px 16px  8px  rgba(0, 0, 0, 0.14);}
+.dp-5  {transition: 0.5s; box-shadow: 0px  5px  5px  2px rgba(0, 0, 0, 0.2),   0px 0px 20px 10px  rgba(0, 0, 0, 0.14);}
+.dp-6  {transition: 0.5s; box-shadow: 0px  6px  6px  3px rgba(0, 0, 0, 0.2),   0px 0px 24px 12px  rgba(0, 0, 0, 0.14);}
+.dp-7  {transition: 0.5s; box-shadow: 0px  7px  7px  3px rgba(0, 0, 0, 0.2),   0px 0px 28px 14px  rgba(0, 0, 0, 0.14);}
+.dp-8  {transition: 0.5s; box-shadow: 0px  8px  8px  4px rgba(0, 0, 0, 0.2),   0px 0px 32px 16px  rgba(0, 0, 0, 0.14);}
+.dp-9  {transition: 0.5s; box-shadow: 0px  9px  9px  4px rgba(0, 0, 0, 0.2),   0px 0px 36px 18px  rgba(0, 0, 0, 0.14);}
+.dp-10 {transition: 0.5s; box-shadow: 0px 10px 10px  5px rgba(0, 0, 0, 0.2),   0px 0px 40px 20px  rgba(0, 0, 0, 0.14);}
+.dp-11 {transition: 0.5s; box-shadow: 0px 11px 11px  5px rgba(0, 0, 0, 0.2),   0px 0px 44px 22px  rgba(0, 0, 0, 0.14);}
+.dp-12 {transition: 0.5s; box-shadow: 0px 12px 12px  6px rgba(0, 0, 0, 0.2),   0px 0px 48px 24px  rgba(0, 0, 0, 0.14);}
+.dp-13 {transition: 0.5s; box-shadow: 0px 13px 13px  6px rgba(0, 0, 0, 0.2),   0px 0px 52px 26px  rgba(0, 0, 0, 0.14);}
+.dp-14 {transition: 0.5s; box-shadow: 0px 14px 14px  7px rgba(0, 0, 0, 0.2),   0px 0px 56px 28px  rgba(0, 0, 0, 0.14);}
+.dp-15 {transition: 0.5s; box-shadow: 0px 15px 15px  7px rgba(0, 0, 0, 0.2),   0px 0px 60px 30px  rgba(0, 0, 0, 0.14);}
+.dp-16 {transition: 0.5s; box-shadow: 0px 16px 16px  8px rgba(0, 0, 0, 0.2),   0px 0px 64px 32px  rgba(0, 0, 0, 0.14);}
+.dp-17 {transition: 0.5s; box-shadow: 0px 17px 17px  8px rgba(0, 0, 0, 0.2),   0px 0px 68px 34px  rgba(0, 0, 0, 0.14);}
+.dp-18 {transition: 0.5s; box-shadow: 0px 18px 18px  9px rgba(0, 0, 0, 0.2),   0px 0px 72px 36px  rgba(0, 0, 0, 0.14);}
+.dp-19 {transition: 0.5s; box-shadow: 0px 19px 19px  9px rgba(0, 0, 0, 0.2),   0px 0px 76px 38px  rgba(0, 0, 0, 0.14);}
+.dp-20 {transition: 0.5s; box-shadow: 0px 20px 20px 10px rgba(0, 0, 0, 0.2),   0px 0px 80px 40px  rgba(0, 0, 0, 0.14);}
+.dp-21 {transition: 0.5s; box-shadow: 0px 21px 21px 10px rgba(0, 0, 0, 0.2),   0px 0px 84px 42px  rgba(0, 0, 0, 0.14);}
+.dp-22 {transition: 0.5s; box-shadow: 0px 22px 22px 11px rgba(0, 0, 0, 0.2),   0px 0px 88px 44px  rgba(0, 0, 0, 0.14);}
+.dp-23 {transition: 0.5s; box-shadow: 0px 23px 23px 12px rgba(0, 0, 0, 0.2),   0px 0px 92px 46px  rgba(0, 0, 0, 0.14);}
+.dp-24 {transition: 0.5s; box-shadow: 0px 24px 24px 12px rgba(0, 0, 0, 0.2),   0px 0px 96px 48px  rgba(0, 0, 0, 0.14);}
+
+.dp-h-0:hover            {box-shadow: 0px  0px  0px  0px rgba(0, 0, 0, 0.2),   0px 0px  0px  0px  rgba(0, 0, 0, 0.14);}
+.dp-h-1:hover            {box-shadow: 0px  1px  1px  0px rgba(0, 0, 0, 0.2),   0px 0px  4px  2px  rgba(0, 0, 0, 0.14);}
+.dp-h-2:hover            {box-shadow: 0px  2px  2px  1px rgba(0, 0, 0, 0.2),   0px 0px  8px  4px  rgba(0, 0, 0, 0.14);}
+.dp-h-3:hover            {box-shadow: 0px  3px  3px  1px rgba(0, 0, 0, 0.2),   0px 0px 12px  6px  rgba(0, 0, 0, 0.14);}
+.dp-h-4:hover            {box-shadow: 0px  4px  4px  2px rgba(0, 0, 0, 0.2),   0px 0px 16px  8px  rgba(0, 0, 0, 0.14);}
+.dp-h-5:hover            {box-shadow: 0px  5px  5px  2px rgba(0, 0, 0, 0.2),   0px 0px 20px 10px  rgba(0, 0, 0, 0.14);}
+.dp-h-6:hover            {box-shadow: 0px  6px  6px  3px rgba(0, 0, 0, 0.2),   0px 0px 24px 12px  rgba(0, 0, 0, 0.14);}
+.dp-h-7:hover            {box-shadow: 0px  7px  7px  3px rgba(0, 0, 0, 0.2),   0px 0px 28px 14px  rgba(0, 0, 0, 0.14);}
+.dp-h-8:hover            {box-shadow: 0px  8px  8px  4px rgba(0, 0, 0, 0.2),   0px 0px 32px 16px  rgba(0, 0, 0, 0.14);}
+.dp-h-9:hover            {box-shadow: 0px  9px  9px  4px rgba(0, 0, 0, 0.2),   0px 0px 36px 18px  rgba(0, 0, 0, 0.14);}
+.dp-h-10:hover           {box-shadow: 0px 10px 10px  5px rgba(0, 0, 0, 0.2),   0px 0px 40px 20px  rgba(0, 0, 0, 0.14);}
+.dp-h-11:hover           {box-shadow: 0px 11px 11px  5px rgba(0, 0, 0, 0.2),   0px 0px 44px 22px  rgba(0, 0, 0, 0.14);}
+.dp-h-12:hover           {box-shadow: 0px 12px 12px  6px rgba(0, 0, 0, 0.2),   0px 0px 48px 24px  rgba(0, 0, 0, 0.14);}
+.dp-h-13:hover           {box-shadow: 0px 13px 13px  6px rgba(0, 0, 0, 0.2),   0px 0px 52px 26px  rgba(0, 0, 0, 0.14);}
+.dp-h-14:hover           {box-shadow: 0px 14px 14px  7px rgba(0, 0, 0, 0.2),   0px 0px 56px 28px  rgba(0, 0, 0, 0.14);}
+.dp-h-15:hover           {box-shadow: 0px 15px 15px  7px rgba(0, 0, 0, 0.2),   0px 0px 60px 30px  rgba(0, 0, 0, 0.14);}
+.dp-h-16:hover           {box-shadow: 0px 16px 16px  8px rgba(0, 0, 0, 0.2),   0px 0px 64px 32px  rgba(0, 0, 0, 0.14);}
+.dp-h-17:hover           {box-shadow: 0px 17px 17px  8px rgba(0, 0, 0, 0.2),   0px 0px 68px 34px  rgba(0, 0, 0, 0.14);}
+.dp-h-18:hover           {box-shadow: 0px 18px 18px  9px rgba(0, 0, 0, 0.2),   0px 0px 72px 36px  rgba(0, 0, 0, 0.14);}
+.dp-h-19:hover           {box-shadow: 0px 19px 19px  9px rgba(0, 0, 0, 0.2),   0px 0px 76px 38px  rgba(0, 0, 0, 0.14);}
+.dp-h-20:hover           {box-shadow: 0px 20px 20px 10px rgba(0, 0, 0, 0.2),   0px 0px 80px 40px  rgba(0, 0, 0, 0.14);}
+.dp-h-21:hover           {box-shadow: 0px 21px 21px 10px rgba(0, 0, 0, 0.2),   0px 0px 84px 42px  rgba(0, 0, 0, 0.14);}
+.dp-h-22:hover           {box-shadow: 0px 22px 22px 11px rgba(0, 0, 0, 0.2),   0px 0px 88px 44px  rgba(0, 0, 0, 0.14);}
+.dp-h-23:hover           {box-shadow: 0px 23px 23px 12px rgba(0, 0, 0, 0.2),   0px 0px 92px 46px  rgba(0, 0, 0, 0.14);}
+.dp-h-24:hover           {box-shadow: 0px 24px 24px 12px rgba(0, 0, 0, 0.2),   0px 0px 96px 48px  rgba(0, 0, 0, 0.14);}
+
+
+
+
+
+/*___________________________________COLOR SHIT___________________________________*/
+
+
+
+
+
+.color1 {color: var(--color1);}
+.color2 {color: var(--color2);}
+.color3 {color: var(--color3);}
+.color4 {color: var(--color4);}
+.color5 {color: var(--color5);}
+
+
+.colorH1:hover {color: var(--color1);}
+.colorH2:hover {color: var(--color2);}
+.colorH3:hover {color: var(--color3);}
+.colorH4:hover {color: var(--color4);}
+.colorH5:hover {color: var(--color5);}
+
+
+.colorBG1 {background: var(--color1);}
+.colorBG1D{background: var(--color1) linear-gradient(rgba(0,  0,  0,  0.3), rgba(0,  0,  0,  0.3));}
+.colorBG1L{background: var(--color1) linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3));}
+.colorBG2 {background: var(--color2);}
+.colorBG2D{background: var(--color2) linear-gradient(rgba(0,  0,  0,  0.3), rgba(0,  0,  0,  0.3));}
+.colorBG2L{background: var(--color2) linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3));}
+.colorBG3 {background: var(--color3);}
+.colorBG3D{background: var(--color3) linear-gradient(rgba(0,  0,  0,  0.3), rgba(0,  0,  0,  0.3));}
+.colorBG3L{background: var(--color3) linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3));}
+.colorBG4 {background: var(--color4);}
+.colorBG4D{background: var(--color4) linear-gradient(rgba(0,  0,  0,  0.3), rgba(0,  0,  0,  0.3));}
+.colorBG4L{background: var(--color4) linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3));}
+.colorBG5 {background: var(--color5);}
+.colorBG5D{background: var(--color5) linear-gradient(rgba(0,  0,  0,  0.3), rgba(0,  0,  0,  0.3));}
+.colorBG5L{background: var(--color5) linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3));}
+
+.bre {border-radius: calc(var(--borderRadiusEstandar) * 1px);}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.red50         {background: #ffebee!important;}
+.red100        {background: #ffcdd2!important;}
+.red200        {background: #ef9a9a!important;}
+.red300        {background: #e57373!important;}
+.red400        {background: #ef5350!important;}
+.red500        {background: #f44336!important;}
+.red600        {background: #e53935!important;}
+.red700        {background: #d32f2f!important;}
+.red800        {background: #c62828!important;}
+.red900        {background: #b71c1c!important;}
+
+.pink50        {background: #fce4ec!important;}
+.pink100       {background: #f8bbd0!important;}
+.pink200       {background: #f48fb1!important;}
+.pink300       {background: #f06292!important;}
+.pink400       {background: #ec407a!important;}
+.pink500       {background: #e91e63!important;}
+.pink600       {background: #d81b60!important;}
+.pink700       {background: #c2185b!important;}
+.pink800       {background: #ad1457!important;}
+.pink900       {background: #880e4f!important;}
+
+.purple50      {background: #f3e5f5!important;}
+.purple100     {background: #e1bee7!important;}
+.purple200     {background: #ce93d8!important;}
+.purple300     {background: #ba68c8!important;}
+.purple400     {background: #ab47bc!important;}
+.purple500     {background: #9c27b0!important;}
+.purple600     {background: #8e24aa!important;}
+.purple700     {background: #7b1fa2!important;}
+.purple800     {background: #6a1b9a!important;}
+.purple900     {background: #4a148c!important;}
+
+.deepPurple50  {background: #ede7f6!important;}
+.deepPurple100 {background: #d1c4e9!important;}
+.deepPurple200 {background: #b39ddb!important;}
+.deepPurple300 {background: #9575cd!important;}
+.deepPurple400 {background: #7e57c2!important;}
+.deepPurple500 {background: #673ab7!important;}
+.deepPurple600 {background: #5e35b1!important;}
+.deepPurple700 {background: #512da8!important;}
+.deepPurple800 {background: #4527a0!important;}
+.deepPurple900 {background: #311b92!important;}
+
+.indigo50      {background: #e8eaf6!important;}
+.indigo100     {background: #c5cae9!important;}
+.indigo200     {background: #9fa8da!important;}
+.indigo300     {background: #7986cb!important;}
+.indigo400     {background: #5c6bc0!important;}
+.indigo500     {background: #3f51b5!important;}
+.indigo600     {background: #3949ab!important;}
+.indigo700     {background: #303f9f!important;}
+.indigo800     {background: #283593!important;}
+.indigo900     {background: #1a237e!important;}
+
+.blue50        {background: #e3f2fd!important;}
+.blue100       {background: #bbdefb!important;}
+.blue200       {background: #90caf9!important;}
+.blue300       {background: #64b5f6!important;}
+.blue400       {background: #42a5f5!important;}
+.blue500       {background: #2196f3!important;}
+.blue600       {background: #1e88e5!important;}
+.blue700       {background: #1976d2!important;}
+.blue800       {background: #1565c0!important;}
+.blue900       {background: #0d47a1!important;}
+
+.lightBlue50   {background: #e1f5fe!important;}
+.lightBlue100  {background: #b3e5fc!important;}
+.lightBlue200  {background: #81d4fa!important;}
+.lightBlue300  {background: #4fc3f7!important;}
+.lightBlue400  {background: #29b6f6!important;}
+.lightBlue500  {background: #03a9f4!important;}
+.lightBlue600  {background: #039be5!important;}
+.lightBlue700  {background: #0288d1!important;}
+.lightBlue800  {background: #0277bd!important;}
+.lightBlue900  {background: #01579b!important;}
+
+.cyan50        {background: #e0f7fa!important;}
+.cyan100       {background: #b2ebf2!important;}
+.cyan200       {background: #80deea!important;}
+.cyan300       {background: #4dd0e1!important;}
+.cyan400       {background: #26c6da!important;}
+.cyan500       {background: #00bcd4!important;}
+.cyan600       {background: #00acc1!important;}
+.cyan700       {background: #0097a7!important;}
+.cyan800       {background: #00838f!important;}
+.cyan900       {background: #006064!important;}
+
+.teal50        {background: #e0f2f1!important;}
+.teal100       {background: #b2dfdb!important;}
+.teal200       {background: #80cbc4!important;}
+.teal300       {background: #4db6ac!important;}
+.teal400       {background: #26a69a!important;}
+.teal500       {background: #009688!important;}
+.teal600       {background: #00897b!important;}
+.teal700       {background: #00796b!important;}
+.teal800       {background: #00695c!important;}
+.teal900       {background: #004d40!important;}
+
+.green50       {background: #e8f5e9!important;}
+.green100      {background: #c8e6c9!important;}
+.green200      {background: #a5d6a7!important;}
+.green300      {background: #81c784!important;}
+.green400      {background: #66bb6a!important;}
+.green500      {background: #4caf50!important;}
+.green600      {background: #43a047!important;}
+.green700      {background: #388e3c!important;}
+.green800      {background: #2e7d32!important;}
+.green900      {background: #1b5e20!important;}
+
+.lightGreen50  {background: #f1f8e9!important;}
+.lightGreen100 {background: #dcedc8!important;}
+.lightGreen200 {background: #c5e1a5!important;}
+.lightGreen300 {background: #aed581!important;}
+.lightGreen400 {background: #9ccc65!important;}
+.lightGreen500 {background: #8bc34a!important;}
+.lightGreen600 {background: #7cb342!important;}
+.lightGreen700 {background: #689f38!important;}
+.lightGreen800 {background: #558b2f!important;}
+.lightGreen900 {background: #33691e!important;}
+
+.lime50        {background: #f9fbe7!important;}
+.lime100       {background: #f0f4c3!important;}
+.lime200       {background: #e6ee9c!important;}
+.lime300       {background: #dce775!important;}
+.lime400       {background: #d4e157!important;}
+.lime500       {background: #cddc39!important;}
+.lime600       {background: #c0ca33!important;}
+.lime700       {background: #afb42b!important;}
+.lime800       {background: #9e9d24!important;}
+.lime900       {background: #827717!important;}
+
+.yellow50      {background: #fffde7!important;}
+.yellow100     {background: #fff9c4!important;}
+.yellow200     {background: #fff59d!important;}
+.yellow300     {background: #fff176!important;}
+.yellow400     {background: #ffee58!important;}
+.yellow500     {background: #ffeb3b!important;}
+.yellow600     {background: #fdd835!important;}
+.yellow700     {background: #fbc02d!important;}
+.yellow800     {background: #f9a825!important;}
+.yellow900     {background: #f57f17!important;}
+
+.amber50       {background: #fff8e1!important;}
+.amber100      {background: #ffecb3!important;}
+.amber200      {background: #ffe082!important;}
+.amber300      {background: #ffd54f!important;}
+.amber400      {background: #ffca28!important;}
+.amber500      {background: #ffc107!important;}
+.amber600      {background: #ffb300!important;}
+.amber700      {background: #ffa000!important;}
+.amber800      {background: #ff8f00!important;}
+.amber900      {background: #ff6f00!important;}
+
+.orange50      {background: #fff3e0!important;}
+.orange100     {background: #ffe0b2!important;}
+.orange200     {background: #ffcc80!important;}
+.orange300     {background: #ffb74d!important;}
+.orange400     {background: #ffa726!important;}
+.orange500     {background: #ff9800!important;}
+.orange600     {background: #fb8c00!important;}
+.orange700     {background: #f57c00!important;}
+.orange800     {background: #ef6c00!important;}
+.orange900     {background: #e65100!important;}
+
+.deepOrange50  {background: #fbe9e7!important;}
+.deepOrange100 {background: #ffccbc!important;}
+.deepOrange200 {background: #ffab91!important;}
+.deepOrange300 {background: #ff8a65!important;}
+.deepOrange400 {background: #ff7043!important;}
+.deepOrange500 {background: #ff5722!important;}
+.deepOrange600 {background: #f4511e!important;}
+.deepOrange700 {background: #e64a19!important;}
+.deepOrange800 {background: #d84315!important;}
+.deepOrange900 {background: #bf360c!important;}
+
+.brown50       {background: #efebe9!important;}
+.brown100      {background: #d7ccc8!important;}
+.brown200      {background: #bcaaa4!important;}
+.brown300      {background: #a1887f!important;}
+.brown400      {background: #8d6e63!important;}
+.brown500      {background: #795548!important;}
+.brown600      {background: #6d4c41!important;}
+.brown700      {background: #5d4037!important;}
+.brown800      {background: #4e342e!important;}
+.brown900      {background: #3e2723!important;}
+
+.grey50        {background: #fafafa!important;}
+.grey100       {background: #f5f5f5!important;}
+.grey200       {background: #eeeeee!important;}
+.grey300       {background: #e0e0e0!important;}
+.grey400       {background: #bdbdbd!important;}
+.grey500       {background: #9e9e9e!important;}
+.grey600       {background: #757575!important;}
+.grey700       {background: #616161!important;}
+.grey800       {background: #424242!important;}
+.grey900       {background: #212121!important;}
+
+.blueGrey50    {background: #eceff1!important;}
+.blueGrey100   {background: #cfd8dc!important;}
+.blueGrey200   {background: #b0bec5!important;}
+.blueGrey300   {background: #90a4ae!important;}
+.blueGrey400   {background: #78909c!important;}
+.blueGrey500   {background: #607d8b!important;}
+.blueGrey600   {background: #546e7a!important;}
+.blueGrey700   {background: #455a64!important;}
+.blueGrey800   {background: #37474f!important;}
+.blueGrey900   {background: #263238!important;}
