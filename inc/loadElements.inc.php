@@ -34,8 +34,6 @@ if ($tdy) {
 // echo var_dump($tdy);
 // aca la idea es que las tablas relacionales son los hilos de donde tiro, y vienen pegados los elementos relacionados
 $ress = $conn->query($qry);
-// echo $qry;
-
 $resp = $ress->fetch_all(MYSQLI_ASSOC);
 
 // echo "hola!";

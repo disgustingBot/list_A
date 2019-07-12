@@ -13,10 +13,10 @@ function bringSignIn() {
 
 // THIS PART CHECKS IF THE MAIL IS ALREADY TAKEN
 mnu.addEventListener("input",function(e){// c.log(e);
-	var dataNames  = ["tbl", "col", "val"], dataValues = ["users", "eml", this.value];
-	postAjaxCall("inc/checkData.inc.php", dataNames, dataValues).then(function(value) {
-		if(value>0){mnu.classList.add("error"); mailInUse = true}else{mnu.classList.remove("error"); mailInUse = false};
-	});
+	var dataNames=["tbl","col","val"],dataValues=["users","eml",this.value];
+	postAjaxCall("inc/checkData.inc.php",dataNames,dataValues).then(function(value) {
+		if(value>0){mnu.classList.add("error");mailInUse=true}else{mnu.classList.remove("error");mailInUse=false}
+	})
 });
 
 // THIS PART CHECKS IF THE PASSWORDS MATCH
