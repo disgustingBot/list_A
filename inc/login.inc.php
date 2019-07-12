@@ -40,14 +40,12 @@ if (empty($log) || empty($pwd)) {
 	// echo "login empty";
 	$_SESSION['status'] = "login empty";
 	echo json_encode($_SESSION);
-	// header("Location: ../user.php?login=empty");
 	exit();
 } else {
 	$sql = "SELECT * FROM users WHERE uid='$log' OR eml='$log'";
 	$result = mysqli_query($conn, $sql);
 	$resultCheck = mysqli_num_rows($result);
 	if ($resultCheck < 1) {
-		// header("Location: ../user.php?login=nodata");
 		// echo "login nodata";
 		$_SESSION['status'] = "login nodata";
 		echo json_encode($_SESSION);
@@ -57,7 +55,6 @@ if (empty($log) || empty($pwd)) {
 			// De-hashing the password
 			$hashedPwdCheck = password_verify($pwd, $row['pwd']);
 			if ($hashedPwdCheck == false) {
-				// header("Location: ../user.php?login=error");
 				// echo "login error";
 				$_SESSION['status'] = "login error";
 				echo json_encode($_SESSION);
@@ -73,7 +70,7 @@ if (empty($log) || empty($pwd)) {
 				$_SESSION['u_eml'] = $row['eml'];
 
 				echo json_encode($_SESSION);
-				
+
 				exit();
 			}
 		}
