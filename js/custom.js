@@ -43,7 +43,6 @@ box = {
 	// REGEX para filtrar mails
 	validateEmail: function(e){var re=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;return re.test(String(e).toLowerCase())},
 	// TODO: EXPLORAR POSIBILIDAD DE MANDAR MAIL A NEW USER PARA CONFIRMAR LA CUENTA -------------------------------------------------------
-	// +34685255205 Australian Tomm's number
 	signUp: function(){
 		var pwd=d.getElementById("signInputPass"),uid=d.getElementById("signInputNick"),fst=d.getElementById("signInputName"),lst=d.getElementById("signInputLast"),eml=d.getElementById("signInputMail"),pw2=d.getElementById("signInputPas2");
 		if(box.sufd){// ERROR HANDLERS                    // check for form visibility
@@ -134,7 +133,7 @@ box = {
 					{tbl: "elementparent", col: "ppk", val: box.hist[0].ppk, epk: newElement.values.pky},
 					{tbl: "userelements",  col: "upk", val: upk,             epk: newElement.values.pky}];
 				parentData.forEach(function(e){newElement.altParent(e)});
-			}catch(err){c.log(err);}
+			}catch(err){c.log(err);c.log(v);}
 		});
 	},
 
