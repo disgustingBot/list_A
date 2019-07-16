@@ -26,6 +26,22 @@
 // user = Zack
 // pass = ltGeQSSjPU9dDpfl
 
+
+// TODO: Sistema de permisos con el dato del permiso otorgado en bytes como estte ejemplo:
+// "[Flags]
+// public enum Permission
+// {
+//     VIEWUSERS     =  1, // 2^0 // 0000 0001
+//     EDITUSERS     =  2, // 2^1 // 0000 0010
+//     VIEWPRODUCTS  =  4, // 2^2 // 0000 0100
+//     EDITPRODUCTS  =  8, // 2^3 // 0000 1000
+//     VIEWCLIENTS   = 16, // 2^4 // 0001 0000
+//     EDITCLIENTS   = 32, // 2^5 // 0010 0000
+//     DELETECLIENTS = 64, // 2^6 // 0100 0000
+// }"
+
+
+
 session_start();
 include 'dbh.inc.php';
 
