@@ -10,9 +10,9 @@ Version 2.1 of List-A include:
 
 I will try to get this WebbApp to be here in GitHub
 
-next feature:
+### next feature:
 
--permits on elements
--friends
--better data structure
--
+_permits on elements_
+_friends_
+**better data structure**
+
