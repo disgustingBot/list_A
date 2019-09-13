@@ -16,6 +16,8 @@ if (preg_match("/[\']/",$uid)||preg_match("/[\']/",$fst)||preg_match("/[\']/",$l
 			$hpw=password_hash($pwd,PASSWORD_DEFAULT); // Hashing the password
 	    $qry=$conn2->prepare("INSERT INTO users (uid,fst,lst,eml,pwd) VALUES ('$uid','$fst','$lst','$eml','$hpw');");
 	    $qry->execute();
+			// $epk = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users ORDER BY pky DESC LIMIT 1;"));
+
 			echo"ok";
 		}catch(PDOException $e){echo 'Error: '.$e->getMessage()." file: ".$e->getFile()." line: ".$e->getLine();exit;}
 		exit();

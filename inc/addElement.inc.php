@@ -4,6 +4,7 @@ include_once 'dbh.inc.php';
 $txt = $_POST['txt'];
 $pty = $_POST['pty'];
 $dte = $_POST['dte'];
+$bse = $_POST['bse'];
 
 
 	// Error handlers
@@ -21,7 +22,7 @@ if (empty($txt)) {
 	} else {
 		// Insert the element into the database
 		try {
-		  $qry=$conn2->prepare("INSERT INTO elements (txt, pty, dte) VALUES ('$txt', '$pty', '$dte');"); $qry->execute();
+		  $qry=$conn2->prepare("INSERT INTO elements (txt, pty, dte, bse) VALUES ('$txt', '$pty', '$dte', '$bse');"); $qry->execute();
 
 			// $epk['pky'] debe ser la pky del elemento que acabo de registrar
 			$epk = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements ORDER BY pky DESC LIMIT 1;"));
