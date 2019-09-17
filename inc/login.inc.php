@@ -30,6 +30,7 @@
 
 // TODO: estructura de datos inicial de cada usuario segun siguiente lista:
 // {
+// TODO: hacer que los elementos de stc=0 tengan bse=pky
 // 		BASE---------->id: 0
 // 		----HOME     ->id: 1
 //	 	----FAVORITES->id: 2
@@ -50,15 +51,16 @@
 // CREATE TRIGGER createStructure1 AFTER INSERT ON users
 //   FOR EACH ROW
 //   BEGIN
-// 		INSERT INTO elements (txt, stc, upk) VALUES ('base',     '0', NEW.pky);
+// 		INSERT INTO elements (txt, stc, upk, bse) VALUES ('base','0', NEW.pky, '0'));
 // 		INSERT INTO elements (txt, stc, upk) VALUES ('home',     '1', NEW.pky);
 // 		INSERT INTO elements (txt, stc, upk) VALUES ('favorites','2', NEW.pky);
-// 		INSERT INTO elements (txt, stc, upk, pbt) VALUES ('groups',   '3', NEW.pky, 1);
+// 		INSERT INTO elements (txt, stc, upk, pbt) VALUES ('groups',   '3', NEW.pky, '1');
 // 		INSERT INTO elements (txt, stc, upk) VALUES ('friends',  '4', NEW.pky);
 // 		INSERT INTO elements (txt, stc, upk) VALUES ('inbox',    '5', NEW.pky);
 // 		INSERT INTO elements (txt, stc, upk) VALUES ('public',   '6', NEW.pky);
 //   END;
 // |
+
 
 // delimiter |
 // CREATE TRIGGER createStructure2 BEFORE INSERT ON elements
@@ -66,6 +68,9 @@
 // 	BEGIN
 // 		IF (NEW.stc) THEN
 // 			SET NEW.bse = (SELECT pky FROM elements WHERE upk = NEW.upk AND stc = 0);
+// 		END IF;
+// 		IF (NEW.bse = 0) THEN
+// 			SET NEW.bse = ((SELECT MAX(pky) FROM elements) + 1);
 // 		END IF;
 // 	END;
 // |
@@ -79,7 +84,7 @@
 // 			INSERT INTO elementparent (ppk, epk) VALUES (
 // 				(SELECT pky FROM elements WHERE upk = NEW.upk AND stc = 0),
 // 				NEW.pky
-//			);
+// 			);
 // 		END IF;
 // 		IF (NEW.stc IS NULL) THEN
 // 			INSERT INTO elementparent (ppk, epk) VALUES (NEW.bse, NEW.pky);
@@ -111,6 +116,16 @@
 
 
 
+
+
+
+
+
+
+
+// CREATE TRIGGER `createStructure1` AFTER INSERT ON `users` FOR EACH ROW BEGIN INSERT INTO elements (txt, stc, upk, bse) VALUES ('base', '0', NEW.pky, 0); INSERT INTO elements (txt, stc, upk) VALUES ('home', '1', NEW.pky); INSERT INTO elements (txt, stc, upk) VALUES ('favorites','2', NEW.pky); INSERT INTO elements (txt, stc, upk, pbt) VALUES ('groups', '3', NEW.pky, 1); INSERT INTO elements (txt, stc, upk) VALUES ('friends', '4', NEW.pky); INSERT INTO elements (txt, stc, upk) VALUES ('inbox', '5', NEW.pky); INSERT INTO elements (txt, stc, upk) VALUES ('public', '6', NEW.pky); END
+// CREATE TRIGGER createStructure2 BEFORE INSERT ON elements FOR EACH ROW BEGIN IF (NEW.stc) THEN SET NEW.bse = (SELECT pky FROM elements WHERE upk = NEW.upk AND stc = 0); END IF; IF (NEW.bse = 0) THEN SET NEW.bse = ((SELECT MAX(pky) FROM elements) + 1); END IF; END;
+// CREATE TRIGGER createStructure3 AFTER INSERT ON elements FOR EACH ROW BEGIN IF (NEW.stc) THEN INSERT INTO elementparent (ppk, epk) VALUES ( (SELECT pky FROM elements WHERE upk = NEW.upk AND stc = 0), NEW.pky ); END IF; IF (NEW.stc IS NULL) THEN INSERT INTO elementparent (ppk, epk) VALUES (NEW.bse, NEW.pky); END IF; END;
 
 
 // TODO: Templates
