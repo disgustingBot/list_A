@@ -11,7 +11,7 @@
 	<meta name=      "mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<!-- Mis estilos -->
-	<link rel="stylesheet" type="text/css" href="css/style.css?v=2.2">
+	<link rel="stylesheet" type="text/css" href="css/style.css?v=3">
 
 
 
@@ -320,6 +320,6 @@
 
 
 
-	<script type="text/javascript" src="js/custom.js?v=2.2"></script>
+	<script type="text/javascript" src="js/custom.js?v=3"></script>
 </body>
 </html>
