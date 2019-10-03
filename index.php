@@ -7,11 +7,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>List-A</title>
-	<link rel="shortcut icon" href="img/icon1.png" >
+	<link rel="shortcut icon" href="img/icon4.png" >
 	<meta name=      "mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<!-- Mis estilos -->
-	<link rel="stylesheet" type="text/css" href="css/style.css?v=3">
+	<link rel="stylesheet" type="text/css" href="css/style.css?v=3.1">
 
 
 

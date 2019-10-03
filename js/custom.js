@@ -145,7 +145,7 @@ box = {
 			if(pwd.value==""){
 				pwd.classList.add("empty")
 			}else{
-				postAjaxCall("inc/login.inc.php",dataNames,dataValues).then(v=>{ // c.log(v);
+				postAjaxCall("inc/login.inc.php",dataNames,dataValues).then(v=>{ c.log(v);
 						session=JSON.parse(v);
 						//c.log("session:");
 						//c.log(JSON.parse(session.u_bse));
@@ -269,7 +269,7 @@ box = {
 		dataNames =["txt","pty","dte","upk","bse","ppk","grp"],
 		dataValues=[ txt , pty , dte , upk , bse , ppk , grp ];
 		if(!txt){return}
-		// c.log(ppk);
+		c.log(dataValues);
 		postAjaxCall("inc/addElement.inc.php",dataNames,dataValues).then(v=>{
 			// CREA EL ELEMENTO VISUAL AL RECIBIR OK DEL SERVIDOR
 			try{newElement=new Element(JSON.parse(v));

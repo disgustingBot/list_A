@@ -326,13 +326,13 @@ input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
   overflow: scroll;
   position: relative;
   z-index: 0;
-  scroll-snap-type: both mandatory;
+  /* scroll-snap-type: both mandatory; */
 }
 .element {
   min-height: min-content;
   height: auto;
   color: var(--color7);
-  scroll-snap-align: start;
+  /* scroll-snap-align: start; */
   display: grid;
   grid-template-columns: 16px auto 40px;
   border-top:1px solid var(--color3);

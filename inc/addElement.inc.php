@@ -29,7 +29,9 @@ if (empty($txt)) {
 
 			// $epk['pky'] debe ser la pky del elemento que acabo de registrar
 			$epk = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements ORDER BY pky DESC LIMIT 1;")); $pky=$epk["pky"];
-			$qry=$conn2->prepare("INSERT INTO elementparent (ppk, epk) VALUES ($ppk, $pky);"); $qry->execute();
+			if ($bse!=$ppk) {
+				$qry=$conn2->prepare("INSERT INTO elementparent (ppk, epk) VALUES ($ppk, $pky);"); $qry->execute();
+			}
 			// echo json_encode($epk["pky"]);
 			// echo var_dump(explode(",",$grp));
 			if ($grp!="") {
