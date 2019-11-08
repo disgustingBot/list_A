@@ -85,7 +85,7 @@ box = {
 			}catch(err){
 				c.log(err);c.log(v)
 			}
-			box.loadElements(favs);
+			box.loadFavs();
 			box.loadElements(home);
 		})
 
@@ -145,7 +145,7 @@ box = {
 			if(pwd.value==""){
 				pwd.classList.add("empty")
 			}else{
-				postAjaxCall("inc/login.inc.php",dataNames,dataValues).then(v=>{ c.log(v);
+				postAjaxCall("inc/login.inc.php",dataNames,dataValues).then(v=>{ // c.log(v);
 						session=JSON.parse(v);
 						//c.log("session:");
 						//c.log(JSON.parse(session.u_bse));
@@ -201,16 +201,15 @@ box = {
 	// el parametro b (por "back") es opcional, dar 1 para ir hacia atras en el historial o nada para ir hacia adelante
 	// GENERALIZAR EL LOAD ---------------------------------------------------------------------------------------------------------------------------------
 	// AQUI CREA TODOS LOS ELEMENTOS VISUALES EN LA PAGINA
-	handleHist  : (h,b)=>{ // c.log(h);
+	handleHist:(h,b)=>{
 		if(b==1){
 			if(box.hist.length==1){return}
 			box.hist.shift()
 		}else{
-			if(h.epk==box.base.pky+2){return}
 			box.hist.unshift(h)
 		}
 	},
-	loadElements: function(h,b){ // c.log(h);
+	loadElements:(h,b)=>{ // c.log(h);
 		box.handleHist(h,b);// aqui se maneja el historial
 		if(h){
 			// !aqui van los cambios en la PAGINA
@@ -225,13 +224,8 @@ box = {
 			// var dataNames=["upk","ppk","tdy"],dataValues=[h.upk,h.ppk,h.tdy],i=0;
 			postAjaxCall("inc/loadElements.inc.php",dataNames,dataValues).then(v=>{
 				try{var j=0;
-					if(h.epk==favs.pky+2){d.getElementById("favsCont").innerText=""}
 					JSON.parse(v).forEach((e,i)=>{
-						if(h.epk==box.base.pky+2){var temp={upk:upk,tdy:0};
-							box.favs.push(new Element(e));box.favs[i].favsUI(e);
-							temp.ppk=box.favs[i].epk;
-							box.updateNofChilds(temp,"amountFav"+box.favs[i].epk);
-						}else if(e.arc==0){
+						if(e.arc==0){
 							e.ord=j;
 							box.list.push(new Element(e));
 							box.list[j].listUI(e);
@@ -241,6 +235,18 @@ box = {
 				}catch(err){c.log(err);c.log(v)}
 			})
 		}
+	},
+
+	loadFavs:()=>{var dataNames=["upk","ppk","tdy"],dataValues=[favs.upk,favs.epk,0];
+		postAjaxCall("inc/loadElements.inc.php",dataNames,dataValues).then(v=>{
+			d.getElementById("favsCont").innerText="";
+			JSON.parse(v).forEach((e,i)=>{
+				var temp={upk:upk,tdy:0};
+				box.favs.push(new Element(e));box.favs[i].favsUI(e);
+				temp.ppk=box.favs[i].epk;
+				box.updateNofChilds(temp,"amountFav"+box.favs[i].epk);
+			})
+		})
 	},
 
 	selectPrimaryButton: e=>{
@@ -302,21 +308,18 @@ box = {
 		},
 	],
 	createGroup:()=>{
-		// c.log("this is the new group");
 		var txt=d.getElementById('newGroupName').value;
+		// TODO: notificar al usuario de campo requerido
 		if(!txt){return}
-		// aqui deberia seleccionar a todos los involucrados en el grupo
+		// Selecciona a todos los involucrados en el grupo
 		let frndSelected=[];
-		d.querySelectorAll(".friendListInput").forEach(e=>{
-			if(e.checked){frndSelected.push(e.value)}
-		})
-		// c.log(frndSelected);
-		// let ppk=[box.hist[0].epk, fnd]
-		box.addNewElement(txt,6,"","","",box.hist[0].epk,frndSelected);
-
-		// (txt,pty,dte,bse,ppk)
-		// newElement.altParent({tbl: "elementparent", col: "ppk", val: box.hist[0].epk, epk: newElement.pky});
-		// newElement.altParent({tbl: "elementparent", col: "ppk", val: 526, epk: newElement.pky});
+		d.querySelectorAll(".friendListInput").forEach(e=>{if(e.checked){frndSelected.push(e.value)}})
+		// Create group
+		box.addNewElement(txt,6,"","",0,box.hist[0].epk,frndSelected);
+		// Go back to main view after creating group
+		box.selectView("bMain");
+		// Empty the group name
+		d.getElementById('newGroupName').value='';
 	}
 };
 
@@ -324,11 +327,6 @@ box = {
 
 
 
-
-// const papapapapa = window.getComputedStyle(
-//     document.querySelector('#afterTest'), ':before'
-// );
-// c.log(papapapapa);
 
 
 
@@ -345,7 +343,6 @@ class Element {
 		this.favorite = { tbl: "elementparent", col: "ppk", val: box.base.pky+2 , epk: v.epk };
 		// Esta parte define las propiedades del elemento como vienen del objeto v
 		for(var k in v){Object.defineProperty(this,k,{enumerable: true,value:v[k]})}
-		// for(var k in v){if(v.hasOwnProperty(k)){Object.defineProperty(this,k,{value:v[k]})}}
 	}
 	listUI(v){
 		// Test to see if the browser supports the HTML template element by checking
@@ -371,25 +368,18 @@ class Element {
 		}
 	}
 	favsUI(v){
-		// Test to see if the browser supports the HTML template element by checking
-		// for the presence of the template element's content attribute.
-		if ('content' in d.createElement('template')) {
-			// Instantiate the template
-			// and the nodes you will control
-			var a = d.importNode(d.querySelector("#favsElement").content, true), element = a.querySelector(".mainMenuElement"), eColor = a.querySelector(".eColor"), eTxt = a.querySelector(".eTxt"), eNmr = a.querySelector(".eNmr");
-			// Make your changes
-			element.setAttribute("id", "fav" + v.epk);
-			eNmr.setAttribute("id", "amountFav" + v.epk);
-			eColor.style.background = "var(--clrPty" + v.pty + ")";
-			eTxt.textContent = v.txt;
-			element.setAttribute("onclick", "box.loadElements("+JSON.stringify(this)+")");
-			// Insert it into the document in the right place
-			var gSpot = d.querySelector("#favsCont");
-			gSpot.insertBefore(a, gSpot.firstChild);
-		}
-		else { // Find another way to add the rows to the table because the HTML template element is not supported.
-			c.log("ERROR: your browser does not support required features for the app");
-		}
+		// Instantiate the template
+		// and the nodes you will control
+		var a = d.importNode(d.querySelector("#favsElement").content, true), element = a.querySelector(".mainMenuElement"), eColor = a.querySelector(".eColor"), eTxt = a.querySelector(".eTxt"), eNmr = a.querySelector(".eNmr");
+		// Make your changes
+		element.setAttribute("id", "fav" + v.epk);
+		eNmr.setAttribute("id", "amountFav" + v.epk);
+		eColor.style.background = "var(--clrPty" + v.pty + ")";
+		eTxt.textContent = v.txt;
+		element.setAttribute("onclick", "box.loadElements("+JSON.stringify(this)+")");
+		// Insert it into the document in the right place
+		var gSpot = d.querySelector("#favsCont");
+		gSpot.insertBefore(a, gSpot.firstChild);
 	}
 	frndUI(v){
 		// Test to see if the browser supports the HTML template element by checking
@@ -417,14 +407,15 @@ class Element {
 
 	// la entrada p es por "parent"
 	// la entrada f es por "favorite" y es opcional, debe ser 1 si se quiere hacer un elemento favorito
-	altParent(p,f){
+	altParent(p,f){c.log(this)
 		// c.log(p,f);
 		var v=this.values,e=d.getElementById(v.ord),favsUI=this.favsUI,eF=d.getElementById("fav"+p.epk);
 		var url="inc/addParentToE.inc.php",dataNames=["tbl","col","val","epk"],dataValues=[p.tbl,p.col,p.val,p.epk];
-		postAjaxCall(url,dataNames,dataValues).then(v=>{
+		postAjaxCall(url,dataNames,dataValues).then(v=>{c.log(p)
 			try{
 				if(f&&v==1){
 					favsUI({epk:p.epk,txt:e.innerText});
+					box.loadFavs();
 				}
 				else if(f&&v==0){
 					eF.remove();

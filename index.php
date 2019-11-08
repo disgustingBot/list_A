@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 	<title>List-A</title>
-	<link rel="shortcut icon" href="img/icon4.png" >
+	<link rel="shortcut icon" href="img/lg.png" >
 	<meta name=      "mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<!-- Mis estilos -->
@@ -320,6 +320,6 @@
 
 
 
-	<script type="text/javascript" src="js/custom.js?v=3"></script>
+	<script type="text/javascript" src="js/custom.js?v=3.2"></script>
 </body>
 </html>
