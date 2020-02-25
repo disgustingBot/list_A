@@ -11,6 +11,7 @@ $tdy = $_POST['tdy'];
 // echo $ppk;
 // echo $tdy;
 if ($tdy) {
+	$e='TODAY';
 	// $qry = "SELECT DISTINCT *
 	// 	FROM
 	// 	elements a, userelements b, elementparent c
@@ -31,6 +32,7 @@ if ($tdy) {
 		DATE(a.dte) <  CURDATE() + INTERVAL 1 DAY
 	);";
 } else {
+	$e='NOT TODAY';
 	// $qry = "SELECT DISTINCT *
 	// 	FROM
 	// 	elements a, userelements b, elementparent c
@@ -54,7 +56,7 @@ $ress = $conn->query($qry);
 $resp = $ress->fetch_all(MYSQLI_ASSOC);
 
 // echo "hola!";
-// echo $resp;
+// echo $e;
 echo json_encode($resp);
 
 // echo sprintf("%d users fetched in %s secs", count($users), number_format(microtime(true) - $startTime, 6, ".", ""));

@@ -25,13 +25,23 @@ w.addEventListener("load",()=>{
 	// bse=parseInt(readCookie("bse"));
 	bse=JSON.parse(readCookie("bse"));
 	if(upk){box.setup(upk,uid,bse)}
-	d.getElementById("load").style.top="-200vw";
+	d.getElementById("load").style.top="-100vh";
 });
 
 
 
 
 
+// alternates a class from a selector of choice zB.:
+// <div class="someButton" onclick="altClassFromSelector('activ', '#navBar')"></div>
+const altClassFromSelector=(clase,selector)=> {
+  const x=d.querySelector(selector);
+  if(x.classList.contains(clase)){
+    x.classList.remove(clase)
+  }else{
+    x.classList.add(clase)
+  }
+}
 
 
 // Actualmente genero una estructura de datos con triggers de MySQL, que si bien fue interesante
@@ -72,15 +82,16 @@ box = {
 		// c.log("cosos del setup: ",dataNames, dataValues);
 		var dataNames=["upk","ppk","tdy"],dataValues=[bse.upk,bse.epk,0];
 		postAjaxCall("inc/loadElements.inc.php", dataNames, dataValues).then(v=>{
-			try{
+			try{ // c.log(v)
 				// d.getElementById(id).innerHTML=JSON.parse(v).length;
 				JSON.parse(v).forEach(e=>{
 					// c.log("hello");
-					if(e.stc==1){home=e;box.updateNofChilds(e, "homeNmr");};
-					// TODO: Hacer que cargue los numeros de los favs
+					c.log(e);
+					if(e.stc==1){home=e;box.updateNofChilds(e, "#homeNmr");};
+					// TODO: Hacer que cargue los numeros de TODAY
 					if(e.stc==2){favs=e;};
-					if(e.stc==3){grps=e;box.updateNofChilds(e, "grpsNmr");};
-					if(e.stc==4){frnd=e;box.updateNofChilds(e, "frndNmr");};
+					if(e.stc==3){grps=e;box.updateNofChilds(e, "#grpsNmr");};
+					if(e.stc==4){frnd=e;box.updateNofChilds(e, "#frndNmr");};
 				})
 			}catch(err){
 				c.log(err);c.log(v)
@@ -175,18 +186,26 @@ box = {
 			d.getElementById("cancel").classList.toggle('highlight');
 		}
 		mainButtonIsAPlus=1;
+		d.querySelector('#addNew').classList.remove('alt')
+		d.querySelector('#mainMenu').classList.remove('active')
 		box.slct.forEach(e=>{
-			d.getElementById(e.ord).classList.toggle('selected')
+			d.getElementById('listElement'+e.ord).classList.toggle('selected')
 		});
 		box.slct=[]
 	},
 
 	newTitle : t=>{d.getElementById("title").innerText=t},
-	clearList: ()=>{box.cancel();var a=d.querySelector("#list");box.list=[];d.getElementById("list").innerText="";a.insertBefore(d.importNode(d.querySelector("#cancelTemp").content, true),a.firstChild);},
+	clearList: ()=>{
+		box.cancel();
+		var a=d.querySelector("#list");
+		box.list=[];
+		d.getElementById("list").innerText="";
+		a.insertBefore(d.importNode(d.querySelector("#cancelTemp").content, true),a.firstChild);
+	},
 
-	selectElement: id=>{if(!d.getElementById(id)){return}
+	selectElement: id=>{if(!d.getElementById('listElement'+id)){return}
 		var s=box.slct,f=1,t=s[0]?0:1;
-		d.getElementById(id).classList.toggle('selected');
+		d.getElementById('listElement'+id).classList.toggle('selected');
 		s.forEach((v,i)=>{if(v.ord==id){f=0;s.splice(i,1)}});
 		if(f){s.push(box.list[id])}
 		if(t||!s[0]){
@@ -209,7 +228,7 @@ box = {
 			box.hist.unshift(h)
 		}
 	},
-	loadElements:(h,b)=>{ // c.log(h);
+	loadElements:(h,b)=>{ c.log(h);
 		box.handleHist(h,b);// aqui se maneja el historial
 		if(h){
 			// !aqui van los cambios en la PAGINA
@@ -229,6 +248,9 @@ box = {
 							e.ord=j;
 							box.list.push(new Element(e));
 							box.list[j].listUI(e);
+							// c.log(e)
+							// c.log('e.ord: ',e.ord)
+							if(e.ord!=null){box.updateNofChilds(e,'#listElement'+e.ord+' .eChild');}
 							j++;
 						}
 					}); // aqui mete todos los elementos en el vector list
@@ -244,7 +266,7 @@ box = {
 				var temp={upk:upk,tdy:0};
 				box.favs.push(new Element(e));box.favs[i].favsUI(e);
 				temp.ppk=box.favs[i].epk;
-				box.updateNofChilds(temp,"amountFav"+box.favs[i].epk);
+				box.updateNofChilds(temp,"#amountFav"+box.favs[i].epk);
 			})
 		})
 	},
@@ -257,12 +279,17 @@ box = {
 	},
 
 	// esta funcion carga el numero junto a los elementos favoritos en el main menu
-	updateNofChilds:(e,id)=>{
+	updateNofChilds:(e,selector)=>{
 		if(!e.tdy){tdy=0    }else{tdy=e.tdy}
 		if(!e.epk){epk=e.ppk}else{epk=e.epk}
 		var dataNames=["upk","ppk","tdy"],dataValues=[e.upk,epk,tdy];
 		postAjaxCall("inc/loadElements.inc.php", dataNames, dataValues).then(v=>{
-			try{d.getElementById(id).innerHTML=JSON.parse(v).length}
+			cant=JSON.parse(v).filter(e=>e.tck==0)
+			try{
+				if(cant.length>0){d.querySelector(selector).innerHTML=cant.length}
+			}
+			// try{d.getElementById(id).innerHTML=cant.length}
+			// try{d.getElementById(id).innerHTML=JSON.parse(v).length}
 			catch(err){c.log(err);c.log(v)}
 		})
 	},
@@ -294,9 +321,11 @@ box = {
 			if(!mainButtonIsAPlus){
 				box.slct.forEach(v=>{
 					v.check();
-					d.getElementById(v.ord).focus()
+					// v.editElement('arc',1 ,1);
+					d.getElementById('listElement'+v.ord).focus()
+					box.cancel();
 				})
-			}
+			}else{d.querySelector('#addNew').classList.add('alt')}
 		},
 		()=>{
 			d.querySelector(".newGroupFriendList").innerText="";
@@ -348,16 +377,25 @@ class Element {
 		// Test to see if the browser supports the HTML template element by checking
 		// for the presence of the template element's content attribute.
 		if ('content' in d.createElement('template')) {
+
 			// Instantiate the template
 			// and the nodes you will control
-			var a = d.importNode(d.querySelector("#listElement").content, true), element = a.querySelector(".element"), eColor = a.querySelector(".eColor"), eTxt = a.querySelector(".eTxt"), eNav = a.querySelector(".eNavigate");
+			var a = d.importNode(d.querySelector("#listElement").content, true),
+			element = a.querySelector(".element"),
+			eColor  = a.querySelector(".eColor"),
+			eChild  = a.querySelector(".eChild"),
+			eTxt    = a.querySelector(".eTxt"),
+			eNav    = a.querySelector(".eNavigate");
 			// Make your changes
 			if(v.tck==1){element.classList.add("ticked")}
-			element.setAttribute("id", this.ord);
-			element.setAttribute("tck", this.tck);
+			element.setAttribute('id', 'listElement'+this.ord);
+			element.setAttribute('tck', this.tck);
+			element.setAttribute("onclick", "box.selectElement("+this.ord+")");
 			// TODO: hacer que en doble click entre al elemento
 			// element.setAttribute("ondblclick", "box.loadElements({upk:" + upk + ",ppk:'" + v.epk + "',ttl:'" + v.txt + "',tdy:0})");
+			element.setAttribute("ondblclick", "box.loadElements({pky:'" + v.epk + "',upk:" + upk + ",ppk:'" + v.epk + "',ttl:'" + v.txt + "',tdy:0,pbt:0})");
 			eColor.style.background = "var(--clrPty" + this.pty + ")";
+			eChild.style.color = "var(--clrPty" + this.pty + ")";
 			eTxt.textContent = v.txt;
 			eNav.setAttribute("onclick", "box.loadElements("+JSON.stringify(this)+")");
 			// Insert it into the document in the right place
@@ -435,7 +473,7 @@ class Element {
 		postAjaxCall("inc/editElement.inc.php", dataNames, dataValues).then(v=>{
 			try {
 				if(del){
-					d.getElementById("list").removeChild(d.getElementById(i));
+					d.getElementById("list").removeChild(d.getElementById('listElement'+i));
 				}
 			}catch(err){c.log(err)}
 		});
@@ -443,12 +481,12 @@ class Element {
 
 	// ESTA FUNCION EDITA ELEMENTOS, QUIZAS LA PUEDO GENERALIZAR -------------------------------------------------------------------------------------------
 	check () {
-		var i = this.ord, state = d.getElementById(i).getAttribute("tck") == 0 ? 1 : 0,
+		var i = this.ord, state = d.getElementById('listElement'+i).getAttribute("tck") == 0 ? 1 : 0,
 		dataNames=["pky","col","val"],dataValues=[this.epk,"tck",state];
 		postAjaxCall("inc/editElement.inc.php",dataNames,dataValues).then(()=>{
 		try {
-			d.getElementById(i).setAttribute("tck", state);
-			d.getElementById(i).classList.toggle("ticked");
+			d.getElementById('listElement'+i).setAttribute("tck", state);
+			d.getElementById('listElement'+i).classList.toggle("ticked");
 		}
 			catch (err) {
 				c.log(err);
@@ -456,13 +494,13 @@ class Element {
 		});
 	}
 	// ESTAS FUNCIONES HABILITA LA EDICION DE TEXTO ----------------------------------------------------------------------------------------------------------------
-	editTxt(){var i=this.ord,eTxt=d.getElementById(i).querySelector(".eTxt");box.cancel();box.selectElement(i);eTxt.setAttribute("contenteditable","true");eTxt.focus();};
+	editTxt(){var i=this.ord,eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");box.cancel();box.selectElement(i);eTxt.setAttribute("contenteditable","true");eTxt.focus();};
 	sendEdit(){
-		var i=this.ord,eTxt=d.getElementById(i).querySelector(".eTxt");if(this.txt!=eTxt.textContent){
+		var i=this.ord,eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");if(this.txt!=eTxt.textContent){
 			this.editElement('txt',eTxt.innerText,0);
 		} eTxt.setAttribute('contenteditable','false');
 	}
-	editColr (a) { this.editElement('pty', a, false); d.getElementById(this.ord).querySelector(".eColor").style.background = "var(--clrPty" + a + ")"; };
+	editColr (a) { this.editElement('pty', a, false); d.getElementById('listElement'+this.ord).querySelector(".eColor").style.background = "var(--clrPty" + a + ")"; };
 
 }
 
