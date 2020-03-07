@@ -9,15 +9,17 @@ $pwd=$_POST['pwd'];
 // Check if imput characters are valid
 if (preg_match("/[\']/",$uid)||preg_match("/[\']/",$fst)||preg_match("/[\']/",$lst)||preg_match("/[\']/",$eml)||preg_match("/[\']/",$pwd)) {
 	echo"if";exit(); // if = invalid fields
-}else{$qry="SELECT * FROM users WHERE eml = '$eml';";$ress=$conn->query($qry);$resp=$ress->fetch_all(MYSQLI_ASSOC);
-	if($resp){echo"mt";exit(); // mt = mail taken
+// }else{$qry="SELECT * FROM users WHERE eml = '$eml';";$ress=$conn->query($qry);$resp=$ress->fetch_all(MYSQLI_ASSOC);
+	// if($resp){echo"mt";exit(); // mt = mail taken
 	}else{ // Insert the user into the database
-		try {
+		try{
 			$hpw=password_hash($pwd,PASSWORD_DEFAULT); // Hashing the password
 	    $qry=$conn2->prepare("INSERT INTO users (uid,fst,lst,eml,pwd) VALUES ('$uid','$fst','$lst','$eml','$hpw');");
 	    $qry->execute();
+			// $epk = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users ORDER BY pky DESC LIMIT 1;"));
+
 			echo"ok";
 		}catch(PDOException $e){echo 'Error: '.$e->getMessage()." file: ".$e->getFile()." line: ".$e->getLine();exit;}
 		exit();
 	}
-}
+// }
