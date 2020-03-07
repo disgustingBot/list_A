@@ -11,7 +11,8 @@
 	<meta name=      "mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<!-- Mis estilos -->
-	<link rel="stylesheet" type="text/css" href="css/style.css?v=3.1">
+	<link rel="stylesheet" type="text/css" href="css/style.css?v=3.2">
+	<!-- <link rel="stylesheet" type="text/css" href="css/main.css?v=3.2"> -->
 
 
 
@@ -154,12 +155,10 @@
 				<p class="eNmr" id="tdayNmr"></p>
 			</div>
 			<div id="favsCont"></div>
-
 			<div tabindex="1" class="mainMenuElement" onclick="box.loadElements(grps)">
 				<p class="mainMenuElementName">groups</p>
 				<p class="eNmr" id="grpsNmr"></p>
 			</div>
-
 			<div tabindex="1" class="mainMenuElement" onclick="box.loadElements(frnd)">
 				<p class="mainMenuElementName">friends</p>
 				<p class="eNmr" id="frndNmr"></p>
@@ -194,28 +193,42 @@
 
 			<h2 id="title"></h2>
 
-			<button id="elementMenu">
+			<button id="elementMenu" onclick="altClassFromSelector('active','#secdMenu')">
 				<div class="menuDot"></div>
 				<div class="menuDot"></div>
 				<div class="menuDot"></div>
 			</button>
 
 			<menu id="secdMenu">
-				<div id="secdMenuTitle">Options</div>
-				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct[box.slct.length - 1].editTxt()">Edit</button></div>
+				<div id="secdMenuTitle">
+					<p>Options</p>
+					<button class="mainMenuClose" onclick="altClassFromSelector('active', '#secdMenu')">
+						<div class="mainMenuCloseBar"></div>
+						<div class="mainMenuCloseBar"></div>
+					</button>
 
-				<button for="amrSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(1)})"><span id="amrCirc" class="checkmark"></span><p class="colrOptP">Bolt  </p></button>
-				<button for="rojSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(2)})"><span id="rojCirc" class="checkmark"></span><p class="colrOptP">Fire  </p></button>
-				<button for="verSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(3)})"><span id="verCirc" class="checkmark"></span><p class="colrOptP">Gold  </p></button>
-				<button for="azlSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(4)})"><span id="azlCirc" class="checkmark"></span><p class="colrOptP">Marine</p></button>
-				<button for="blcSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(5)})"><span id="blcCirc" class="checkmark"></span><p class="colrOptP">Void  </p></button>
-				<button for="njaSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(6)})"><span id="njaCirc" class="checkmark"></span><p class="colrOptP">Ninja </p></button>
+				</div>
+				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct[box.slct.length - 1].editTxt();altClassFromSelector('active','#secdMenu')">Edit</button></div>
 
-				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct.forEach(function(v){v.altParent(v.favorite,1)});box.cancel()">Favorite</button></div>
-				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct.forEach(function(v){v.editElement('arc',1 ,1)});box.cancel()">Archive </button></div>
-				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct.forEach(function(v){v.editElement('del',1 ,1)});box.cancel()">Delete  </button></div>
+				<button for="amrSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(1)});altClassFromSelector('active','#secdMenu')"><span id="amrCirc" class="checkmark"></span><p class="colrOptP">Bolt  </p></button>
+				<button for="rojSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(2)});altClassFromSelector('active','#secdMenu')"><span id="rojCirc" class="checkmark"></span><p class="colrOptP">Fire  </p></button>
+				<button for="verSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(3)});altClassFromSelector('active','#secdMenu')"><span id="verCirc" class="checkmark"></span><p class="colrOptP">Gold  </p></button>
+				<button for="azlSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(4)});altClassFromSelector('active','#secdMenu')"><span id="azlCirc" class="checkmark"></span><p class="colrOptP">Marine</p></button>
+				<button for="blcSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(5)});altClassFromSelector('active','#secdMenu')"><span id="blcCirc" class="checkmark"></span><p class="colrOptP">Void  </p></button>
+				<button for="njaSM" class="colrOption" onclick="box.slct.forEach(function(v){v.editColr(6)});altClassFromSelector('active','#secdMenu')"><span id="njaCirc" class="checkmark"></span><p class="colrOptP">Ninja </p></button>
+
+				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct.forEach(function(v){v.altParent(v.favorite,1)});box.cancel();altClassFromSelector('active','#secdMenu')">Favorite</button></div>
+				<div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct.forEach(function(v){v.editElement('arc',1 ,1)});box.cancel();altClassFromSelector('active','#secdMenu')">Archive </button></div>
+				<!-- <div class="secdMenuElement"><button class="secdMenuButton" onclick="box.slct.forEach(function(v){v.editElement('del',1 ,1)});box.cancel()">Delete  </button></div> -->
+				<div class="secdMenuElement"><button class="secdMenuButton" onclick="altClassFromSelector('active','#deleteConfirm');altClassFromSelector('active','#secdMenu')">Delete  </button></div>
 			</menu>
 		</nav>
+
+		<sign class="deleteConfirm" id="deleteConfirm">
+			<p>are you sure you want to delete the element(s)?</p>
+			<button class="btn" onclick="altClassFromSelector('active','#deleteConfirm')">cancel</button>
+			<button class="btn" onclick="box.slct.forEach(function(v){v.editElement('del',1 ,1)});box.cancel()">delete</button>
+		</sign>
 
 		<section id="list">
 			<!-- ------  Get involved and Point someone in the right direction  ------ -->

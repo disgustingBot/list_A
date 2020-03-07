@@ -43,6 +43,7 @@
   --titlePadding:0;
 
   --listWidth:100%;
+  --listHeight:calc(100vh - 30px);
 
 
   --btnRoundActiveTop:calc(100vh - 1rem - 50px);
@@ -67,17 +68,18 @@
   --mainMenuButtonDisplay:none;
 
   --navBarGC:2;
-  --navBarWidth:calc(100% - 200px);
+  --navBarWidth:calc(100% - 150px);
   --titlePadding:0 1rem;
 
-  --listWidth:calc(100% - 200px);
+  --listWidth:calc(100% - 150px);
+  --listHeight:calc(100vh - 30px - var(--addNewHeight));
 
   --btnRoundActiveTop:calc(100vh - 1rem - 50px - var(--addNewHeight));
 
   --addNewPosition:sticky;
   --addNewBottom:0;
   --addNewGC:2;
-  --addNewWidth:calc(100% - 200px);
+  --addNewWidth:calc(100% - 150px);
 }}
 @media screen and (min-width:  768px) {:root {}}
 @media screen and (min-width:  992px) {:root {}}
@@ -201,6 +203,7 @@ input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
   grid-template-columns:var(--mainGTC);
   /* overflow: scroll; */
   width: 100vw;
+  position:relative;
 }
 
 
@@ -405,12 +408,17 @@ input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
 #secdMenuTitle {
   color:      var(--color7);
   background: var(--color3);
+  display:grid;
+  grid-template-columns:1fr 50px;
   text-align: center;
   font-size: 1.5em;
   line-height: 50px;
   height: 50px;
 }
-#elementMenu:focus + #secdMenu, #secdMenu:focus {top:0px;}
+#secdMenuTitle p{margin:0}
+#secdMenuTitle .mainMenuClose{display:grid;margin:auto}
+/* #elementMenu:focus + #secdMenu, #secdMenu:focus {top:0px;} */
+#secdMenu.active {top:0px;}
 .secdMenuElement {
   height: 40px;
   display: flex;
@@ -431,6 +439,24 @@ input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
 
 
 
+.deleteConfirm{
+  grid-column:1/-1;
+  grid-row:1/-1;
+  position:absolute;
+  /* top:50%; */
+  top:-50%;
+  transition:.4s;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:var(--color1);
+  padding:1rem 2rem;
+  z-index:20;
+}
+.deleteConfirm.active{top:50%}
+
+
+
+
 
 
 
@@ -444,7 +470,8 @@ input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
   grid-column: var(--navBarGC);
   grid-row: 2;
   /* height: calc(100vh - 30px); */
-  height: calc(100vh - 30px - var(--addNewHeight));
+  /* height: calc(100vh - 30px - var(--addNewHeight)); */
+  height:var(--listHeight);
   width:var(--listWidth);
   overflow: scroll;
   position: relative;

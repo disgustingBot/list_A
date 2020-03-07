@@ -86,7 +86,7 @@ box = {
 				// d.getElementById(id).innerHTML=JSON.parse(v).length;
 				JSON.parse(v).forEach(e=>{
 					// c.log("hello");
-					c.log(e);
+					// c.log(e);
 					if(e.stc==1){home=e;box.updateNofChilds(e, "#homeNmr");};
 					// TODO: Hacer que cargue los numeros de TODAY
 					if(e.stc==2){favs=e;};
@@ -228,7 +228,7 @@ box = {
 			box.hist.unshift(h)
 		}
 	},
-	loadElements:(h,b)=>{ c.log(h);
+	loadElements:(h,b)=>{ // c.log(h);
 		box.handleHist(h,b);// aqui se maneja el historial
 		if(h){
 			// !aqui van los cambios en la PAGINA
@@ -257,6 +257,7 @@ box = {
 				}catch(err){c.log(err);c.log(v)}
 			})
 		}
+		// box.loadFavs();
 	},
 
 	loadFavs:()=>{var dataNames=["upk","ppk","tdy"],dataValues=[favs.upk,favs.epk,0];
@@ -391,9 +392,7 @@ class Element {
 			element.setAttribute('id', 'listElement'+this.ord);
 			element.setAttribute('tck', this.tck);
 			element.setAttribute("onclick", "box.selectElement("+this.ord+")");
-			// TODO: hacer que en doble click entre al elemento
-			// element.setAttribute("ondblclick", "box.loadElements({upk:" + upk + ",ppk:'" + v.epk + "',ttl:'" + v.txt + "',tdy:0})");
-			element.setAttribute("ondblclick", "box.loadElements({pky:'" + v.epk + "',upk:" + upk + ",ppk:'" + v.epk + "',ttl:'" + v.txt + "',tdy:0,pbt:0})");
+			element.setAttribute("ondblclick", "box.loadElements("+JSON.stringify(v)+")");
 			eColor.style.background = "var(--clrPty" + this.pty + ")";
 			eChild.style.color = "var(--clrPty" + this.pty + ")";
 			eTxt.textContent = v.txt;
@@ -408,7 +407,11 @@ class Element {
 	favsUI(v){
 		// Instantiate the template
 		// and the nodes you will control
-		var a = d.importNode(d.querySelector("#favsElement").content, true), element = a.querySelector(".mainMenuElement"), eColor = a.querySelector(".eColor"), eTxt = a.querySelector(".eTxt"), eNmr = a.querySelector(".eNmr");
+		var a = d.importNode(d.querySelector("#favsElement").content, true),
+		element = a.querySelector(".mainMenuElement"),
+		eColor = a.querySelector(".eColor"),
+		eTxt = a.querySelector(".eTxt"),
+		eNmr = a.querySelector(".eNmr");
 		// Make your changes
 		element.setAttribute("id", "fav" + v.epk);
 		eNmr.setAttribute("id", "amountFav" + v.epk);
@@ -418,6 +421,8 @@ class Element {
 		// Insert it into the document in the right place
 		var gSpot = d.querySelector("#favsCont");
 		gSpot.insertBefore(a, gSpot.firstChild);
+
+
 	}
 	frndUI(v){
 		// Test to see if the browser supports the HTML template element by checking
@@ -445,9 +450,14 @@ class Element {
 
 	// la entrada p es por "parent"
 	// la entrada f es por "favorite" y es opcional, debe ser 1 si se quiere hacer un elemento favorito
-	altParent(p,f){c.log(this)
+	altParent(p,f){ // c.log(this)
 		// c.log(p,f);
-		var v=this.values,e=d.getElementById(v.ord),favsUI=this.favsUI,eF=d.getElementById("fav"+p.epk);
+		var v=this.values,
+		e=d.getElementById("listElement"+v.ord),
+		favsUI=this.favsUI,
+		eF=d.getElementById("fav"+p.epk);
+		c.log("v: ",v);
+		c.log("e: ",e);
 		var url="inc/addParentToE.inc.php",dataNames=["tbl","col","val","epk"],dataValues=[p.tbl,p.col,p.val,p.epk];
 		postAjaxCall(url,dataNames,dataValues).then(v=>{c.log(p)
 			try{
@@ -478,6 +488,10 @@ class Element {
 			}catch(err){c.log(err)}
 		});
 	}
+	editColr (a) { // c.log(a)
+		this.editElement('pty', a, false);
+		d.getElementById('listElement'+this.ord).querySelector(".eColor").style.background = "var(--clrPty" + a + ")";
+	}
 
 	// ESTA FUNCION EDITA ELEMENTOS, QUIZAS LA PUEDO GENERALIZAR -------------------------------------------------------------------------------------------
 	check () {
@@ -500,7 +514,6 @@ class Element {
 			this.editElement('txt',eTxt.innerText,0);
 		} eTxt.setAttribute('contenteditable','false');
 	}
-	editColr (a) { this.editElement('pty', a, false); d.getElementById('listElement'+this.ord).querySelector(".eColor").style.background = "var(--clrPty" + a + ")"; };
 
 }
 
