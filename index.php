@@ -1,4 +1,8 @@
 <?php session_start(); ?>
+<?php
+	// version de List-A
+	$version='3.9';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +15,7 @@
 	<meta name=      "mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<!-- Mis estilos -->
-	<link rel="stylesheet" type="text/css" href="css/style.css?v=3.2">
-	<!-- <link rel="stylesheet" type="text/css" href="css/main.css?v=3.2"> -->
+	<link rel="stylesheet" type="text/css" href="css/style.css?v=<?= $version; ?>">
 
 
 
@@ -127,16 +130,14 @@
 
 
 	<view class="main">
-
-
 		<menu id="mainMenu">
 			<!-- TODO: account -->
 			<!-- <figure id="mainMenuProfile" onclick="box.loadElements(box.base)"> -->
-			<figure id="mainMenuProfile">
-				<svg id="mainMenuProfilePic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
-				<figcaption id="mainMenuProfileCaption">
-					<h3 id="userName"></h3>
-					<p id="userKey"></p>
+			<figure class="userBasic" onclick="altClassFromSelector('alt','#user')">
+				<svg class="userBasicPic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
+				<figcaption class="userBasicCaption">
+					<h3 class="userBasicName"></h3>
+					<p class="userBasicKey"></p>
 				</figcaption>
 
 				<button class="mainMenuClose" onclick="altClassFromSelector('active', '#mainMenu')">
@@ -227,7 +228,7 @@
 		<sign class="deleteConfirm" id="deleteConfirm">
 			<p>are you sure you want to delete the element(s)?</p>
 			<button class="btn" onclick="altClassFromSelector('active','#deleteConfirm')">cancel</button>
-			<button class="btn" onclick="box.slct.forEach(function(v){v.editElement('del',1 ,1)});box.cancel()">delete</button>
+			<button class="btn" onclick="box.slct.forEach(function(v){v.editElement('del',1 ,1)});box.cancel();altClassFromSelector('active','#deleteConfirm')">delete</button>
 		</sign>
 
 		<section id="list">
@@ -250,16 +251,37 @@
 			<div class="buttonOneCircle" id=""></div>
 		</button>
 
-		<button id="button0" class="btnRound buttonZero" onclick="box.buttons[0]()" tabindex="0">
+		<!-- <button id="button0" class="btnRound buttonZero" onclick="box.buttons[0]()" tabindex="0">
 			<div class="mainButtonBar" id="mainButtonBar1"></div>
 			<div class="mainButtonBar" id="mainButtonBar2"></div>
-		</button>
+		</button> -->
 
 
 
 
-		<form id="addNew" action="" onkeypress="return event.keyCode != 13;">
-			<input id="addNewText" type="text" placeholder="Write" autocomplete="off">
+		<form id="addNew" onkeypress="return event.keyCode != 13;">
+
+			<div id="button0" class="btnRound buttonZero" onclick="box.buttons[0].action()" tabindex="0">
+				<div class="mainButtonBar" id="mainButtonBar1"></div>
+				<div class="mainButtonBar" id="mainButtonBar2"></div>
+			</div>
+
+			<textarea
+				id="addNewText"
+				type="text"
+				placeholder="Write"
+				autocomplete="off"
+				oninput="
+				if(this.value){
+					if(box.buttons[0].old){
+						box.buttons[0].old=box.buttons[0].state;
+					}
+					box.buttons[0].setState(3);
+				}else{
+					box.buttons[0].setState();
+					d.querySelector('#button0').classList.remove('send');
+				};"
+				onkeydown="if (this.clientHeight < this.scrollHeight) this.style.height=this.scrollHeight+'px';"></textarea>
 
 			<span class="addNewButton" id="addNewFrnd">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
@@ -287,27 +309,27 @@
 				<label for="nja" class="colrOption"><input type="radio" name="colr" id="nja" class="colrOpt" onclick="box.selectColor(this.value)" value="6"        ><span id="njaCirc" class="checkmark"></span><p class="colrOptP">Ninja </p></label>
 			</div>
 
-			<span class="addNewButton" id="addNewSend" onclick="
-				var inputs=d.getElementById('addNew').elements;
-				box.addNewElement(
-					inputs['addNewText'].value,
-					inputs['colr'].value,
-					inputs['dateInput'].value,
-					inputs['friendId'].value,
-					box.hist[0].bse,
-					box.hist[0].epk,
-					'',
-				);
-			">
-			<!-- <span class="addNewButton" id="addNewSend" onclick="
-				var inputs=d.getElementById('addNew').elements;c.log(inputs);
-			"> -->
+			<!-- <span class="addNewButton" id="addNewSend">
 				<svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg>
-			</span>
+			</span> -->
 		</form>
 	</view>
 
+	<view class="user" id="user">
+		<figure class="userBasic" onclick="altClassFromSelector('alt','#user')">
+			<svg class="userBasicPic" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
+			<figcaption class="userBasicCaption">
+				<h3 class="userBasicName"></h3>
+				<p class="userBasicKey"></p>
+			</figcaption>
 
+			<button class="mainMenuClose" onclick="altClassFromSelector('active', '#mainMenu')">
+				<div class="mainMenuCloseBar"></div>
+				<div class="mainMenuCloseBar"></div>
+			</button>
+		</figure>
+
+	</view>
 
 
 
@@ -344,6 +366,6 @@
 
 
 
-	<script type="text/javascript" src="js/custom.js?v=3.2"></script>
+	<script type="text/javascript" src="js/custom.js?v=<?= $version; ?>"></script>
 </body>
 </html>

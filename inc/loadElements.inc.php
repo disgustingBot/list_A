@@ -11,7 +11,6 @@ $tdy = $_POST['tdy'];
 // echo $ppk;
 // echo $tdy;
 if ($tdy) {
-	$e='TODAY';
 	// $qry = "SELECT DISTINCT *
 	// 	FROM
 	// 	elements a, userelements b, elementparent c
@@ -32,7 +31,6 @@ if ($tdy) {
 		DATE(a.dte) <  CURDATE() + INTERVAL 1 DAY
 	);";
 } else {
-	$e='NOT TODAY';
 	// $qry = "SELECT DISTINCT *
 	// 	FROM
 	// 	elements a, userelements b, elementparent c

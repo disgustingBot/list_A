@@ -1,13 +1,14 @@
 d=document;w=window;c=console; // por comodidad, le daremos nombres amistosos (con amistosos quiero decir cortos) a las cosas
 
 aNP=d.getElementById("addNewPrty").style;
-mainButtonIsAPlus=1;
+// box.buttons[0].state=0;
 clr=5;
 
 // HACER QUE AL APRETAR ENTER NO RECARGUE LA PAGINA -----------------------------------------------------------------------------------------------
 // d.onkeydown = function(e){e=e||w.event;if(e.keyCode==13){if(!mainButtonIsAPlus){addNewElement()}}};
 // al apretar "esc" se cancela el menu actual
-d.onkeydown=e=>{e=e||w.event;if(e.keyCode==27){box.cancel()}};
+d.onkeydown=e=>{e=e||w.event;if(e.keyCode==27){box.cancel()}}
+
 
 // const date = new Date(2002, 01, 02);  // 2009-11-10
 // const month = date.toLocaleString('es', { month: 'short' });
@@ -28,9 +29,11 @@ w.addEventListener("load",()=>{
 	d.getElementById("load").style.top="-100vh";
 });
 
-
-
-
+// color console
+c.lof = (message, farbe = false)=>{
+	if(farbe){c.log("%c" + message, "color:" + farbe);}
+	else{c.log(message)}
+};
 
 // alternates a class from a selector of choice zB.:
 // <div class="someButton" onclick="altClassFromSelector('activ', '#navBar')"></div>
@@ -51,7 +54,60 @@ const altClassFromSelector=(clase,selector)=> {
 
 
 
+// COSAS QUE NO SE DONDE PONER:
 
+//Accordion //Desplegable
+
+// var acc = d.querySelectorAll("Accordion");
+// var i;
+//
+// acc.forEach((item, i) => {
+// 	item.addEventListener("click", function() {
+//
+//     this.classList.toggle("active");
+//     var panel = this.nextElementSibling;
+//     if (panel.style.maxHeight) {
+//       panel.style.maxHeight = null;
+//       panel.style.padding = "0";
+//     } else {
+//       panel.style.maxHeight = panel.scrollHeight + "px";
+//       panel.style.padding = "20px";
+//     }
+//
+// 	});
+// });
+
+const accordionSelector = (selector) => {
+	var acc = d.querySelectorAll(selector);
+
+	acc.forEach((item, i) => {
+		item.classList.toggle("active");
+		// var panel = this.nextElementSibling;
+		if (item.style.maxHeight!=0) {
+			item.style.maxHeight = null;
+			// item.style.maxHeight = null;
+			item.style.padding = "0 .5rem";
+		} else {
+			item.style.maxHeight = item.scrollHeight + 20 + "px";
+			item.style.padding = ".5rem";
+		}
+	});
+}
+
+
+// for (i = 0; i < acc.length; i++) {
+//   acc[i].addEventListener("click", function() {
+//     this.classList.toggle("active");
+//     var panel = this.nextElementSibling;
+//     if (panel.style.maxHeight) {
+//       panel.style.maxHeight = null;
+//       panel.style.padding = "0";
+//     } else {
+//       panel.style.maxHeight = panel.scrollHeight + "px";
+//       panel.style.padding = "20px";
+//     }
+//   });
+// }
 
 
 
@@ -63,12 +119,13 @@ const altClassFromSelector=(clase,selector)=> {
 
 // parent class
 box = {
+	dbug:0, // debug mode
 	base:{},
 	list:[],
 	favs:[],
 	hist:[],
 	slct:[],
-	sufd:0, //sign up form display
+	sufd:0, // sign up form display
 
 	setup: (upk,uid,bse)=>{
 		bse.epk=bse.pky;box.base=bse;
@@ -87,7 +144,9 @@ box = {
 				JSON.parse(v).forEach(e=>{
 					// c.log("hello");
 					// c.log(e);
-					if(e.stc==1){home=e;box.updateNofChilds(e, "#homeNmr");};
+
+					// TODO: hacer que todos estos OBJETOS sean ELEMENTOS ... ;)
+					if(e.stc==1){home=new Element(e);box.updateNofChilds(home, "#homeNmr");};
 					// TODO: Hacer que cargue los numeros de TODAY
 					if(e.stc==2){favs=e;};
 					if(e.stc==3){grps=e;box.updateNofChilds(e, "#grpsNmr");};
@@ -98,8 +157,11 @@ box = {
 			}
 			box.loadFavs();
 			box.loadElements(home);
-		})
+			box.slct[0] = home;
+			// box.slct[0] = new Element(home);
 
+			// c.log(box.slct)
+		})
 
 
 
@@ -112,12 +174,22 @@ box = {
 		tday={upk:upk,ppk:bse.pky  ,ttl:"Today" ,tdy:1};
 
 
-		d.querySelector("#userName").innerText=uid;
-		d.querySelector("#userKey").innerText="#"+upk;
+		d.querySelectorAll(".userBasicName").forEach(e=>{e.innerText=uid});
+		d.querySelectorAll(".userBasicKey").forEach(e=>{e.innerText="#"+upk});
+		// d.querySelector("#userKey").innerText="#"+upk;
+
 		box.selectView("bMain");
 		// TODO: mejorar la carga de cantidad de hijos por elemento
 		// c.log("base: ",bse);
+
+
+		d.addEventListener("keydown",e=>{if(e.which == 46){altClassFromSelector('active','#deleteConfirm')}})
 	},
+
+
+
+
+
 
 	// REGEX para filtrar mails
 	validateEmail: e=>{var re=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;return re.test(String(e).toLowerCase())},
@@ -181,17 +253,43 @@ box = {
 
 	greet : ()=>{c.log("greetings "+uid+", your id is: "+upk)},
 	cancel: ()=>{
-		if(!mainButtonIsAPlus){
-			d.getElementById("button0").classList.toggle('check');
+		let dbug = 1;
+		if(box.dbug || dbug){c.lof('comienza la funcion Cancel', '#5FA')}
+
+		// if(!mainButtonIsAPlus){
+		// if(d.getElementById("button0").classList.contains('check')){
+		if(box.buttons[0].state == 1){
+			if(box.dbug || dbug){c.log('if main Button0 state is 1')}
+			if(box.dbug || dbug){c.log('setState of button0 to what necesary')}
+			// d.getElementById("button0").classList.toggle('check');
+			if (box.buttons[0].old==1) {
+				box.buttons[0].setState(0)
+			} else {
+				box.buttons[0].setState(box.buttons[0].old)
+			}
+			if(box.dbug || dbug){c.log('button0 state: ', box.buttons[0].state)}
 			d.getElementById("cancel").classList.toggle('highlight');
 		}
-		mainButtonIsAPlus=1;
-		d.querySelector('#addNew').classList.remove('alt')
-		d.querySelector('#mainMenu').classList.remove('active')
+
+		// if(box.dbug || dbug){c.log('make mainButtonIsAPlus = 1')}
+		// box.buttons[0].state=box.buttons[0].old;
+
+		// deprecated I THINK
+		// if(box.dbug || dbug){c.log('make mainButtonIsAPlus = 1')}
+		// d.querySelector('#addNew').classList.remove('alt')
+		// d.querySelector('#mainMenu').classList.remove('active')
+
+		if(box.dbug || dbug){c.log('Unselect:')}
 		box.slct.forEach(e=>{
-			d.getElementById('listElement'+e.ord).classList.toggle('selected')
+			if (d.querySelector('#listElement'+e.ord)) {
+				if(box.dbug || dbug){c.log(d.querySelector('#listElement'+e.ord))}
+				d.getElementById('listElement'+e.ord).classList.toggle('selected')
+			}
 		});
-		box.slct=[]
+		if(box.dbug || dbug){c.log('Give the selection the current element')}
+		box.slct=[new Element(box.hist[0])]
+		if(box.dbug || dbug){c.log(box.slct)}
+		if(box.dbug || dbug){c.lof('finaliza la funcion Cancel', '#F35')}
 	},
 
 	newTitle : t=>{d.getElementById("title").innerText=t},
@@ -203,25 +301,84 @@ box = {
 		a.insertBefore(d.importNode(d.querySelector("#cancelTemp").content, true),a.firstChild);
 	},
 
-	selectElement: id=>{if(!d.getElementById('listElement'+id)){return}
-		var s=box.slct,f=1,t=s[0]?0:1;
-		d.getElementById('listElement'+id).classList.toggle('selected');
-		s.forEach((v,i)=>{if(v.ord==id){f=0;s.splice(i,1)}});
-		if(f){s.push(box.list[id])}
-		if(t||!s[0]){
-			d.getElementById("button0").classList.toggle('check');
-			d.getElementById("cancel").classList.toggle('highlight');
+
+
+
+
+
+	selectElement: id=>{
+		let dbug = 0; // debug mode
+
+		if(box.dbug || dbug){c.lof('comienza la funcion selectElement', '#5FA')}
+
+		// security measurements
+		if(!d.getElementById('listElement'+id)){return}
+
+		if(box.dbug || dbug){c.log('inicializacion de variables')}
+		let clicked=box.list[id],s=box.slct,found=0;
+		if(box.dbug || dbug){
+			c.log('box.slct: ', s);
+			c.log('clicked: ', clicked);
+			c.log('found: ', found)
 		}
-		mainButtonIsAPlus=s[0]?0:1;
+
+		// SELECT ARRAY HANDLING:
+		if(box.dbug || dbug){
+			c.log('check if list of selected includes clicked element:')
+			c.log('select before: ', box.slct);
+		}
+		// at the beggining remove parent if exists
+		if(box.slct[0].pky==box.hist[0].pky){
+			box.slct.splice(box.slct.findIndex(x=>{x==box.hist[0]}),1)
+		}
+		// checks if element is already selected
+		box.slct.forEach((v,i)=>{
+			if(v.ord==id){found=1;box.slct.splice(i,1)} // if found, remove it
+		});
+		// if not, adds the eleement to the selected elements array
+		if(!found){box.slct.push(box.list[id])}
+		// finally if selection is empty, give it the parent element
+		if(!box.slct[0]){
+			box.slct.push(box.hist[0])
+		}
+		if(box.dbug || dbug){c.log('select after: ', box.slct)}
+		// END OF ARRAY HANDLING
+
+
+		// make visual changes
+		if(box.dbug || dbug){c.lof('cambios visuales', '#FEA')}
+		d.getElementById('listElement'+id).classList.toggle('selected');
+		// cambios en otras partes de la app
+		// mainButtonIsAPlus=(box.slct[0].pky!=box.hist[0].pky)?0:1;
+		// box.buttons[0].state=(box.slct[0].pky!=box.hist[0].pky)?0:1;
+		if(box.slct[0].pky==box.hist[0].pky){
+			// box.buttons[0].state=0;
+		// if(s.includes(box.hist[0])){
+			// d.getElementById("button0").classList.remove('check');
+
+			box.buttons[0].setState(0);
+			d.getElementById("cancel").classList.remove('highlight');
+		} else {
+			// box.buttons[0].state=1;
+			// d.getElementById("button0").classList.add('check');
+			box.buttons[0].setState(1);
+			d.getElementById("cancel").classList.add('highlight');
+		}
+		if(box.dbug || dbug){c.log('Button Zero state = ', box.buttons[0].state)}
+
+		if(box.dbug || dbug){c.lof('finaliza la funcion selectElement', '#F35')}
 	},
+
+
+
 
 	// esta funcion carga elementos de la base de datos en base a parametros,
 	// el parametro h (por "history") es donde vienen los datos de busqueda
 	// el parametro b (por "back") es opcional, dar 1 para ir hacia atras en el historial o nada para ir hacia adelante
 	// GENERALIZAR EL LOAD ---------------------------------------------------------------------------------------------------------------------------------
 	// AQUI CREA TODOS LOS ELEMENTOS VISUALES EN LA PAGINA
-	handleHist:(h,b)=>{
-		if(b==1){
+	handleHist:(h,back = 0)=>{
+		if(back){
 			if(box.hist.length==1){return}
 			box.hist.shift()
 		}else{
@@ -254,7 +411,10 @@ box = {
 							j++;
 						}
 					}); // aqui mete todos los elementos en el vector list
-				}catch(err){c.log(err);c.log(v)}
+				}catch(err){
+					c.log(err);
+					c.log(v);
+				}
 			})
 		}
 		// box.loadFavs();
@@ -275,12 +435,16 @@ box = {
 	selectPrimaryButton: e=>{
 		box.buttons.forEach((e,i)=>{
 			d.getElementById("button"+i).classList.remove("active");
+			d.querySelector("body").classList.remove("button" + i);
 		})
 		d.getElementById("button"+e.pbt).classList.add("active");
+		d.querySelector("body").classList.add("button" + e.pbt);
 	},
 
 	// esta funcion carga el numero junto a los elementos favoritos en el main menu
 	updateNofChilds:(e,selector)=>{
+		// TODO: mejorar definicion de variable denro del if
+		// tdy=(!e.tdy)?0:e.tdy;
 		if(!e.tdy){tdy=0    }else{tdy=e.tdy}
 		if(!e.epk){epk=e.ppk}else{epk=e.epk}
 		var dataNames=["upk","ppk","tdy"],dataValues=[e.upk,epk,tdy];
@@ -303,30 +467,154 @@ box = {
 		dataNames =["txt","pty","dte","upk","bse","ppk","grp"],
 		dataValues=[ txt , pty , dte , upk , bse , ppk , grp ];
 		if(!txt){return}
-		c.log(dataValues);
-		postAjaxCall("inc/addElement.inc.php",dataNames,dataValues).then(v=>{
+		d.getElementById("addNewText").value="";
+		postAjaxCall("inc/addElement.inc.php",dataNames,dataValues).then(v=>{ // c.log(v);
 			// CREA EL ELEMENTO VISUAL AL RECIBIR OK DEL SERVIDOR
-			try{newElement=new Element(JSON.parse(v));
-				i=box.list.length;newElement.ord=i;newElement.epk=newElement.pky;
-				box.list.push(newElement);box.list[i].listUI(box.list[i].values);
-				d.getElementById("addNewText").value="";
+			try{
+				newElement = new Element(JSON.parse(v));
+				i=box.list.length;
+				newElement.ord=i;
+				newElement.epk=newElement.pky;
+				box.list.push(newElement);
+				box.list[i].listUI(box.list[i].values);
 				// ppk.forEach(e=>{newElement.altParent({tbl:"elementparent",col:"ppk",val:e,epk:newElement.pky})});
 				// newElement.altParent({tbl: "elementparent", col: "ppk", val: ppk, epk: newElement.pky});
 			}catch(err){c.log(err);c.log(v)}
 		});
 	},
 
+
+
 	// BUTTONS!
 	buttons:[
-		()=>{
-			if(!mainButtonIsAPlus){
-				box.slct.forEach(v=>{
-					v.check();
-					// v.editElement('arc',1 ,1);
-					d.getElementById('listElement'+v.ord).focus()
-					box.cancel();
-				})
-			}else{d.querySelector('#addNew').classList.add('alt')}
+		{
+			// ESTADOS:
+			// 0 = signo "+": abre y cierra el menu de nuevo elemento
+			old:false,
+			state: 0,
+			setState:(state = false)=>{
+				let dbug = 1; // debug mode
+				if(box.dbug || dbug){c.lof('comienza la funcion setState de button Zero', '#5FA')}
+				if(box.dbug || dbug){c.log('queremos setear el boton al estado: ', state)}
+				let addNew = d.querySelector('#addNew');
+				let button = d.querySelector('#button0');
+				if(state === false){state = box.buttons[0].old}
+				switch (state) {
+					case 0:
+						button.classList.remove('send')
+						button.classList.remove('check')
+						button.classList.remove('close')
+						addNew.classList.remove('alt')
+						break;
+					case 1:
+						button.classList.remove('send')
+						button.classList.add('check')
+						button.classList.remove('close')
+						addNew.classList.remove('alt')
+						break;
+					case 2:
+						if (d.querySelector('#addNewText').value) {
+							box.buttons[0].setState(3);
+							return;
+						}
+						button.classList.remove('send')
+						button.classList.remove('check')
+						button.classList.add('close')
+						addNew.classList.add('alt')
+						break;
+					case 3:
+						button.classList.add('send')
+						button.classList.remove('check')
+						button.classList.remove('close')
+						addNew.classList.add('alt')
+						break;
+					default:
+						box.buttons[0].setState(0);
+						break;
+				}
+				if (box.buttons[0].old!=box.buttons[0].state) {
+					box.buttons[0].old=box.buttons[0].state;
+				}
+				if(box.dbug || dbug){c.log('old: ', box.buttons[0].old)}
+
+				box.buttons[0].state=state
+
+				if(box.dbug || dbug){c.lof('finaliza la funcion setState de button Zero', '#F35')}
+			},
+			action:()=>{
+				switch (box.buttons[0].state) {
+					case 0:
+						// altClassFromSelector('alt', '#addNew')
+						box.buttons[0].setState(2);
+						break;
+					case 1:
+						box.slct.forEach(e=>{
+							e.check();
+							d.getElementById('listElement'+e.ord).focus()
+							box.cancel();
+						})
+						break;
+					case 2:
+						// altClassFromSelector('alt', '#addNew');
+						box.buttons[0].setState(0);
+						break;
+					case 3:
+						var inputs=d.getElementById('addNew').elements;
+						box.addNewElement(
+						    inputs['addNewText'].value,
+						    inputs['colr'].value,
+						    inputs['dateInput'].value,
+						    inputs['friendId'].value,
+						    box.hist[0].bse,
+						    box.hist[0].epk,
+						    '',
+						);
+						// altClassFromSelector('alt', '#addNew');
+						box.buttons[0].setState(2);
+						break;
+					default:
+						c.log('caso default de estado');
+				}
+				// if(box.buttons[0].state==0){
+				// 	altClassFromSelector('alt', '#addNew')
+				// }else if(box.buttons[0].state==1){
+				// 	box.slct.forEach(e=>{
+				// 		e.check();
+				// 		// v.editElement('arc',1 ,1);
+				// 		d.getElementById('listElement'+e.ord).focus()
+				// 		box.cancel();
+				// 	})
+				// } else {
+				// 	c.log(box.buttons[0].status);
+				//
+				// 		var inputs=d.getElementById('addNew').elements;
+				// 		box.addNewElement(
+				// 		    inputs['addNewText'].value,
+				// 		    inputs['colr'].value,
+				// 		    inputs['dateInput'].value,
+				// 		    inputs['friendId'].value,
+				// 		    box.hist[0].bse,
+				// 		    box.hist[0].epk,
+				// 		    '',
+				// 		);
+				// 		altClassFromSelector('alt', '#addNew')
+				// 		// accordionSelector('#addNew');
+				// }
+			},
+			// old:()=>{
+			// 	if(!mainButtonIsAPlus){
+			// 		box.slct.forEach(v=>{
+			// 			v.check();
+			// 			// v.editElement('arc',1 ,1);
+			// 			d.getElementById('listElement'+v.ord).focus()
+			// 			box.cancel();
+			// 		})
+			// 	}else{
+			// 		// d.querySelector('#addNew').classList.add('alt')
+			// 		altClassFromSelector('alt', '#addNew')
+			// 		// accordionSelector('#addNew');
+			// 	}
+			// }
 		},
 		()=>{
 			d.querySelector(".newGroupFriendList").innerText="";
@@ -490,7 +778,9 @@ class Element {
 	}
 	editColr (a) { // c.log(a)
 		this.editElement('pty', a, false);
-		d.getElementById('listElement'+this.ord).querySelector(".eColor").style.background = "var(--clrPty" + a + ")";
+		if(this.ord){
+			d.getElementById('listElement'+this.ord).querySelector(".eColor").style.background = "var(--clrPty" + a + ")";
+		}
 	}
 
 	// ESTA FUNCION EDITA ELEMENTOS, QUIZAS LA PUEDO GENERALIZAR -------------------------------------------------------------------------------------------
@@ -510,15 +800,17 @@ class Element {
 	// ESTAS FUNCIONES HABILITA LA EDICION DE TEXTO ----------------------------------------------------------------------------------------------------------------
 	editTxt(){var i=this.ord,eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");box.cancel();box.selectElement(i);eTxt.setAttribute("contenteditable","true");eTxt.focus();};
 	sendEdit(){
-		var i=this.ord,eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");if(this.txt!=eTxt.textContent){
-			this.editElement('txt',eTxt.innerText,0);
-		} eTxt.setAttribute('contenteditable','false');
+		var i=this.ord;
+		if (i) {
+			let eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");
+			if(this.txt!=eTxt.textContent){
+				this.editElement('txt',eTxt.innerText,0);
+			}
+			eTxt.setAttribute('contenteditable','false');
+		}
 	}
 
 }
-
-
-
 
 
 
