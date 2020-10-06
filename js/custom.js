@@ -60,22 +60,6 @@ const altClassFromSelector=(clase,selector)=> {
 
 // var acc = d.querySelectorAll("Accordion");
 // var i;
-//
-// acc.forEach((item, i) => {
-// 	item.addEventListener("click", function() {
-//
-//     this.classList.toggle("active");
-//     var panel = this.nextElementSibling;
-//     if (panel.style.maxHeight) {
-//       panel.style.maxHeight = null;
-//       panel.style.padding = "0";
-//     } else {
-//       panel.style.maxHeight = panel.scrollHeight + "px";
-//       panel.style.padding = "20px";
-//     }
-//
-// 	});
-// });
 
 const accordionSelector = (selector) => {
 	var acc = d.querySelectorAll(selector);
@@ -94,20 +78,6 @@ const accordionSelector = (selector) => {
 	});
 }
 
-
-// for (i = 0; i < acc.length; i++) {
-//   acc[i].addEventListener("click", function() {
-//     this.classList.toggle("active");
-//     var panel = this.nextElementSibling;
-//     if (panel.style.maxHeight) {
-//       panel.style.maxHeight = null;
-//       panel.style.padding = "0";
-//     } else {
-//       panel.style.maxHeight = panel.scrollHeight + "px";
-//       panel.style.padding = "20px";
-//     }
-//   });
-// }
 
 
 
@@ -253,7 +223,7 @@ box = {
 
 	greet : ()=>{c.log("greetings "+uid+", your id is: "+upk)},
 	cancel: ()=>{
-		let dbug = 1;
+		let dbug = 0;
 		if(box.dbug || dbug){c.lof('comienza la funcion Cancel', '#5FA')}
 
 		// if(!mainButtonIsAPlus){
@@ -463,6 +433,10 @@ box = {
 
 	// AGREGAR LA POSIBILIDAD DE QUE LOS ELEMENTOS SEAN PRODUCTOS, QUE TENGAN PRECIO Y CANTIDADES Y QUE SUMEN LOS COSTOS DE LOS HIJOS ----------------------
 	addNewElement:(txt,pty,dte,upk,bse,ppk,grp)=>{
+		// dte = '0000-00-00 00:00:00';
+		// if(dte == ''){dte = null}
+		// if(upk == ''){upk = null}
+		// c.log(dte);
 		var i,
 		dataNames =["txt","pty","dte","upk","bse","ppk","grp"],
 		dataValues=[ txt , pty , dte , upk , bse , ppk , grp ];
@@ -493,7 +467,7 @@ box = {
 			old:false,
 			state: 0,
 			setState:(state = false)=>{
-				let dbug = 1; // debug mode
+				let dbug = 0; // debug mode
 				if(box.dbug || dbug){c.lof('comienza la funcion setState de button Zero', '#5FA')}
 				if(box.dbug || dbug){c.log('queremos setear el boton al estado: ', state)}
 				let addNew = d.querySelector('#addNew');
@@ -575,46 +549,7 @@ box = {
 					default:
 						c.log('caso default de estado');
 				}
-				// if(box.buttons[0].state==0){
-				// 	altClassFromSelector('alt', '#addNew')
-				// }else if(box.buttons[0].state==1){
-				// 	box.slct.forEach(e=>{
-				// 		e.check();
-				// 		// v.editElement('arc',1 ,1);
-				// 		d.getElementById('listElement'+e.ord).focus()
-				// 		box.cancel();
-				// 	})
-				// } else {
-				// 	c.log(box.buttons[0].status);
-				//
-				// 		var inputs=d.getElementById('addNew').elements;
-				// 		box.addNewElement(
-				// 		    inputs['addNewText'].value,
-				// 		    inputs['colr'].value,
-				// 		    inputs['dateInput'].value,
-				// 		    inputs['friendId'].value,
-				// 		    box.hist[0].bse,
-				// 		    box.hist[0].epk,
-				// 		    '',
-				// 		);
-				// 		altClassFromSelector('alt', '#addNew')
-				// 		// accordionSelector('#addNew');
-				// }
 			},
-			// old:()=>{
-			// 	if(!mainButtonIsAPlus){
-			// 		box.slct.forEach(v=>{
-			// 			v.check();
-			// 			// v.editElement('arc',1 ,1);
-			// 			d.getElementById('listElement'+v.ord).focus()
-			// 			box.cancel();
-			// 		})
-			// 	}else{
-			// 		// d.querySelector('#addNew').classList.add('alt')
-			// 		altClassFromSelector('alt', '#addNew')
-			// 		// accordionSelector('#addNew');
-			// 	}
-			// }
 		},
 		()=>{
 			d.querySelector(".newGroupFriendList").innerText="";

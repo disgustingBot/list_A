@@ -86,7 +86,7 @@
 // 				NEW.pky
 // 			);
 // 		END IF;
-// 		IF (NEW.stc IS NULL) THEN
+// 		IF (NEW.stc IS NULL AND NEW.bse != NEW.pky) THEN
 // 			INSERT INTO elementparent (ppk, epk) VALUES (NEW.bse, NEW.pky);
 // 		END IF;
 // 	END;

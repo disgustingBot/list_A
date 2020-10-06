@@ -180,6 +180,7 @@ body {
 }
 body.bLogin   {margin-left:-000vw}
 body.bMain    {margin-left:-100vw}
+body.main     {margin-left:-100vw}
 body.bNewGroup{margin-left:-200vw}
 button {border: none; cursor: pointer;}
 /*button:active {outline:0;}*/
