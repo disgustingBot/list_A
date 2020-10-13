@@ -18,7 +18,7 @@ $ppk = $_POST['ppk'];
 		FROM
 		elements a, elementparent b
 		WHERE (
-		a.pky = b.epk AND a.del = 0 AND
+		a.element_id = b.epk AND a.del = 0 AND
 		b.ppk = $ppk  AND b.onf = 1
 	);";
 // }

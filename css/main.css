@@ -42,9 +42,14 @@ Version: 1.0
 6.6.1) =btn:
 6.6.2) =btn_close:
 6.6.3) =element_navigate:
+6.6.4) =btn_round:
+6.6.5) =action_btn:
+6.6.6) =back_btn
 
 6.8) =MENUS:
-6.8.1) =main_menu:
+6.8.0) =main_menu:
+6.8.1) =action_menu:
+6.8.2) =add_new:
 
 6.69) =redDot:
 
@@ -472,8 +477,10 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 .list{
-  display:grid;
-  width:100vw;
+  height:100vh;
+  overflow-y:scroll;
+  /* display:grid; */
+  /* width:100vw; */
 }
 
 
@@ -516,9 +523,12 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 /* ELEMENT TITLE */
+.element.title.selected{background:var(--grey5)!important;}
 .element.title{
   background:var(--grey3)!important;
   box-shadow: var(--DP24);
+  position:sticky;
+  top:0;
 }
 .element.title .element_title{
   font-size:1.3rem;
@@ -530,7 +540,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 .element.title .element_texto{
   grid-column:1/5;
   grid-row:2;
-  padding:.5rem 2rem;
+  /* padding:.5rem 2rem; */
   background:var(--grey2);
 }
 /* ELEMENT */
@@ -744,7 +754,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   grid-column:4;
   display: none;
 }
-.selected .element_navigate {display: inline-block;}
+.selected:not(.title) .element_navigate {display: inline-block;}
 #element_navigate_dash1 {transform: rotate( 30deg);transform-origin: 100% 100%;}
 #element_navigate_dash2 {transform: rotate(-30deg);transform-origin: 100%    0;}
 .element_navigate_dash {
@@ -761,6 +771,203 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.4) =btn_round:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.btn_round{
+  background: var(--color5);
+  border-radius: 50%;
+  box-shadow: 0px 12px 12px  6px rgba(0, 0, 0, 0.2),   0px 0px 48px 24px  rgba(0, 0, 0, 0.14);
+  color: var(--color7);
+  cursor:pointer;
+  display:none;
+  height: 40px;
+  padding: 0;
+  position: sticky;
+  transition: .3s;
+  transition-delay: .3s;
+  width:  40px;
+  z-index: 5;
+}
+.btn_round.active {
+  background: var(--color1);
+  color: var(--color2);
+  display:grid;
+  height:50px;
+  bottom:.5rem;
+  right: .5rem;
+  position:absolute;
+  width: 50px;
+  transition-delay: 0s!important;
+  z-index: 6;
+}
+
+.button_zero {
+  grid-column:var(--navBarGC);
+  grid-row:    2;
+}
+.mainButtonBar {
+  width: 40%;
+  height: 4px;
+  background: currentColor;
+  position: absolute;
+  transition:.4s;
+  transform-origin: 50% 50%;
+  border:solid 0px currentColor;
+  clip-path: polygon(100% 100%, 0 100%, 0 0, 100% 0);
+}
+#mainButtonBar1                  {transform:rotate(  90deg);left:30%;top:46%;transition-delay:.1s}
+#mainButtonBar2                  {transform:rotate(   0deg);left:30%;top:46%;width:40%}
+
+.button_zero.close #mainButtonBar1{transform:rotate( 135deg);transition-delay:0}
+.button_zero.close #mainButtonBar2{transform:rotate(  45deg);}
+/* .button_zero.check */
+.button_zero.check #mainButtonBar1{transform:rotate( 135deg);left:40%;top:46%}
+.button_zero.check #mainButtonBar2{transform:rotate(  45deg);left:24%;top:50%;width:30%}
+
+
+.button_zero.send #mainButtonBar1{
+  transform:rotate(0);
+  clip-path: polygon(100% 50%, 0 100%, 0 0, 0 0);
+  left:36%;
+  height:20px;
+  top:30%;
+}
+.button_zero.send #mainButtonBar2{
+  transform:rotate(0);
+  left:36%;
+  height:6px;
+  width:6px;
+  color:var(--color1);
+  top:45%;
+  clip-path: polygon(100% 50%, 0 100%, 0 0, 0 0);
+}
+
+
+
+
+
+
+.buttonOne {
+  grid-column:var(--navBarGC);
+  grid-row: 2;
+  bottom:1.8rem!important;
+}
+.buttonOneCircle{
+  border-radius: 50%;
+  height: 60%;
+  width:  60%;
+  border: 4px solid currentColor;
+  box-sizing: border-box;
+  margin: auto;
+}
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.5) =action_btn:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.action_btn {
+  height: 100%;
+  background: none;
+  height:50px;
+  display: inline-flex;
+  flex-direction: column;
+  padding: 10px 0;
+  cursor:pointer;
+  position:fixed;
+  top:  0;
+  right:0;
+  width: 50px;
+  z-index:2;
+}
+.action_menu_active .action_btn_dot{
+  height: 4px;
+  width: 30px;
+  border-radius:0;
+  transform-origin: right center;
+}
+.action_menu_active .action_btn_dot:nth-child(1){transform:rotate(-45deg);}
+.action_menu_active .action_btn_dot:nth-child(2){transform:scaleX(0);transform-origin:center;}
+.action_menu_active .action_btn_dot:nth-child(3){transform:rotate( 45deg);}
+.action_btn_dot {
+  transition:.3s;
+  height: 5px;
+  width:  5px;
+  border-radius: 50%;
+  /* margin: auto 22px; */
+  margin: auto;
+  background: var(--color7);
+}
+
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.6) =back_btn:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+
+/* .login #backButton {display: none;} */
+.back_btn {
+  align-items: center;
+  background: var(--color4);
+  border-radius: 50%;
+  bottom:15px;
+  box-shadow: 0px 12px 12px  6px rgba(0, 0, 0, 0.2),   0px 0px 48px 24px  rgba(0, 0, 0, 0.14);
+  display: inline-flex;
+  flex-direction: column;
+  font-size: 2.2em;
+  /* grid-column: 1; */
+  grid-column:var(--navBarGC);
+  grid-row: 2;
+  height: 35px;
+  margin-left:  15px;
+  /* right: calc(100vw - 50px); */
+  padding: 0;
+  position: absolute;
+  /* top: calc(100vh - 60px); */
+  /* top: var(--btnRoundActiveTop); */
+  bottom:2rem;
+  width:  35px;
+  z-index: 5;
+}
+.back_btn_bar {
+  background: var(--color2);
+  height: 2px;
+  left:10px;
+  margin: auto;
+  top: 17px;
+  transform-origin: 0% 50%;
+  width: 15px;
+}
+.back_btn_bar1{transform:rotate( 30deg);margin-top:   -1px}
+.back_btn_bar2{transform:rotate(-30deg);margin-bottom:-1px}
+
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
                               6.8) =MENUS:
@@ -769,7 +976,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                              6.8.1) =main_menu:
+                              6.8.0) =main_menu:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
@@ -791,6 +998,277 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 }
 /* #mainMenuButton:focus + #mainMenu,#mainMenu:focus{left:0;} */
 .main_menu.active{left:0}
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.8.1) =action_menu:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.action_menu.action_menu_active {
+  clip-path:circle(calc(500px * 1.42) at calc(100% - var(--hideSize)) calc(var(--hideSize)));
+  background: var(--color2);
+  transition-delay: .05s;
+}
+body:not(.view_main) .action_menu {
+  clip-path:circle(0 at calc(100% - var(--hideSize)) calc(var(--hideSize)));
+}
+.action_menu {
+  box-shadow: 0px  4px  4px  2px rgba(0, 0, 0, 0.2),   0px 0px 16px  8px  rgba(0, 0, 0, 0.14);
+  --hideSize:25px;
+  clip-path:circle(var(--hideSize) at calc(100% - var(--hideSize)) calc(var(--hideSize)));
+  position: fixed;
+  /* top:-454px; */
+  top:0;
+  right:0;
+  width: 220px;
+  padding: 0;
+  z-index: 1;
+  margin:0;
+  background: transparent;
+  color:      var(--color7);
+  box-shadow: 0;
+  transition: .4s;
+  display: flex;
+  flex-direction: column;
+}
+.action_menu_active .action_menu_title{
+  background:var(--color3);
+  transition:.3s;
+  transition-delay:0;
+}
+.action_menu_title {
+  color:      var(--color7);
+  /* background:var(--color3); */
+  background: transparent;
+  transition:.3s;
+  transition-delay:.3s;
+  display:grid;
+  grid-template-columns:1fr 50px;
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 50px;
+  height: 56px;
+  align-items:center;
+}
+.action_menu_title p{margin:0}
+.action_menu_title .mainMenuClose{display:grid;margin:auto}
+/* #elementMenu:focus + #secdMenu, #secdMenu:focus {top:0px;} */
+.action_menu_option {
+  height: 40px;
+  display: flex;
+  border-bottom: solid 1px var(--color4);
+}
+.action_menu_option:nth-last-child(1){border-bottom:none}
+
+.action_menu_button {
+  width: 100%;
+  text-align: left;
+  padding: 0 50px;
+  background: none;
+  border: none;
+  color:var(--color7);
+}
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.8.2) =add_new:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+
+
+/* #button0:focus + .add_new, .add_new:hover {bottom: 0px;} */
+/* .add_new.alt {bottom:0px} */
+.add_new.alt {
+  clip-path:circle(calc(100vmax * 1.42) at calc(100% - 30px - .5rem) calc(100% - 30px - .5rem));
+}
+body:not(.button0) .add_new,
+body:not(.view_main) .add_new {
+  clip-path:circle(0 at calc(100% - 30px - .5rem) calc(100% - 30px - .5rem));
+}
+.add_new {
+  --hideSize:25px;
+  background: var(--color3);
+  bottom:0;
+  clip-path:circle(var(--hideSize) at calc(100% - var(--hideSize) - .5rem) calc(100% - var(--hideSize) - .5rem));
+  display: grid;
+  grid-column:var(--addNewGC);
+  /* height:var(--addNewHeight); */
+  /* grid-template-columns: repeat(6, 1fr); */
+  grid-template-columns: 1fr repeat(5, 50px);
+  grid-gap:.5rem;
+  /* grid-template-rows: 40px 40px; */
+  /* max-height: 0; */
+  /* padding:0 .5rem; */
+  padding:.5rem;
+  overflow: hidden;
+  position: fixed;
+  right:0;
+  transition: .5s ease-in-out;
+  width: var(--addNewWidth);
+  z-index: 10;
+}
+.add_new_text::placeholder{color:var(--color6)}
+.add_new_text {
+  grid-row:1;
+  grid-column:1/-1;
+  border: none;
+  width: 100%;
+  background: none;
+  color:       var(--color7);
+  caret-color: var(--color1);
+  height: min-content;
+  min-height: 1rem;
+  line-height: 1rem;
+}
+.add_new_button {
+  background: none;
+  cursor:pointer;
+  color: var(--color7);
+  padding: 0;
+  min-height:2.5rem;
+  height:100%;
+  display: flex;
+}
+.add_new_button svg {
+  height: 40px;
+  width: 40px;
+  margin: auto;
+  -webkit-filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.5));
+          filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.5));
+}
+.add_new_frnd{grid-column:3/4}
+.add_new_frnd_input{
+  position: fixed;
+  bottom:-41px;
+  transition: .4s;
+}
+.add_new_frnd:hover .add_new_frnd_input,
+.add_new_frnd:focus .add_new_frnd_input,
+.add_new_frnd_input:hover,
+.add_new_frnd_input:focus{bottom:84px}
+
+.add_new_send {grid-column:6/7;}
+/*.add_new_prty {grid-column:5/6;color:}*/
+.add_new_prty {grid-column:5/6; border-radius: 10px 0 0 0;}
+.add_new_colr {
+  position:fixed;
+  z-index: 9;
+  right:0;
+  bottom:-250px;
+  /*bottom:84px;*/
+  background: var(--color3);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-radius: 8px 8px 0 0;
+  transition: .5s;
+}
+.add_new_prty:focus + .add_new_colr, .add_new_colr:focus {bottom:84px;}
+.noSelect {
+    -webkit-touch-callout:none;
+    -webkit-user-select:  none;
+     -khtml-user-select:  none;
+       -moz-user-select:  none;
+        -ms-user-select:  none;
+            user-select:  none;
+}
+
+.colrOption {
+  background: var(--color2);
+  border-bottom: solid 1px var(--color4);
+  color:white;
+  line-height: 40px;
+  height:      40px;
+  width: 220px;
+  display: flex;
+  text-align: left;
+  font-size: 18px;
+  position: relative;
+  cursor: pointer;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.colrOpt {display: none;}
+.colrOptP {margin: 0;padding-left: 60px;width: 100%;}
+input:checked ~ .colrOptP {background-color: var(--color4);}
+
+
+/* On mouse-over, add a grey background color */
+/*.colrOption:hover {background-color: var(--color4);}*/
+.colrOption:selected {background-color: #ccc;}
+
+
+#amrCirc {background-color: var(--clrPty1);}
+#rojCirc {background-color: var(--clrPty2);}
+#verCirc {background-color: var(--clrPty3);}
+#azlCirc {background-color: var(--clrPty4);}
+#blcCirc {background-color: var(--clrPty5);}
+#njaCirc {background-color: var(--clrPty6);box-shadow:none;}
+
+.checkmark {
+  position: absolute;
+  top:  8px;
+  left:18px;
+  height: 24px;
+  width:  24px;
+  background-color: #eee;
+  border-radius: 50%;
+  box-shadow: 0px  10px  10px  1px rgba(0, 0, 0, 0.2),   0px 0px  8px  4px  rgba(0, 0, 0, 0.14);
+}
+
+
+
+.add_new_date {grid-column:4/5;}
+#datePicker {
+  position:fixed;
+  /* top:500px; */
+  /* bottom:85px; */
+  bottom:-50px;
+  right: 0;
+  /* z-index: -1000; */
+  margin:auto;
+  width: 220px;
+  box-sizing: border-box;
+  padding: 5px;
+  transition: .5s;
+  border-radius: 7px 7px 0 0;
+  background: var(--color3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.add_new_date:hover #datePicker {
+  bottom: 85px;
+}
+#datePicker:hover {
+  bottom: 85px;
+}
+
+.datePickerSelc {
+  width: calc(200px / 3);
+  padding: 10px 0;
+  border:none;
+  border-radius: 7px;
+}
+
+.dayOpt {
+  background: var(--color6);
+  color: var(--color2);
+}
 
 
 

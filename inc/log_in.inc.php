@@ -192,6 +192,13 @@ if (empty($log) || empty($pwd)) {
 				$_SESSION['u_fst'] = $row['fst'];
 				$_SESSION['u_lst'] = $row['lst'];
 				$_SESSION['u_eml'] = $row['eml'];
+				$respuesta['data'] = array(
+					'pky' => $row['pky'],
+					'nick name' => $row['uid'],
+					'first name' => $row['fst'],
+					'last name' => $row['lst'],
+					'email' => $row['eml'],
+				);
 				// $sql = "SELECT * FROM elements WHERE ( (stc = '0' OR stc = '1' OR stc = '2' OR stc = '3') AND upk = $pky);";
 				// $sql = "SELECT pky FROM elements WHERE uid=$row['pky'] AND stc=0;";
 
@@ -200,14 +207,28 @@ if (empty($log) || empty($pwd)) {
 				// $row = mysqli_fetch_assoc($result);
 				// $_SESSION['u_base'] = $row['pky'];
 
-				$bse = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements WHERE upk = $upk;"));
 				// $_SESSION['u_bse'] = $bse['pky'];
+				$bse = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements WHERE upk = $upk;"));
+				$_SESSION['base'] = json_encode($bse);
+				$respuesta['base'] = json_encode($bse);
+
+				$home = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements WHERE (upk = $upk AND stc = 1);"));
+				$_SESSION['home']  = json_encode($home);
+				$respuesta['home'] = json_encode($home);
+
+				$favorites = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements WHERE (upk = $upk AND stc = 2);"));
+				$_SESSION['favorites']  = json_encode($favorites);
+				$respuesta['favorites'] = json_encode($favorites);
+
+				$groups = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements WHERE (upk = $upk AND stc = 3);"));
+				$_SESSION['groups']  = json_encode($groups);
+				$respuesta['groups'] = json_encode($groups);
+
+				$friends = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements WHERE (upk = $upk AND stc = 4);"));
+				$_SESSION['friends']  = json_encode($friends);
+				$respuesta['friends'] = json_encode($friends);
 
 
-				$_SESSION['u_bse'] = json_encode($bse);
-
-				
-				$respuesta['u_bse'] = json_encode($bse);
 				$respuesta['title'] = 'Success';
 				$respuesta['message'] = 'inicio de sesion correcto';
 				echo json_encode($respuesta);
