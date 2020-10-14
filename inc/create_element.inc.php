@@ -1,13 +1,15 @@
 <?php
 include_once 'dbh.inc.php';
 
-$txt = $_POST['txt'];
-$pty = $_POST['pty'];
-$dte = $_POST['dte'];
-$upk = $_POST['upk'];
-$bse = $_POST['bse'];
-$ppk = $_POST['ppk'];
-$grp = $_POST['grp'];
+$respuesta = array();
+
+$txt = $_POST['text'];
+$pty = $_POST['priority'];
+$dte = $_POST['date'];
+$upk = $_POST['user'];
+$bse = $_POST['base'];
+$ppk = $_POST['parent'];
+$grp = $_POST['group'];
 
 $columns = '(txt, pty, ';
 $values  = "('$txt', '$pty', ";
@@ -28,13 +30,19 @@ $values = $values . "'$bse')";
 	// Check for empty fields
 if (empty($txt)) {
 	// echo "empty fields";
-	echo json_encode("empty fields");
+	// echo json_encode("empty fields");
+	$respuesta['title'] = 'error';
+	$respuesta['message'] = 'empty fields';
+	echo json_encode($respuesta);
 	exit();
 } else {
 		// Check if imput characters are valid
 	if (preg_match("/[\']/", $txt)) {
 		// echo "invalid fields";
-		echo json_encode("invalid fields");
+		// echo json_encode("invalid fields");
+		$respuesta['title'] = 'Error';
+		$respuesta['message'] = 'invalid fields';
+		echo json_encode($respuesta);
 		exit();
 	} else {
 		// Insert the element into the database
@@ -45,9 +53,10 @@ if (empty($txt)) {
 			$qry=$conn2->prepare( $creation_query ); $qry->execute();
 
 			// $epk['pky'] debe ser la pky del elemento que acabo de registrar
-			$epk = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements ORDER BY pky DESC LIMIT 1;")); $pky=$epk["pky"];
+			$epk = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM elements ORDER BY element_id DESC LIMIT 1;")); $pky=$epk["element_id"];
 			if ($bse!=$ppk) {
-				$qry=$conn2->prepare("INSERT INTO elementparent (ppk, epk) VALUES ($ppk, $pky);"); $qry->execute();
+				$save_parent = "INSERT INTO elementparent (ppk, epk) VALUES ($ppk, $pky);";
+				$qry=$conn2->prepare($save_parent); $qry->execute();
 			}
 			// echo json_encode($epk["pky"]);
 			// echo var_dump(explode(",",$grp));
@@ -57,10 +66,18 @@ if (empty($txt)) {
 					// echo $v;
 				}
 			}
-
+// "INSERT INTO elementparent (ppk, epk) VALUES (768, 787);"
 			// var_dump($grp);
 			// echo $creation_query;
-			echo json_encode($epk);
+			// echo json_encode($epk);
+			$respuesta['title'] = 'success';
+			$respuesta['message'] = 'here is your element';
+			$respuesta['element'] = $epk;
+			// $respuesta['ppk'] = $ppk;
+			// $respuesta['pky'] = $pky;
+			// $respuesta['save_parent'] = $save_parent;
+			// $respuesta['creation_query'] = $creation_query;
+			echo json_encode($respuesta);
 
 		} catch (PDOException $e) { echo 'Error: ' . $e->getMessage() . " file: " . $e->getFile() . " line: " . $e->getLine(); exit; }
 

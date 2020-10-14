@@ -28,7 +28,30 @@ Version: 1.0
 5) =ESTRUCTURA:
 
 6) =COMPONENTES:
+6.0) =VIEWS:
+6.0.0) =Load:
+6.0.1) =log:
+6.0.2) =main:
+
+6.3) =cancel:
+6.4) =MULTICARDS:
+6.4.0) =element:
+6.4.1) =user_card:
+
 6.6) =BUTTONS:
+6.6.1) =btn:
+6.6.2) =btn_close:
+6.6.3) =element_navigate:
+6.6.4) =btn_round:
+6.6.5) =action_btn:
+6.6.6) =back_btn
+
+6.8) =MENUS:
+6.8.0) =main_menu:
+6.8.1) =action_menu:
+6.8.2) =add_new:
+
+6.69) =redDot:
 
 
 FIN DE MAPA DE CONTENIDOS */
@@ -41,10 +64,11 @@ FIN DE MAPA DE CONTENIDOS */
 --------------------------------------------------------------------------- */
 
 :root {
+  font-size: var(--sizeR);
 
   /* ---------------------------------------------------------------------------
   ------------------------------------------------------------------------------
-                 1.1) =Variables de personalizacion de pagina
+                1.1) =Variables de personalizacion de pagina
   ------------------------------------------------------------------------------
   --------------------------------------------------------------------------- */
   /* la idea de esto es que sean como controles con los
@@ -58,10 +82,30 @@ FIN DE MAPA DE CONTENIDOS */
   /* COLORS */
   /* Al editar colores siempre usar HEX y nunca
   dejar espacio entre los dos puntos y el color */
+
+
+  --grey0:#000000;
+  --grey1:#111111;
+  --grey2:#222222;
+  --grey3:#333333;
+  --grey4:#444444;
+  --grey5:#555555;
+  --grey6:#666666;
+  --grey7:#777777;
+  --grey8:#888888;
+  --grey9:#999999;
+  --greya:#AAAAAA;
+  --greyb:#BBBBBB;
+  --greyc:#CCCCCC;
+  --greyd:#DDDDDD;
+  --greye:#EEEEEE;
+  --greyf:#FFFFFF;
+
+
   --color1:#4cff62;
   /* --color1:#FECC00; */
   --color2:#1C1B17;
-  --color3:#434242;
+  --color3:#424242;
   --color4:#5B5B5B;
   --color5:#727271;
   --color6:#898989;
@@ -76,11 +120,23 @@ FIN DE MAPA DE CONTENIDOS */
   --clrPty5:#FEFEFE;
   --clrPty6:#434242;
 
+  --DP0:  0px 0px 0px  rgba(0, 0, 0, 0.0),  0px 0px 0px  rgba(0, 0, 0, 0.00), 0px 0px 0px   rgba(0, 0, 0, 0.00);
+  --DP1:  0px 1px 3px  rgba(0, 0, 0, 0.2),  0px 2px 2px  rgba(0, 0, 0, 0.12), 0px 0px 2px   rgba(0, 0, 0, 0.14);
+  --DP2:  0px 1px 5px  rgba(0, 0, 0, 0.2),  0px 3px 4px  rgba(0, 0, 0, 0.12), 0px 2px 4px   rgba(0, 0, 0, 0.14);
+  --DP3:  0px 1px 8px  rgba(0, 0, 0, 0.2),  0px 3px 4px  rgba(0, 0, 0, 0.12), 0px 3px 3px   rgba(0, 0, 0, 0.14);
+  --DP4:  0px 1px 10px rgba(0, 0, 0, 0.2),  0px 4px 5px  rgba(0, 0, 0, 0.12), 0px 2px 4px   rgba(0, 0, 0, 0.14);
+  --DP6:  0px 3px 5px  rgba(0, 0, 0, 0.2),  0px 1px 18px rgba(0, 0, 0, 0.12), 0px 6px 10px  rgba(0, 0, 0, 0.14);
+  --DP8:  0px 4px 5px  rgba(0, 0, 0, 0.2),  0px 3px 14px rgba(0, 0, 0, 0.12), 0px 8px 10px  rgba(0, 0, 0, 0.14);
+  --DP9:  0px 5px 6px  rgba(0, 0, 0, 0.2),  0px 3px 16px rgba(0, 0, 0, 0.12), 0px 9px 12px  rgba(0, 0, 0, 0.14);
+  --DP12: 0px 7px 8px  rgba(0, 0, 0, 0.2),  0px 5px 22px rgba(0, 0, 0, 0.12), 0px 12px 17px rgba(0, 0, 0, 0.14);
+  --DP16: 0px 8px 10px rgba(0, 0, 0, 0.2),  0px 6px 30px rgba(0, 0, 0, 0.12), 0px 16px 24px rgba(0, 0, 0, 0.14);
+  --DP24: 0px 11px 15px rgba(0, 0, 0, 0.2), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 24px 38px rgba(0, 0, 0, 0.14);
+
 
   /* SIZES */
   /* Al editar los tamaños, hacerlo siempre sin unidades
   sabiendo que el numero corresponde a la cantidad de pixeles */
-  --sizeRa: 16; --sizeRb: 20; --sizeRc: 20; --sizeRd:24;
+  --sizeRa: 16; --sizeRb: 18; --sizeRc: 18; --sizeRd:20;
   --sizeR: calc(var(--sizeRa) * 1px);
 
   /* ---------------------------------------------------------------------------
@@ -91,7 +147,6 @@ FIN DE MAPA DE CONTENIDOS */
 
     /* login View */
     /* --signFormMarginBottom:-260px; */
-    --mainGTC:;
 
     --mainMenuPosition:fixed;
     --mainMenuLeft:-110%;
@@ -103,7 +158,6 @@ FIN DE MAPA DE CONTENIDOS */
     --navBarWidth:100%;
     --titlePadding:0;
 
-    --listWidth:;
 
     --addNewPosition:fixed;
     --addNewBottom:-85px;
@@ -171,10 +225,10 @@ FIN DE MAPA DE CONTENIDOS */
                           2.1) min-width:  =992px
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
-@media screen and (min-width: 992px) {
+/* @media screen and (min-width: 992px) {
   :root {
   }
-}
+} */
 
 
 /* ---------------------------------------------------------------------------
@@ -230,7 +284,7 @@ FIN DE MAPA DE CONTENIDOS */
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                           4) =ETIQUETAS GLOBALES:
+                          4) =ETIQUETAS GLOBALES:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 *{
@@ -238,44 +292,41 @@ FIN DE MAPA DE CONTENIDOS */
   margin: 0;
   padding: 0;
 }
-/* TODO: fijarse que onda, cosaColor3 es color 7....  */
-.cosaColor1 {fill: var(--color1);}
-.cosaColor2 {fill: var(--color2);}
-.cosaColor3 {fill: var(--color7);}
- body{
-   background: var(--color2);
-   display: grid;
-   font-family: 'Ubuntu', sans-serif;
-   /* font-size: 14px; */
-   font-weight: 400;
-   grid-auto-flow: column;
-   grid-template-columns: 100vw;
-   margin: 0;
-   min-height: 100vh;
-   overflow: hidden;
-   position: relative;
-   transition: .5s;
-   z-index: 0;
-   font-size: var(--sizeR);
- }
- body.bLogin   {margin-left:-000vw}
- body.bMain    {margin-left:-100vw}
- body.bNewGroup{margin-left:-200vw}
- button {border: none; cursor: pointer;}
- /*button:active {outline:0;}*/
- /*button:focus  {outline:0;}*/
- input, textarea {
-   background: var(--color3);
-   border: none;
-   border-bottom: 1px solid var(--color4);
-   color:      var(--color7);
-   min-height: 40px;
-   padding: 0 10px;
- }
- input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
- :focus  {outline:0;}
+body{
+  background: var(--grey2);
+  display: grid;
+  font-family: 'Ubuntu', sans-serif;
+  /* font-size: 14px; */
+  font-weight: 400;
+  grid-auto-flow: column;
+  grid-template-columns: 100vw;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  transition: .5s;
+  z-index: 0;
+  font-size: var(--sizeR);
+}
+body.view_log {margin-left:-000vw}
+body.view_main{margin-left:-100vw}
+body.bNewGroup{margin-left:-200vw}
+button {border: none; cursor: pointer;}
+/*button:active {outline:0;}*/
+/*button:focus  {outline:0;}*/
+input, textarea {
+  background: var(--color3);
+  border: none;
+  border-bottom: 1px solid var(--color4);
+  color:      var(--color7);
+  min-height: 40px;
+  padding: 0 10px;
+}
+input, textarea, button, select, a {-webkit-tap-highlight-color: rgba(0,0,0,0);}
+:focus  {outline:0;}
 
-
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow: 0 0 0px 1000px var(--color4) inset;}
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
@@ -283,13 +334,336 @@ FIN DE MAPA DE CONTENIDOS */
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
-
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
                               6) =COMPONENTES:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                               6.0) =VIEWS:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                               6.0.0) =Load:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.load{
+  background: var(--color2);
+  display: grid;
+  height: 100vh;
+  width:  100vw;
+  position: absolute;
+  top:0;
+  left:0;
+  z-index: 10000;
+  transition: .5s;
+}
+.circle{
+  width:  50px;
+  height: 50px;
+  border-radius: 50%;
+  border-top: 2px solid var(--color1);
+  margin: auto;
+  animation: wheel 1s infinite;
+}
+@keyframes wheel{to{transform:rotate(360deg)}}
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.0.1) =log:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+/* NEW LOGIN PAGE */
+/* .login #login {display: grid;} */
+.log {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-auto-rows: min-content;
+  grid-column-gap: 16px;
+  height: 100vh;
+  margin:0 auto;
+  max-width: 400px;
+  /* grid-row-gap: 300px; */
+  overflow: hidden;
+  padding:         16px;
+  position: relative;
+  z-index: 0;
+}
+.log_title {
+  grid-column: 1/3;
+  margin: auto;
+  text-align: center;
+  font-size: 5rem;
+  line-height: 1em;
+  color: var(--greyf);
+  font-family: 'Megrim', cursive;
+}
+.log_titleA {
+  color: var(--color1);
+  text-shadow: 0px 0px 40px var(--color5);
+  font-family: unset;
+}
+.log_form {
+  grid-column: 1/3;
+  position: relative;
+  z-index: 1;
+  margin: auto;
+  padding: 16px 0;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-row-gap: 8px;
+  justify-content: center;
+  width: 100%;
+  transition: .4s;
+  position: relative;
+}
+.log_input {
+  width: 100%;
+  padding: 5px 10px;
+  height: 30px;
+  border: none;
+  box-sizing: border-box;
+  border-radius: 8px;
+  position: relative;
+  z-index: 0;
+}
+.logInput::placeholder  {color: var(--grey7); opacity: 1;}
+
+.log_conditions {
+  text-align: center;
+  color: var(--greye);
+  font-size:1rem;
+}
+.log_conditions span{color:var(--color1)}
+
+
+
+
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.0.2) =main:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.main{
+  display: grid;
+  grid-template-rows: 50px auto;
+  grid-template-columns:var(--mainGTC);
+  /* overflow: scroll; */
+  width: 100vw;
+  position:relative;
+  grid-column:2;
+  grid-row:1;
+}
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.2) =list:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.list{
+  height:100vh;
+  overflow-y:scroll;
+  /* display:grid; */
+  /* width:100vw; */
+}
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.3) =cancel:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.cancel {
+  width:  100%;
+  height: 100%;
+  min-height: 300px;
+  transition: .4s;
+  display: grid;
+}
+.highlight {box-shadow:inset 0 0 50px -30px var(--color1)}
+.highlight svg {color: var(--color3)!important;}
+.cancel svg {
+  margin: auto;
+  width:  15%;
+  height: 15%;
+  min-height: 300px;
+  transition: .4s;
+  color: var(--color2);
+}
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.4) =MULTICARDS:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.4.0) =element:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+/* ELEMENT TITLE */
+.element.title.selected{background:var(--grey5)!important;}
+.element.title{
+  background:var(--grey3)!important;
+  box-shadow: var(--DP24);
+  position:sticky;
+  top:0;
+}
+.element.title .element_title{
+  font-size:1.3rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width:calc(100%);
+}
+.element.title .element_texto{
+  grid-column:1/5;
+  grid-row:2;
+  /* padding:.5rem 2rem; */
+  background:var(--grey2);
+}
+/* ELEMENT */
+.element {
+  align-items: center;
+  box-sizing: border-box;
+  border-top:1px solid var(--color3);
+  color: var(--color7);
+  display:grid;
+  grid-gap: .5rem;
+  grid-row-gap:0;
+  overflow:hidden;
+  grid-template-columns:.25rem min-content 1fr 40px;
+  grid-auto-rows:auto;
+  height: auto;
+  min-height: min-content;
+  font-size:1rem;
+  /* scroll-snap-align: start; */
+  transition: .5s;
+  z-index:1;
+}
+.selected {background:var(--grey6)}
+.ticked {
+  text-decoration: line-through;
+  color: var(--color6)!important;
+}
+.element_color {
+  width: 4px;
+  height:100%;
+  background: red;
+  grid-row:1/3;
+  grid-column:1;
+}
+.element_title {
+  padding:.7rem 0;
+}
+.element_short {
+  padding:.3rem 0;
+}
+.element_title,.element_short,.element_texto {grid-column:3}
+.element_short, .element_texto {display:none}
+
+.element.selected:not(.title) .element_short,
+.element.title .element_texto {display:unset}
+
+.mainMenuElement .element_title {overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+/* ELEMENT MAIN MENU */
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.4.1) =user_card:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+
+.user {
+  /* background: red; */
+  background: var(--color2);
+  /* background: radial-gradient( circle 20px at calc(20px + 1rem) calc(20px + 1.13rem), transparent 20px, var(--color3) 20px ); */
+  clip-path:circle(20px at calc(20px + 1rem) calc(20px + 1.13rem));
+  display:var(--onlyDesktopG);
+  grid-column:2;
+  grid-row:1;
+  height:100vh;
+  position:relative;
+  transition: 1s;
+  width: 100vw;
+  z-index:1000;
+}
+.user.alt{
+  clip-path:circle(calc(100vmax * 1.42) at calc(20px + 1rem) calc(20px + 1.13rem));
+}
+.user.alt .user_card{
+  /* margin-left:50vw; */
+  /* transform:translateX(-50%); */
+  width:100%;
+}
+.user .user_card{width:100%;}
+
+
+
+.user_card {
+  align-items:center;
+  background: var(--color3);
+  /* box-shadow: 0px  1px  1px  0px rgba(0, 0, 0, 0.2),   0px 0px  4px  2px  rgba(0, 0, 0, 0.14); */
+  display:grid;
+  grid-gap:1rem;
+  grid-template-columns:min-content 1fr min-content;
+  height: 75px;
+  margin:0;
+  transition:.5s;
+  /* padding-left: 30px; */
+  padding:0 1rem;
+  color:white;
+}
+.user_card_pic {
+  border: 2px solid var(--color1);
+  height: 40px;
+  width:  40px;
+  border-radius: 50%;
+  margin: auto 0;
+  color:inherit;
+}
+/* #mainMenuProfileCaption {display: flex;} */
+.user_card_name {
+  margin: auto;
+  /* padding-left: 20px; */
+  color:inherit;
+  display: inline-block;
+}
+.user_card_key {
+  /* color: var(--color5); */
+  margin: auto;
+  padding-top: 4px;
+  color: var(--color6);
+  /* font-size: .7em; */
+  display: inline-block;
+}
 
 
 /* ---------------------------------------------------------------------------
@@ -303,8 +677,643 @@ FIN DE MAPA DE CONTENIDOS */
                               6.6.1) =btn:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
-.btn{
-  background:red;
-  border:none;
-  padding:.4rem 1.2rem;
+
+.btn {
+  /* align-items: center; */
+  background: var(--greye);
+  border-radius: 8px;
+  box-shadow: 0px  4px  4px  2px rgba(0, 0, 0, 0.2),   0px 0px 16px  8px  rgba(0, 0, 0, 0.14);
+  color: var(--grey2);
+  /* display: inline-flex; */
+  font-size: 1rem;
+  /* font-family: 'Arizonia', cursive; */
+  height: 40px;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 0;
+  max-width: 200px;
+  position: relative;
+  width: 100%;
+  z-index: 0;
 }
+.btn.btn_special{background: var(--color1)}
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.2) =btn_close:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.btn_close{
+  align-items:center;
+  background:none;
+  border:none;
+  cursor:pointer!important;
+  display:flex;
+  height:25px;
+  /* margin: auto; */
+  /* margin-right: 15px; */
+  padding:0;
+  position: absolute;
+  right:.5rem;
+  top:.5rem;
+  width: 25px;
+}
+.btn_close_bar{
+  width: 100%;
+  height: 4px;
+  background: white;
+  position: absolute;
+  /* top:50%; */
+  left: 0;
+  /* transform:translateY(-50%) rotate(45deg); */
+  transform:rotate(45deg);
+}
+.btn_close_bar:nth-child(2){
+  /* transform:translateY(-50%) rotate(-45deg); */
+  transform:rotate(-45deg);
+}
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.3) =element_navigate:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.element_navigate {
+  background: none;
+  margin-left: auto;
+  width: 40px;
+  height:100%;
+  cursor:pointer;
+  padding: 0;
+  grid-row:1/3;
+  grid-column:4;
+  display: none;
+}
+.selected:not(.title) .element_navigate {display: inline-block;}
+#element_navigate_dash1 {transform: rotate( 30deg);transform-origin: 100% 100%;}
+#element_navigate_dash2 {transform: rotate(-30deg);transform-origin: 100%    0;}
+.element_navigate_dash {
+  margin:-2px auto;
+  width: 12px;
+  height: 2px;
+  background: var(--color6);
+  transform-origin: 100% 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.4) =btn_round:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.btn_round{
+  background: var(--color5);
+  border-radius: 50%;
+  box-shadow: 0px 12px 12px  6px rgba(0, 0, 0, 0.2),   0px 0px 48px 24px  rgba(0, 0, 0, 0.14);
+  color: var(--color7);
+  cursor:pointer;
+  display:none;
+  height: 40px;
+  padding: 0;
+  position: sticky;
+  transition: .3s;
+  transition-delay: .3s;
+  width:  40px;
+  z-index: 5;
+}
+.btn_round.active {
+  background: var(--color1);
+  color: var(--color2);
+  display:grid;
+  height:50px;
+  bottom:.5rem;
+  right: .5rem;
+  position:absolute;
+  width: 50px;
+  transition-delay: 0s!important;
+  z-index: 6;
+}
+
+.button_zero {
+  grid-column:var(--navBarGC);
+  grid-row:    2;
+}
+.mainButtonBar {
+  width: 40%;
+  height: 4px;
+  background: currentColor;
+  position: absolute;
+  transition:.4s;
+  transform-origin: 50% 50%;
+  border:solid 0px currentColor;
+  clip-path: polygon(100% 100%, 0 100%, 0 0, 100% 0);
+}
+#mainButtonBar1                  {transform:rotate(  90deg);left:30%;top:46%;transition-delay:.1s}
+#mainButtonBar2                  {transform:rotate(   0deg);left:30%;top:46%;width:40%}
+
+.button_zero.close #mainButtonBar1{transform:rotate( 135deg);transition-delay:0}
+.button_zero.close #mainButtonBar2{transform:rotate(  45deg);}
+/* .button_zero.check */
+.button_zero.check #mainButtonBar1{transform:rotate( 135deg);left:40%;top:46%}
+.button_zero.check #mainButtonBar2{transform:rotate(  45deg);left:24%;top:50%;width:30%}
+
+
+.button_zero.send #mainButtonBar1{
+  transform:rotate(0);
+  clip-path: polygon(100% 50%, 0 100%, 0 0, 0 0);
+  left:36%;
+  height:20px;
+  top:30%;
+}
+.button_zero.send #mainButtonBar2{
+  transform:rotate(0);
+  left:36%;
+  height:6px;
+  width:6px;
+  color:var(--color1);
+  top:45%;
+  clip-path: polygon(100% 50%, 0 100%, 0 0, 0 0);
+}
+
+
+
+
+
+
+.buttonOne {
+  grid-column:var(--navBarGC);
+  grid-row: 2;
+  bottom:1.8rem!important;
+}
+.buttonOneCircle{
+  border-radius: 50%;
+  height: 60%;
+  width:  60%;
+  border: 4px solid currentColor;
+  box-sizing: border-box;
+  margin: auto;
+}
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.5) =action_btn:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.action_btn {
+  height: 100%;
+  background: none;
+  height:50px;
+  display: inline-flex;
+  flex-direction: column;
+  padding: 10px 0;
+  cursor:pointer;
+  position:fixed;
+  top:  0;
+  right:0;
+  width: 50px;
+  z-index:2;
+}
+.action_menu_active .action_btn_dot{
+  height: 4px;
+  width: 30px;
+  border-radius:0;
+  transform-origin: right center;
+}
+.action_menu_active .action_btn_dot:nth-child(1){transform:rotate(-45deg);}
+.action_menu_active .action_btn_dot:nth-child(2){transform:scaleX(0);transform-origin:center;}
+.action_menu_active .action_btn_dot:nth-child(3){transform:rotate( 45deg);}
+.action_btn_dot {
+  transition:.3s;
+  height: 5px;
+  width:  5px;
+  border-radius: 50%;
+  /* margin: auto 22px; */
+  margin: auto;
+  background: var(--color7);
+}
+
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.6) =back_btn:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+
+/* .login #backButton {display: none;} */
+.back_btn {
+  align-items: center;
+  background: var(--color4);
+  border-radius: 50%;
+  bottom:15px;
+  box-shadow: 0px 12px 12px  6px rgba(0, 0, 0, 0.2),   0px 0px 48px 24px  rgba(0, 0, 0, 0.14);
+  display: inline-flex;
+  flex-direction: column;
+  font-size: 2.2em;
+  /* grid-column: 1; */
+  grid-column:var(--navBarGC);
+  grid-row: 2;
+  height: 35px;
+  margin-left:  15px;
+  /* right: calc(100vw - 50px); */
+  padding: 0;
+  position: absolute;
+  /* top: calc(100vh - 60px); */
+  /* top: var(--btnRoundActiveTop); */
+  bottom:2rem;
+  width:  35px;
+  z-index: 5;
+}
+.back_btn_bar {
+  background: var(--color2);
+  height: 2px;
+  left:10px;
+  margin: auto;
+  top: 17px;
+  transform-origin: 0% 50%;
+  width: 15px;
+}
+.back_btn_bar1{transform:rotate( 30deg);margin-top:   -1px}
+.back_btn_bar2{transform:rotate(-30deg);margin-bottom:-1px}
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.8) =MENUS:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.8.0) =main_menu:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.main_menu {
+  background: var(--color2);
+  box-shadow: 0px 24px 24px 12px rgba(0, 0, 0, 0.2),   0px 0px 96px 48px  rgba(0, 0, 0, 0.14);
+  color:      var(--color7);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  left:  var(--mainMenuLeft);
+  margin:0;
+  padding: 0;
+  position:var(--mainMenuPosition);
+  top:0;
+  transition: .7s;
+  width: var(--mainMenuWidth);
+  z-index: 24;
+}
+/* #mainMenuButton:focus + #mainMenu,#mainMenu:focus{left:0;} */
+.main_menu.active{left:0}
+
+
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.8.1) =action_menu:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.action_menu.action_menu_active {
+  clip-path:circle(calc(500px * 1.42) at calc(100% - var(--hideSize)) calc(var(--hideSize)));
+  background: var(--color2);
+  transition-delay: .05s;
+}
+body:not(.view_main) .action_menu {
+  clip-path:circle(0 at calc(100% - var(--hideSize)) calc(var(--hideSize)));
+}
+.action_menu {
+  box-shadow: 0px  4px  4px  2px rgba(0, 0, 0, 0.2),   0px 0px 16px  8px  rgba(0, 0, 0, 0.14);
+  --hideSize:25px;
+  clip-path:circle(var(--hideSize) at calc(100% - var(--hideSize)) calc(var(--hideSize)));
+  position: fixed;
+  /* top:-454px; */
+  top:0;
+  right:0;
+  width: 220px;
+  padding: 0;
+  z-index: 2;
+  margin:0;
+  background: transparent;
+  color:      var(--color7);
+  box-shadow: 0;
+  transition: .4s;
+  display: flex;
+  flex-direction: column;
+}
+.action_menu_active .action_menu_title{
+  background:var(--color3);
+  transition:.3s;
+  transition-delay:0;
+}
+.action_menu_title {
+  color:      var(--color7);
+  /* background:var(--color3); */
+  background: transparent;
+  transition:.3s;
+  transition-delay:.3s;
+  display:grid;
+  grid-template-columns:1fr 50px;
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 50px;
+  height: 56px;
+  align-items:center;
+}
+.action_menu_title p{margin:0}
+.action_menu_title .mainMenuClose{display:grid;margin:auto}
+/* #elementMenu:focus + #secdMenu, #secdMenu:focus {top:0px;} */
+.action_menu_option {
+  height: 40px;
+  display: flex;
+  border-bottom: solid 1px var(--color4);
+}
+.action_menu_option:nth-last-child(1){border-bottom:none}
+
+.action_menu_button {
+  width: 100%;
+  text-align: left;
+  padding: 0 50px;
+  background: none;
+  border: none;
+  color:var(--color7);
+}
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.8.2) =add_new:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+
+
+/* #button0:focus + .add_new, .add_new:hover {bottom: 0px;} */
+/* .add_new.alt {bottom:0px} */
+.add_new.alt {
+  clip-path:circle(calc(100vmax * 1.42) at calc(100% - 30px - .5rem) calc(100% - 30px - .5rem));
+}
+body:not(.button0) .add_new,
+body:not(.view_main) .add_new {
+  clip-path:circle(0 at calc(100% - 30px - .5rem) calc(100% - 30px - .5rem));
+}
+.add_new {
+  --hideSize:25px;
+  background: var(--color3);
+  bottom:0;
+  clip-path:circle(var(--hideSize) at calc(100% - var(--hideSize) - .5rem) calc(100% - var(--hideSize) - .5rem));
+  display: grid;
+  grid-column:var(--addNewGC);
+  /* height:var(--addNewHeight); */
+  /* grid-template-columns: repeat(6, 1fr); */
+  grid-template-columns: 1fr repeat(5, 50px);
+  grid-gap:.5rem;
+  /* grid-template-rows: 40px 40px; */
+  /* max-height: 0; */
+  /* padding:0 .5rem; */
+  padding:.5rem;
+  overflow: hidden;
+  position: fixed;
+  right:0;
+  transition: .5s ease-in-out;
+  width: var(--addNewWidth);
+  z-index: 10;
+}
+.add_new_text::placeholder{color:var(--color6)}
+.add_new_text {
+  grid-row:1;
+  grid-column:1/-1;
+  border: none;
+  width: 100%;
+  background: none;
+  color:       var(--color7);
+  caret-color: var(--color1);
+  height: min-content;
+  min-height: 1rem;
+  line-height: 1rem;
+}
+.add_new_button {
+  background: none;
+  cursor:pointer;
+  color: var(--color7);
+  padding: 0;
+  min-height:2.5rem;
+  height:100%;
+  display: flex;
+}
+.add_new_button svg {
+  height: 40px;
+  width: 40px;
+  margin: auto;
+  -webkit-filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.5));
+          filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.5));
+}
+.add_new_frnd{grid-column:3/4}
+.add_new_frnd_input{
+  position: fixed;
+  bottom:-41px;
+  transition: .4s;
+}
+.add_new_frnd:hover .add_new_frnd_input,
+.add_new_frnd:focus .add_new_frnd_input,
+.add_new_frnd_input:hover,
+.add_new_frnd_input:focus{bottom:84px}
+
+.add_new_send {grid-column:6/7;}
+/*.add_new_prty {grid-column:5/6;color:}*/
+.add_new_prty {grid-column:5/6; border-radius: 10px 0 0 0;}
+.add_new_colr {
+  position:fixed;
+  z-index: 9;
+  right:0;
+  bottom:-250px;
+  /*bottom:84px;*/
+  background: var(--color3);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-radius: 8px 8px 0 0;
+  transition: .5s;
+}
+.add_new_prty:focus + .add_new_colr, .add_new_colr:focus {bottom:84px;}
+.noSelect {
+    -webkit-touch-callout:none;
+    -webkit-user-select:  none;
+     -khtml-user-select:  none;
+       -moz-user-select:  none;
+        -ms-user-select:  none;
+            user-select:  none;
+}
+
+.colrOption {
+  background: var(--color2);
+  border-bottom: solid 1px var(--color4);
+  color:white;
+  line-height: 40px;
+  height:      40px;
+  width: 220px;
+  display: flex;
+  text-align: left;
+  font-size: 18px;
+  position: relative;
+  cursor: pointer;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.colrOpt {display: none;}
+.colrOptP {margin: 0;padding-left: 60px;width: 100%;}
+input:checked ~ .colrOptP {background-color: var(--color4);}
+
+
+/* On mouse-over, add a grey background color */
+/*.colrOption:hover {background-color: var(--color4);}*/
+.colrOption:selected {background-color: #ccc;}
+
+
+#amrCirc {background-color: var(--clrPty1);}
+#rojCirc {background-color: var(--clrPty2);}
+#verCirc {background-color: var(--clrPty3);}
+#azlCirc {background-color: var(--clrPty4);}
+#blcCirc {background-color: var(--clrPty5);}
+#njaCirc {background-color: var(--clrPty6);box-shadow:none;}
+
+.checkmark {
+  position: absolute;
+  top:  8px;
+  left:18px;
+  height: 24px;
+  width:  24px;
+  background-color: #eee;
+  border-radius: 50%;
+  box-shadow: 0px  10px  10px  1px rgba(0, 0, 0, 0.2),   0px 0px  8px  4px  rgba(0, 0, 0, 0.14);
+}
+
+
+
+.add_new_date {grid-column:4/5;}
+#datePicker {
+  position:fixed;
+  /* top:500px; */
+  /* bottom:85px; */
+  bottom:-50px;
+  right: 0;
+  /* z-index: -1000; */
+  margin:auto;
+  width: 220px;
+  box-sizing: border-box;
+  padding: 5px;
+  transition: .5s;
+  border-radius: 7px 7px 0 0;
+  background: var(--color3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.add_new_date:hover #datePicker {
+  bottom: 85px;
+}
+#datePicker:hover {
+  bottom: 85px;
+}
+
+.datePickerSelc {
+  width: calc(200px / 3);
+  padding: 10px 0;
+  border:none;
+  border-radius: 7px;
+}
+
+.dayOpt {
+  background: var(--color6);
+  color: var(--color2);
+}
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.32) =alert:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.alert.visible{
+  transform:translate(-50%, 0);
+}
+.alert{
+  position: fixed;
+  top:0;
+  left:50%;
+  transform:translate(-50%, -100%);
+  border-radius:0 0 4px 4px;
+  color:var(--greyf);
+  min-width: 50%;
+  display: grid;
+  grid-gap:.5rem;
+  padding:.7rem 1.4rem;
+  z-index:99;
+  transition:.5s;
+  background:var(--grey4);
+}
+.alert_title{
+  font-size:1.2rem;
+}
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                          6.69) =redDot:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.header_activator{bottom:2rem}
+.redDot {
+  border-radius: 50%;
+  height: 3rem;
+  position: absolute;
+  right: 10vw;
+  width: 3rem!important;
+  z-index:12;
+}
+.redDot.test{background:red}

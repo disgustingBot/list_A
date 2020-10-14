@@ -1,12 +1,20 @@
 <?php
 
 
+// // $dbServerName = "localhost";
+// // $dbUserName = "lattedev_list-a";
+// // $dbPassword = "2epOrRrPEvXHjYG6";
+// // $dbName = "lattedev_list-a";
+// // $pdo_dsn='mysql:dbname=lattedev_list-a;host=localhost'; $pdo_user='lattedev_list-a'; $pdo_password='2epOrRrPEvXHjYG6';
+
+// Datos de acceso online
+
 // $dbServerName = "localhost";
-// $dbUserName = "lattedev_list-a";
+// $dbUserName = "lattedev_lista";
 // $dbPassword = "2epOrRrPEvXHjYG6";
-// $dbName = "lattedev_list-a";
-//
-// $pdo_dsn='mysql:dbname=lattedev_list-a;host=localhost'; $pdo_user='lattedev_list-a'; $pdo_password='2epOrRrPEvXHjYG6';
+// $dbName = "lattedev_lista";
+
+// $pdo_dsn='mysql:dbname=lattedev_lista;host=localhost'; $pdo_user='lattedev_lista'; $pdo_password='2epOrRrPEvXHjYG6';
 
 
 
