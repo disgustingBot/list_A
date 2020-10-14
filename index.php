@@ -27,7 +27,10 @@
 	<!-- TEMPLATES -->
 	<!-- <div class="element" onclick="box.selectElement(this.id)" onfocusout="if(box.slct[0]){box.slct[0].sendEdit()}" tabindex="1"> -->
 	<template id="listElement">
-		<div class="element" onclick="selection.select(user_home)" tabindex="1">
+		<!-- <div class="element" onfocusout="if(box.slct[0]){box.slct[0].sendEdit()}" tabindex="1"> -->
+
+		<!-- <div class="element" onfocusout="if(box.slct[0]){selection.sendEdit(selection.current[0])}" tabindex="1"> -->
+		<div class="element" onfocusout="selection.send_text_edit(selection.current[0])" tabindex="1">
 			<div class="element_color"></div>
 			<p   class="element_count"></p>
 			<p   class="element_title" contenteditable="false"></p>
@@ -74,7 +77,7 @@
 
 
 </head>
-<body class="view_log button0"  onkeypress="if (event.keyCode == 13 && !event.shiftKey){main_button.action();}">
+<body class="view_log button0">
 
 
 
@@ -116,7 +119,7 @@
 		</form>
 
 		<button class="btn" id="" onclick="accounts.create_user()">sign up</button>
-		<button class="btn btn_special" id="" onclick="accounts.log_in(d.getElementById('signInputNick').value,d.getElementById('signInputPass').value)">sign in</button>
+		<button class="btn btn_special" id="" onclick="accounts.log_in(d.getElementById('logInputMail').value,d.getElementById('logInputPass').value)">sign in</button>
 	</view>
 
 
@@ -139,15 +142,18 @@
 			</figure>
 
 			<!-- TODO: aqui todos tendrian que ser hijos de favorites -->
-			<div tabindex="1" class="element" onclick="history.go_to(first_entry)">
+			<div tabindex="1" class="element" onclick="history.go_to(home_entry)">
 				<!-- <div class="element_color"></div> -->
 				<p class="element_title">home</p>
-				<p class="element_count" id="homeNmr">3</p>
+				<p class="element_count">3</p>
+			</div>
+			<div tabindex="1" class="element" onclick="history.go_to(favorites_entry)">
+				<!-- <div class="element_color"></div> -->
+				<p class="element_title">favorites</p>
+				<p class="element_count">3</p>
 			</div>
 
-			<div class="favorites">
-
-			</div>
+			<div class="favorites"></div>
 
 			<!-- <article class="element" tabindex="1">
 				<div class="element_color"></div>
@@ -161,16 +167,16 @@
 				</button>
 			</article> -->
 
-			<div tabindex="1" class="element" onclick="box.loadElements(tday)">
-				<!-- <div class="element_color"></div> -->
+			<!-- <div tabindex="1" class="element" onclick="box.loadElements(tday)">
+				<div id="favsCont"></div>
 				<p class="element_title">today</p>
 				<p class="eNmr" id="tdayNmr"></p>
-			</div>
-			<div id="favsCont"></div>
+			</div> -->
+
 			<div tabindex="1" class="element" onclick="box.loadElements(grps)">
 				<!-- <div class="element_color"></div> -->
 				<p class="element_title">groups</p>
-				<p class="eNmr" id="grpsNmr"></p>
+				<p class="element_count">3</p>
 			</div>
 			<div tabindex="1" class="element" onclick="box.loadElements(frnd)">
 				<!-- <div class="element_color"></div> -->
@@ -214,7 +220,7 @@
 							</button> -->
 
 						</div>
-						<div class="action_menu_option"><button class="action_menu_button" onclick="box.slct[box.slct.length - 1].editTxt();altClassFromSelector('active','#secdMenu')">Edit text</button></div>
+						<div class="action_menu_option"><button class="action_menu_button" onclick="selection.enable_text_edit(selection.current[0])">Edit text</button></div>
 
 						<button for="amrSM" class="colrOption" onclick="selection.edit('pty', 1)"><span id="amrCirc" class="checkmark"></span><p class="colrOptP">Bolt  </p></button>
 						<button for="rojSM" class="colrOption" onclick="selection.edit('pty', 2)"><span id="rojCirc" class="checkmark"></span><p class="colrOptP">Fire  </p></button>
@@ -223,7 +229,7 @@
 						<button for="blcSM" class="colrOption" onclick="selection.edit('pty', 5)"><span id="blcCirc" class="checkmark"></span><p class="colrOptP">Void  </p></button>
 						<button for="njaSM" class="colrOption" onclick="selection.edit('pty', 6)"><span id="njaCirc" class="checkmark"></span><p class="colrOptP">Ninja </p></button>
 
-						<div class="action_menu_option"><button class="action_menu_button" onclick="box.slct.forEach(function(v){v.altParent(v.favorite,1)});box.cancel();altClassFromSelector('active','#secdMenu')">Favorite</button></div>
+						<div class="action_menu_option"><button class="action_menu_button" onclick="selection.current.forEach( element => { favorites.alternate( element ) } )">Favorite</button></div>
 						<div class="action_menu_option"><button class="action_menu_button" onclick="selection.edit('arc', 1)">Archive </button></div>
 						<!-- <div class="action_menu_option"><button class="action_menu_button" onclick="box.slct.forEach(function(v){v.editElement('del',1 ,1)});box.cancel()">Delete  </button></div> -->
 						<div class="action_menu_option"><button class="action_menu_button" onclick="selection.delete()">Delete  </button></div>

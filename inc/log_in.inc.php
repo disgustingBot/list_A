@@ -194,9 +194,9 @@ if (empty($log) || empty($pwd)) {
 				$_SESSION['u_eml'] = $row['eml'];
 				$respuesta['data'] = array(
 					'pky' => $row['pky'],
-					'nick name' => $row['uid'],
-					'first name' => $row['fst'],
-					'last name' => $row['lst'],
+					'nick_name' => $row['uid'],
+					'first_name' => $row['fst'],
+					'last_name' => $row['lst'],
 					'email' => $row['eml'],
 				);
 				// $sql = "SELECT * FROM elements WHERE ( (stc = '0' OR stc = '1' OR stc = '2' OR stc = '3') AND upk = $pky);";

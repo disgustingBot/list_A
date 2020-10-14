@@ -5,18 +5,21 @@ d=document;w=window;c=console;
 
 // Asi comienza nuestra historia,
 w.addEventListener("load",()=>{
-	// Al arrivar en tu dispositivo, un paquete misterioso se abre
-	// y una amistosa criatura se asoma,
-	// te pide tus credenciales
-	// TODO: hacer un gif de carga
-	// upk=readCookie("upk");
-	// uid=readCookie("uid");
-	// bse=parseInt(readCookie("bse"));
-	// bse=JSON.parse(readCookie("bse"));
-	// if(upk){box.setup(upk,uid,bse)}
-	accounts.log_in('mail@testing.com', 'pass')
+
+
+	// accounts.log_in('mail@testing.com', 'pass')
+
+
 	d.getElementById("load").style.top="-100vh";
 });
+
+w.addEventListener('keypress', event =>{
+	// c.log(event);
+	if (event.keyCode == 13 && !event	.shiftKey) {
+		main_button.action();
+    event.preventDefault();
+  }
+})
 
 
 // color console
@@ -87,7 +90,7 @@ const history = {
 
 
 		if(history.list[0]){
-			d.querySelector('.element_' + history.list[0].element.element_id).classList.remove('title')
+			d.querySelector('.list .element_' + history.list[0].element.element_id).classList.remove('title')
 		}
 
 		list.clear();
@@ -102,7 +105,7 @@ const history = {
 
 		// TODO: aqui deberia agregar el elemento actual
 		list.add(entry.element, 0)
-		d.querySelector('.element_' + entry.element.element_id).classList.add('title')
+		d.querySelector('.list .element_' + entry.element.element_id).classList.add('title')
 		if(selection.dbug_mode || dbug){c.lof('finaliza la funcion go_to de history handler', '#F35')}
 	},
 
@@ -120,9 +123,32 @@ const favorites = {
 
 
 	/*
+	=favorites.children_count
+
+	aqui contaremos cantidad de hijos y actualizaremos la pantalla
+	*/
+	children_count: element => {
+
+		let is_on_the_list = favorites.current.findIndex(find => find.element_id === element.element_id) == -1 ? false : true;
+		if( is_on_the_list ){
+			let formData = new FormData();
+
+			formData.append('ppk', element.element_id);
+
+			ajax2(formData, 'inc/load_elements.inc.php').then(response => {
+
+				let cant = response.filter(element=>element.tck==0)
+				if(cant.length>0){d.querySelector('.favorites .element_' + element.element_id + ' .element_count').innerHTML=cant.length}
+			})
+		}
+	},
+
+
+	/*
 	=favorites.alternate
 
-	añade elemento a los favoritos y lo dibuja en la pantalla
+	alterna el estado de favorito de un elemento. Si es favorito lo quita, si no lo
+	es lo agrega
 	PARAMETROS:
 		REQUERIDOS:
 			- element => elemento a añadir ( element )
@@ -134,19 +160,28 @@ const favorites = {
 		if(favorites.dbug_mode || dbug){c.log('elemento a añadir: ', element)}
 		if(favorites.dbug_mode || dbug){c.log('favorites actual: ', favorites.current)}
 
+		let favs = JSON.parse(accounts.logged[0].favorites);
 
-				let formData = new FormData();
-				formData.append('epk', element.element_id);
-				formData.append('ppk', favs.element_id);
+		let formData = new FormData();
+		formData.append('epk', element.element_id);
+		formData.append('ppk', favs.element_id);
 
-				ajax2(formData, 'inc/alt_parent.inc.php').then(response => {
-					response.forEach(element => {
-						favorites.add(element);
-					})
-				})
-			// favorites.children_count(element);
+		ajax2(formData, 'inc/alt_parent.inc.php').then(response => {
+			if(favorites.dbug_mode || dbug){c.log('respuesta: ', response)}
+			if(response.title!='Error'){
+				if(favorites.dbug_mode || dbug){c.log('already related?: ', response.already_related)}
+				if( response.already_related ){
+					favorites.remove( element );
+				} else {
+					favorites.draw( element );
+				}
+			}
 
-		if(favorites.dbug_mode || dbug){c.lof('finaliza la funcion alternate de favorites handler', '#F35')}
+			// response.forEach(element => {
+				// favorites.draw(element);
+			// })
+			if(favorites.dbug_mode || dbug){c.lof('finaliza la funcion alternate de favorites handler', '#F35')}
+		})
 	},
 
 
@@ -178,12 +213,47 @@ const favorites = {
 			favorites.current.splice(position, 0, new Element(element));
 			if(favorites.dbug_mode || dbug){c.log('NUEVA favorites actual: ', favorites.current)}
 			// draw element on the screen
-			favorites.current[position].element_UI('.favorites', position);
+			favorites.current[position].element_UI('.favorites', position, true);
 
 			// favorites.children_count(element);
 		}
 
 		if(favorites.dbug_mode || dbug){c.lof('finaliza la funcion add de favorites handler', '#F35')}
+	},
+
+
+
+	/*
+	=favorites.remove
+
+	remueve elemento de la lista actual y lo quita de la pantalla
+	PARAMETROS:
+		REQUERIDOS:
+			- element => elemento a añadir ( element )
+	*/
+	remove:(element, position = favorites.current.length, view_archived = false)=>{
+		let dbug = 0; // debug mode
+		if(!element){return}
+		if(favorites.dbug_mode || dbug){c.lof('comienza la funcion remove de favorites handler', '#5FA')}
+		if(favorites.dbug_mode || dbug){c.log('elemento a remover: ', element)}
+		if(favorites.dbug_mode || dbug){c.log('favorites actual: ', favorites.current)}
+
+
+		// chequear si esta en la lista
+		let is_on_the_list = favorites.current.findIndex(find => find.element_id === element.element_id) == -1 ? false : true;
+		if( is_on_the_list ){
+			if(favorites.dbug_mode || dbug){c.log('elemento está en la lista actual: ', favorites.current)}
+
+			let index = favorites.current.findIndex(find => find.element_id === element.element_id);
+			if(selection.dbug_mode || dbug){c.log('at index: ', index)}
+			// quitar elemento de la lista
+			favorites.current.splice(index, 1);
+			// selection.select(element);
+			let lista = d.querySelector('.favorites');
+			lista.removeChild(lista.querySelector('.element_'+element.element_id));
+		}
+
+		if(favorites.dbug_mode || dbug){c.lof('finaliza la funcion remove de favorites handler', '#F35')}
 	},
 
 	/*
@@ -192,7 +262,7 @@ const favorites = {
 	carga elementos en la lista de favoritos del menu
 	*/
 	load:()=>{
-		let dbug = 1; // debug mode
+		let dbug = 0; // debug mode
 		if(favorites.dbug_mode || dbug){c.lof('comienza la funcion load de favorites handler', '#5FA')}
 		let favs = JSON.parse(accounts.logged[0].favorites);
 		// let favs = JSON.parse(accounts.logged);
@@ -205,7 +275,8 @@ const favorites = {
 
 		ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 			response.forEach(element => {
-				favorites.add(element);
+				favorites.draw(element);
+				favorites.children_count(element);
 			})
 		})
 
@@ -230,6 +301,34 @@ const selection = {
 	current: [],
 
 
+	// ESTAS FUNCIONES HABILITAN LA EDICION DE TEXTO ----------------------------------------------------------------------------------------------------------------
+	enable_text_edit:(element)=>{
+		let text=d.querySelector('.list .element_' + element.element_id + ' .element_title');
+		// selection.select(element);
+		altClassFromSelector('action_menu_active','.action_menu')
+		text.setAttribute("contenteditable","true");
+		text.focus();
+	},
+	send_text_edit:(element)=>{
+		let text=d.querySelector('.list .element_' + element.element_id + ' .element_title');
+		// c.log()
+		if(element.txt!=text.textContent){
+			// this.editElement('txt',eTxt.innerText,0);
+			factory.edit(element, 'txt', text.innerText);
+		}
+		text.setAttribute('contenteditable','false');
+
+		// var i=this.ord;
+		// if (i) {
+		// 	let eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");
+		// 	if(this.txt!=eTxt.textContent){
+		// 		this.editElement('txt',eTxt.innerText,0);
+		// 	}
+		// 	eTxt.setAttribute('contenteditable','false');
+		// }
+	},
+
+
 
 	/*
 	funcion select
@@ -245,8 +344,8 @@ const selection = {
 		if(selection.dbug_mode || dbug){c.lof('comienza la funcion select de selection handler', '#5FA')}
 
 		// TODO: chequear si es un elemento valido
-		if(d.querySelector('.element_' + select.element_id)){
-			altClassFromSelector('selected', '.element_' + select.element_id);
+		if(d.querySelector('.list .element_' + select.element_id)){
+			altClassFromSelector('selected', '.list .element_' + select.element_id);
 		}
 
 		// buscar elemento en selection.current
@@ -393,7 +492,7 @@ const list = {
 			ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 
 				let cant = response.filter(element=>element.tck==0)
-				if(cant.length>0){d.querySelector('.element_' + element.element_id + ' .element_count').innerHTML=cant.length}
+				if(cant.length>0){d.querySelector('.list .element_' + element.element_id + ' .element_count').innerHTML=cant.length}
 			})
 		}
 	},
@@ -526,7 +625,8 @@ const list = {
 			// quitar elemento de la lista
 			list.current.splice(index, 1);
 			selection.select(element);
-			d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
+			let lista = d.querySelector('.list');
+			lista.removeChild(lista.querySelector('.element_'+element.element_id));
 		}
 		// si esta en la lista eliminarlo
 		// si no, no hacer nada
@@ -837,7 +937,7 @@ const main_button = {
 
 
 /*
-!Account Handler:
+=accounts Handler:
 
 Handles all account related:
 -Registration
@@ -856,6 +956,34 @@ accounts = {
     debugMode:0,
 
 		logged:[],
+
+
+
+		/*
+		=update_card
+
+		para actualizar la info de la cuenta
+
+		PARAMETROS:
+			REQUERIDOS:
+				- user => usuario que va a poner
+		*/
+		update_card: user => {
+        // debug mode
+        let debugMode = 0;
+				if(accounts.debugMode || debugMode){c.lof('----------------------------\ncomienza la funcion update_card\n----------------------------', '#5FA')}
+				if(accounts.debugMode || debugMode){c.log('user: ', user)}
+        if(accounts.debugMode || debugMode){c.log('user: ', user.data.first_name)}
+
+				if(user.data.first_name){
+					d.querySelector('.user_card_name').innerHTML = user.data.first_name;
+					d.querySelector('.user_card_key').innerHTML = user.data.pky;
+				}
+
+
+
+				if(accounts.debugMode || debugMode){c.lof('----------------------------\nfinaliza la funcion update_card\n----------------------------', '#F35')}
+		},
 
 
     /*
@@ -889,9 +1017,15 @@ accounts = {
 						// c.log('home: ', user_home);
 						// user_base.ppk = user_base.pky;
 
+						accounts.update_card(response);
+
 						favorites.load();
 
-						first_entry = { element:user_home, }
+						home_entry      = { element:JSON.parse(response.home), }
+						favorites_entry = { element:JSON.parse(response.favorites), }
+
+						first_entry     = { element:JSON.parse(response.home), }
+						// first_entry = { element:JSON.parse(accounts.logged[0].favorites), }
 						history.go_to(first_entry)
 						// list.load(user_home);
 						// list.load({ppk:767})
@@ -1059,10 +1193,11 @@ class Element {
 		// Esta parte define las propiedades del elemento como vienen del objeto v
 		for(var k in v){Object.defineProperty(this,k,{enumerable: true,value:v[k]})}
 	}
-	element_UI(parent_query, index){
+	element_UI(parent_query, index, enter_with_simple_click){
 		// Test to see if the browser supports the HTML template element by checking
 		// for the presence of the template element's content attribute.
 		if ('content' in d.createElement('template')) {
+			let entry = { element:this, }
 
 			// Instantiate the template
 			// and the nodes you will control
@@ -1077,13 +1212,20 @@ class Element {
 			element.classList.add('list_element')
 			element.classList.add('element_'+this.element_id)
 			// element.setAttribute('id', 'list_element'+this.ord);
-			element.setAttribute('onclick', 'selection.select('+JSON.stringify(this)+')');
+			buton.setAttribute('onclick', 'history.go_to('+JSON.stringify(entry)+')');
 
-			let entry = {
-				element:this,
-			}
 			// history.go(first_entry)
-			element.setAttribute('ondblclick', 'history.go_to('+JSON.stringify(entry)+')');
+			// element.setAttribute('onclick', 'selection.select('+JSON.stringify(this)+')');
+			// element.setAttribute('ondblclick', 'history.go_to('+JSON.stringify(entry)+')');
+			let select = 'selection.select('+JSON.stringify(this)+')';
+			let enter = 'history.go_to('+JSON.stringify(entry)+')';
+			if( enter_with_simple_click ){
+				element.setAttribute('onclick', enter);
+
+			} else {
+				element.setAttribute('onclick', select);
+				element.setAttribute('ondblclick', enter);
+			}
 
 
 			element.setAttribute('tck', this.tck);

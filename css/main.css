@@ -560,6 +560,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   font-size:1rem;
   /* scroll-snap-align: start; */
   transition: .5s;
+  z-index:1;
 }
 .selected {background:var(--grey6)}
 .ticked {
@@ -1027,7 +1028,7 @@ body:not(.view_main) .action_menu {
   right:0;
   width: 220px;
   padding: 0;
-  z-index: 1;
+  z-index: 2;
   margin:0;
   background: transparent;
   color:      var(--color7);
