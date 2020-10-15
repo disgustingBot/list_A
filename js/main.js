@@ -13,8 +13,13 @@ w.addEventListener("load",()=>{
 	d.getElementById("load").style.top="-100vh";
 });
 
-w.addEventListener('keypress', event =>{
-	// c.log(event);
+
+// SHORTCODES
+w.addEventListener('keydown', event =>{
+	// c.log(event.keyCode);
+	if (event.keyCode ==  8){
+		// event.preventDefault();
+	}
 	if (event.keyCode == 13 && !event	.shiftKey) {
 		main_button.action();
     event.preventDefault();
@@ -61,7 +66,7 @@ const history = {
 		if(history.list.length==1){return}
 
 		// if(history.list[0]){
-			d.querySelector('.element_' + history.list[0].element.element_id).classList.remove('title')
+			d.querySelector('.list .element_' + history.list[0].element.element_id).classList.remove('title')
 		// }
 		list.clear();
 		selection.clear();
@@ -73,12 +78,12 @@ const history = {
 
 		// TODO: aqui deberia agregar el elemento actual
 		list.add(entry.element, 0)
-		d.querySelector('.element_' + entry.element.element_id).classList.add('title')
+		d.querySelector('.list .element_' + entry.element.element_id).classList.add('title')
 	},
 
 
 	/*
-	=go_to
+	=history.go_to
 
 	navega a la direccion solicitada, añadiendola al historial
 	*/
@@ -96,7 +101,7 @@ const history = {
 		list.clear();
 		selection.clear();
 		// añade la entrada al historial
-		history.list.splice(0, 0, entry)
+		history.list.splice(0, 0, entry);
 		// carga elementos en la lista
 		list.load(entry.element)
 
@@ -199,10 +204,15 @@ const favorites = {
 			- position => posicion en donde insertar el elemento ( número )
 			- view_archived => ver favoritos? ( true || false )
 	*/
-	draw:(element, position = favorites.current.length, view_archived = false)=>{
+	draw:(element, position = 2, view_archived = false)=>{
 		let dbug = 0; // debug mode
 		if(!element){return}
-		if(favorites.dbug_mode || dbug){c.lof('comienza la funcion add de favorites handler', '#5FA')}
+		if(favorites.dbug_mode || dbug){c.lof('comienza la funcion draw de favorites handler', '#5FA')}
+
+		if(favorites.current.length < position){
+			position = favorites.current.length;
+		}
+
 		if(favorites.dbug_mode || dbug){c.log('elemento a añadir: ', element)}
 		if(favorites.dbug_mode || dbug){c.log('favorites actual: ', favorites.current)}
 
@@ -218,7 +228,7 @@ const favorites = {
 			// favorites.children_count(element);
 		}
 
-		if(favorites.dbug_mode || dbug){c.lof('finaliza la funcion add de favorites handler', '#F35')}
+		if(favorites.dbug_mode || dbug){c.lof('finaliza la funcion draw de favorites handler', '#F35')}
 	},
 
 
@@ -310,22 +320,36 @@ const selection = {
 		text.focus();
 	},
 	send_text_edit:(element)=>{
-		let text=d.querySelector('.list .element_' + element.element_id + ' .element_title');
-		// c.log()
-		if(element.txt!=text.textContent){
-			// this.editElement('txt',eTxt.innerText,0);
-			factory.edit(element, 'txt', text.innerText);
+		if(d.querySelector('.element[contenteditable="true"]')){
+			let text=d.querySelector('.list .element_' + element.element_id + ' .element_title');
+			// c.log()
+			if(element.txt!=text.textContent){
+				// this.editElement('txt',eTxt.innerText,0);
+				factory.edit(element, 'txt', text.innerText);
+			}
+			text.setAttribute('contenteditable','false');
 		}
-		text.setAttribute('contenteditable','false');
+	},
 
-		// var i=this.ord;
-		// if (i) {
-		// 	let eTxt=d.getElementById('listElement'+i).querySelector(".eTxt");
-		// 	if(this.txt!=eTxt.textContent){
-		// 		this.editElement('txt',eTxt.innerText,0);
-		// 	}
-		// 	eTxt.setAttribute('contenteditable','false');
-		// }
+
+	/*
+	=select_all
+
+	selecciona todos los elementos de la lista
+	*/
+	select_all:()=>{
+		selection.clear();
+		list.current.forEach( element => { selection.select(element) });
+	},
+
+	/*
+	=invert
+
+	invierte la seleccion actual, todo lo que no este seleccionado lo selecciona,
+	todo lo que este seleccionado lo des-selecciona
+	*/
+	invert:()=>{
+		list.current.forEach( element => { selection.select(element) });
 	},
 
 
@@ -529,12 +553,16 @@ const list = {
 			- position => posicion en donde insertar el elemento ( número )
 			- view_archived => ver favoritos? ( true || false )
 	*/
-	add:(element, position = list.current.length, view_archived = false)=>{
+	add:(element, position = 1, view_archived = false)=>{
 		let dbug = 0; // debug mode
 		if(!element){return}
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion add de list handler', '#5FA')}
 		if(list.dbug_mode || dbug){c.log('elemento a añadir: ', element)}
 		if(list.dbug_mode || dbug){c.log('lista actual: ', list.current)}
+
+		if(list.current.length < position){
+			position = list.current.length;
+		}
 
 
 
@@ -649,14 +677,14 @@ const list = {
 			// c.log(response);
 			// list.clear();
 
-			let j=0;
+			// let j=0;
 			// if(response){
 				response.forEach(element=>{
 
 					// si el elemento no esta archivado se carga, sino se omite
 					// TODO: hacer un selector de "cargar archivados=true/false"
 					// if( !( element.arc == 1 && view_archived == false ) ){
-						element.ord=j;j++;
+						// element.ord=j;j++;
 						list.add(element)
 					// }
 				})
@@ -977,7 +1005,7 @@ accounts = {
 
 				if(user.data.first_name){
 					d.querySelector('.user_card_name').innerHTML = user.data.first_name;
-					d.querySelector('.user_card_key').innerHTML = user.data.pky;
+					d.querySelector('.user_card_key').innerHTML = '#' + user.data.pky;
 				}
 
 
@@ -987,7 +1015,8 @@ accounts = {
 
 
     /*
-    !general user log in
+    =accounts.log_in
+		=log_in
 
     *Parameters:
         REQUIRED:
@@ -1018,17 +1047,18 @@ accounts = {
 						// user_base.ppk = user_base.pky;
 
 						accounts.update_card(response);
-
-						favorites.load();
-
+						favorites.draw(response.home, 0);
+						favorites.draw( response.home     , 0);
+						favorites.draw( response.favorites, 1);
+						favorites.draw( response.groups   , 2);
+						favorites.draw( response.friends  , 3);
+						// favorites.load();
 						home_entry      = { element:JSON.parse(response.home), }
 						favorites_entry = { element:JSON.parse(response.favorites), }
 
 						first_entry     = { element:JSON.parse(response.home), }
-						// first_entry = { element:JSON.parse(accounts.logged[0].favorites), }
 						history.go_to(first_entry)
-						// list.load(user_home);
-						// list.load({ppk:767})
+
 						select_view('view_main button0');
 
 					}
@@ -1201,24 +1231,36 @@ class Element {
 
 			// Instantiate the template
 			// and the nodes you will control
-			var draw = d.importNode(d.querySelector("#listElement").content, true),
+			let draw = d.importNode(d.querySelector("#listElement").content, true),
 			element = draw.querySelector(".element"),
 			color   = draw.querySelector(".element_color"),
 			count   = draw.querySelector(".element_count"),
 			title   = draw.querySelector(".element_title"),
 			buton   = draw.querySelector(".element_navigate");
+
+
+			let date   = draw.querySelector(".element_date");
+			let the_date = Date.parse(this.tsp)
+			date.textContent = this.tsp;
+			// c.log(Date.parse(this.tsp))
+
+
+
 			// Make your changes
 			if(this.tck==1){element.classList.add("ticked")}
 			element.classList.add('list_element')
 			element.classList.add('element_'+this.element_id)
 			// element.setAttribute('id', 'list_element'+this.ord);
-			buton.setAttribute('onclick', 'history.go_to('+JSON.stringify(entry)+')');
+
+			// TODO: hacer que no aparezca todo el JSON del elemento en el HTML
+			// let select = 'selection.select(list.current['+ position +'])';
+			let select = 'selection.select('+JSON.stringify(this)+')';
+			let enter = 'history.go_to('+JSON.stringify(entry)+')';
+			buton.setAttribute('onclick', enter);
 
 			// history.go(first_entry)
 			// element.setAttribute('onclick', 'selection.select('+JSON.stringify(this)+')');
 			// element.setAttribute('ondblclick', 'history.go_to('+JSON.stringify(entry)+')');
-			let select = 'selection.select('+JSON.stringify(this)+')';
-			let enter = 'history.go_to('+JSON.stringify(entry)+')';
 			if( enter_with_simple_click ){
 				element.setAttribute('onclick', enter);
 

@@ -13,7 +13,7 @@
 // $dbUserName = "lattedev_lista";
 // $dbPassword = "2epOrRrPEvXHjYG6";
 // $dbName = "lattedev_lista";
-
+//
 // $pdo_dsn='mysql:dbname=lattedev_lista;host=localhost'; $pdo_user='lattedev_lista'; $pdo_password='2epOrRrPEvXHjYG6';
 
 

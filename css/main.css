@@ -136,7 +136,7 @@ FIN DE MAPA DE CONTENIDOS */
   /* SIZES */
   /* Al editar los tamaños, hacerlo siempre sin unidades
   sabiendo que el numero corresponde a la cantidad de pixeles */
-  --sizeRa: 16; --sizeRb: 18; --sizeRc: 18; --sizeRd:20;
+  --sizeRa: 14; --sizeRb: 16; --sizeRc: 16; --sizeRd:18;
   --sizeR: calc(var(--sizeRa) * 1px);
 
   /* ---------------------------------------------------------------------------
@@ -188,7 +188,7 @@ FIN DE MAPA DE CONTENIDOS */
   :root {
     /* login View */
     /* --signFormMarginBottom:-240px; */
-    --mainGTC:200px 1fr;
+    --mainGTC:250px 1fr;
 
     --mainMenuPosition:sticky;
     --mainMenuLeft:0;
@@ -532,6 +532,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 }
 .element.title .element_title{
   font-size:1.3rem;
+  /* height: 80px; */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -575,15 +576,22 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   grid-column:1;
 }
 .element_title {
-  padding:.7rem 0;
+  padding:.6rem 0;
 }
 .element_short {
   padding:.3rem 0;
 }
-.element_title,.element_short,.element_texto {grid-column:3}
-.element_short, .element_texto {display:none}
+.element_date{
+  padding-bottom:.2rem;
+  font-size:.6rem;
+  text-align:right;
+}
+.element_title,.element_short,.element_texto,.element_date {grid-column:3}
+.element_short, .element_texto, .element_date {display:none}
 
-.element.selected:not(.title) .element_short,
+.element.selected:not(.title) .element_title{padding-bottom:0}
+/* .element.selected:not(.title) .element_short, */
+.element.selected:not(.title) .element_date,
 .element.title .element_texto {display:unset}
 
 .mainMenuElement .element_title {overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
@@ -633,7 +641,8 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   /* box-shadow: 0px  1px  1px  0px rgba(0, 0, 0, 0.2),   0px 0px  4px  2px  rgba(0, 0, 0, 0.14); */
   display:grid;
   grid-gap:1rem;
-  grid-template-columns:min-content 1fr min-content;
+  /* grid-template-columns:min-content 1fr min-content; */
+  grid-template-columns:min-content 1fr;
   height: 75px;
   margin:0;
   transition:.5s;
@@ -994,7 +1003,8 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   position:var(--mainMenuPosition);
   top:0;
   transition: .7s;
-  width: var(--mainMenuWidth);
+  /* width: var(--mainMenuWidth); */
+  width: 100%;
   z-index: 24;
 }
 /* #mainMenuButton:focus + #mainMenu,#mainMenu:focus{left:0;} */
@@ -1075,6 +1085,19 @@ body:not(.view_main) .action_menu {
   color:var(--color7);
 }
 
+.action_submenu_title{
+  background:var(--grey4);
+  padding:.3rem 50px;
+  font-size:1.1rem;
+}
+.action_submenu{
+  /* height: 40px; */
+  display: flex;
+  border-bottom: solid 1px var(--color4);
+  flex-direction: column;
+
+}
+
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
                               6.8.2) =add_new:
@@ -1110,8 +1133,10 @@ body:not(.view_main) .add_new {
   overflow: hidden;
   position: fixed;
   right:0;
+  position:absolute;
   transition: .5s ease-in-out;
-  width: var(--addNewWidth);
+  /* width: var(--addNewWidth); */
+  width: 100%;
   z-index: 10;
 }
 .add_new_text::placeholder{color:var(--color6)}
