@@ -224,6 +224,7 @@ const favorites = {
 			if(favorites.dbug_mode || dbug){c.log('NUEVA favorites actual: ', favorites.current)}
 			// draw element on the screen
 			favorites.current[position].element_UI('.favorites', position, true);
+			favorites.children_count(element);
 
 			// favorites.children_count(element);
 		}
@@ -286,7 +287,6 @@ const favorites = {
 		ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 			response.forEach(element => {
 				favorites.draw(element);
-				favorites.children_count(element);
 			})
 		})
 
