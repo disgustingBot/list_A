@@ -187,11 +187,18 @@ if (empty($log) || empty($pwd)) {
 				$upk = $row['pky'];
 				$_SESSION['status'] = "ok";
 
-				$_SESSION['u_pky'] = $row['pky'];
-				$_SESSION['u_uid'] = $row['uid'];
-				$_SESSION['u_fst'] = $row['fst'];
-				$_SESSION['u_lst'] = $row['lst'];
-				$_SESSION['u_eml'] = $row['eml'];
+				$_SESSION['data'] =  array(
+					'pky' => $row['pky'],
+					'nick_name' => $row['uid'],
+					'first_name' => $row['fst'],
+					'last_name' => $row['lst'],
+					'email' => $row['eml'],
+				);
+				// $_SESSION['u_pky'] = $row['pky'];
+				// $_SESSION['u_uid'] = $row['uid'];
+				// $_SESSION['u_fst'] = $row['fst'];
+				// $_SESSION['u_lst'] = $row['lst'];
+				// $_SESSION['u_eml'] = $row['eml'];
 				$respuesta['data'] = array(
 					'pky' => $row['pky'],
 					'nick_name' => $row['uid'],
