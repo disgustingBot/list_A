@@ -5,26 +5,59 @@ d=document;w=window;c=console;
 
 // Asi comienza nuestra historia,
 w.addEventListener("load",()=>{
-
-
-	// accounts.log_in('mail@testing.com', 'pass')
-
-
+	log.set_state(0);
 	d.getElementById("load").style.top="-100vh";
 });
 
 
-// SHORTCODES
+
+
+
+
+
+
+// =SHORTCODES
+// space opens the action menu
+// delete goes back on the history
+// escape clears the selection
+// enter does main button action (green buton bottom left), in log screen does log_in
 w.addEventListener('keydown', event =>{
 	// c.log(event.keyCode);
-	if (event.keyCode ==  8){
-		// event.preventDefault();
+	// space opens the action menu
+	if (event.keyCode ==  32){
+		if((main_button.state != 0 && main_button.state != 1) || d.querySelector('body').classList.contains('view_log')){return}
+		altClassFromSelector('action_menu_active','.action_menu')
+		event.preventDefault();
 	}
-	if (event.keyCode == 13 && !event	.shiftKey) {
-		main_button.action();
+	// delete goes back on the history
+	if (event.keyCode ==  8){
+		// if(d.querySelector('body').classList.contains('view_log'))
+		if((main_button.state != 0 && main_button.state != 1) || d.querySelector('body').classList.contains('view_log')){return}
+		history.go_back();
+		event.preventDefault();
+	}
+	// escape clears the selection
+	if (event.keyCode ==  27){
+		selection.clear();
+		d.querySelector('.action_menu').classList.remove('action_menu_active');
+	}
+	// enter does main button action (green buton bottom left), in log screen does log_in
+	if (event.keyCode == 13 && !event.shiftKey) {
+		if (d.querySelector('body').classList.contains('view_log')){
+			// c.log('hi there')
+			// accounts.log_in('mail@testing.com', 'pass')
+			accounts.log_in(d.querySelector('#log_input_mail'), d.querySelector('#log_input_pass'));
+		} else {
+			main_button.action();
+		}
     event.preventDefault();
   }
 })
+
+
+
+
+
 
 
 // color console
@@ -38,16 +71,54 @@ random = array => array[Math.floor(Math.random() * array.length)]
 
 
 
-// alternates a class from a selector of choice zB.:
-// <div class="someButton" onclick="altClassFromSelector('activ', '#navBar')"></div>
-const altClassFromSelector=(clase,selector) => {
-    const x=d.querySelector(selector);
-    if(x.classList.contains(clase)){
-        x.classList.remove(clase)
-    }else{
-        x.classList.add(clase)
-    }
+/*
+=altClassFromSelector
+
+alternates a class from a selector of choice, for example:
+<div class="someButton" onclick="altClassFromSelector('activ', '#navBar')"></div>
+*/
+const altClassFromSelector = ( clase, selector, dont_remove = false )=>{
+  const x = d.querySelector(selector);
+  // if there is a main class removes all other classes
+  if(dont_remove){
+    x.classList.forEach( item =>{
+      if( dont_remove.findIndex( element => element == item) == -1 && item!=clase ){
+        x.classList.remove(item);
+      }
+    });
+  }
+
+  if(x.classList.contains(clase)){
+		if(dont_remove){
+			if( dont_remove.findIndex( element => element == clase) == -1 ){
+				x.classList.remove(clase)
+			}
+		} else {
+			x.classList.remove(clase)
+		}
+  }else{
+		if(clase){
+			x.classList.add(clase)
+		}
+  }
 }
+
+
+
+const acordionar = query => {
+  // var panel = this.nextElementSibling;
+  var panel = document.querySelector(query);
+  panel.classList.toggle("alt");
+
+  if (panel.style.maxHeight) {
+    panel.style.maxHeight = null;
+    // panel.style.padding = "0";
+  } else {
+    panel.style.maxHeight = panel.scrollHeight + "px";
+    // panel.style.padding = "20px";
+  }
+}
+
 
 
 
@@ -311,27 +382,6 @@ const selection = {
 	current: [],
 
 
-	// ESTAS FUNCIONES HABILITAN LA EDICION DE TEXTO ----------------------------------------------------------------------------------------------------------------
-	enable_text_edit:(element)=>{
-		let text=d.querySelector('.list .element_' + element.element_id + ' .element_title');
-		// selection.select(element);
-		altClassFromSelector('action_menu_active','.action_menu')
-		text.setAttribute("contenteditable","true");
-		text.focus();
-	},
-	send_text_edit:(element)=>{
-		if(d.querySelector('.element[contenteditable="true"]')){
-			let text=d.querySelector('.list .element_' + element.element_id + ' .element_title');
-			// c.log()
-			if(element.txt!=text.textContent){
-				// this.editElement('txt',eTxt.innerText,0);
-				factory.edit(element, 'txt', text.innerText);
-			}
-			text.setAttribute('contenteditable','false');
-		}
-	},
-
-
 	/*
 	=select_all
 
@@ -348,14 +398,12 @@ const selection = {
 	invierte la seleccion actual, todo lo que no este seleccionado lo selecciona,
 	todo lo que este seleccionado lo des-selecciona
 	*/
-	invert:()=>{
-		list.current.forEach( element => { selection.select(element) });
-	},
+	invert:()=>{ list.current.forEach( element => { selection.select(element) }); },
 
 
 
 	/*
-	funcion select
+	=selection.select
 
 	alterna el la seleccion de un elemento. al seleccionar, si el elemento esta en
 	selection.current lo quitamos, y si no esta lo añadimos.
@@ -389,15 +437,14 @@ const selection = {
 			selection.current.splice(0, 0, select);
 		}
 
-		selection.button_hook();
-
-
-
-		// c.log(selection.current);
-
-
-		// c.log(element.element_id);
-		// c.log(selection.current);
+		let is_empty = selection.current == 0 ? true : false;
+		if(is_empty==0){
+			// elegir estado de check
+			main_button.setState(1);
+		} else {
+			// elegir estado de add new
+			main_button.setState(0);
+		}
 
 		if(selection.dbug_mode || dbug){c.log('NEW current selection: ', selection.current)}
 		if(selection.dbug_mode || dbug){c.lof('finaliza la funcion select de selection handler', '#F35')}
@@ -443,28 +490,7 @@ const selection = {
 	elimina todos los elementos de la seleccion actual
 	*/
 	delete:()=>{
-		selection.edit('del', 1)
-	},
-
-	/*
-	funcion button hook
-
-	si la seleccion actual esta vacia pone la cruz en el boton, sino pone el check
-	*/
-	button_hook:()=>{
-		let dbug = 0; // debug mode
-		if(selection.dbug_mode || dbug){c.lof('comienza la funcion button_hook de selection handler', '#5FA')}
-		if(selection.dbug_mode || dbug){c.log('current selection: ', selection.current)}
-		let is_empty = selection.current == 0 ? true : false;
-		if(selection.dbug_mode || dbug){c.log('esta vacia: ', is_empty)}
-		if(is_empty==0){
-			// elegir estado de check
-			main_button.setState(1);
-		} else {
-			// elegir estado de add new
-			main_button.setState(0);
-		}
-		if(selection.dbug_mode || dbug){c.lof('finaliza la funcion button_hook de selection handler', '#F35')}
+		selection.edit('del', 1, 1)
 	},
 }
 
@@ -612,6 +638,7 @@ const list = {
 			let they_are_different = list.current[index] == element ? false : true;
 			if(selection.dbug_mode || dbug){c.log('necesito actualizar: ', they_are_different)}
 			if( they_are_different ){
+
 				// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
 				// list.current.splice(index, 1, new Element(element));
 
@@ -707,7 +734,11 @@ const list = {
 
 
 
+/*
+=factory
 
+
+*/
 const factory = {
 
 	// AGREGAR LA POSIBILIDAD DE QUE LOS ELEMENTOS SEAN PRODUCTOS, QUE TENGAN PRECIO Y CANTIDADES Y QUE SUMEN LOS COSTOS DE LOS HIJOS ----------------------
@@ -802,28 +833,31 @@ const factory = {
 		let dbug = 0; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion edit de factory', '#5FA')}
 
+		if(element[key] != value){
 
-		let formData = new FormData();
+			let formData = new FormData();
 
-		formData.append('element_id', element.element_id);
-		formData.append('key', key);
-		formData.append('value', value);
 
-		ajax2(formData, 'inc/edit_element.inc.php').then(response => {
-			// c.log(response)
-			if( remove ){
-				if(list.dbug_mode || dbug){c.lof('remover elemento de la pantalla', '#5AF')}
-				list.remove(element);
-				// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
-			} else {
-				if(list.dbug_mode || dbug){c.lof('actualizar elemento en la pantalla', '#5AF')}
-				// response.element.element_id = response.element.element_id;
-				// c.log(response.element);
-				if(list.dbug_mode || dbug){c.log('Nuevo elemento', response.element)}
-				list.update(response.element);
-			}
-			if(list.dbug_mode || dbug){c.lof('finaliza la funcion edit de factory', '#F35')}
-		})
+			formData.append('element_id', element.element_id);
+			formData.append('key', key);
+			formData.append('value', value);
+
+			ajax2(formData, 'inc/edit_element.inc.php').then(response => {
+				// c.log(response)
+				if( remove ){
+					if(list.dbug_mode || dbug){c.lof('remover elemento de la pantalla', '#5AF')}
+					list.remove(element);
+					// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
+				} else {
+					if(list.dbug_mode || dbug){c.lof('actualizar elemento en la pantalla', '#5AF')}
+					// response.element.element_id = response.element.element_id;
+					// c.log(response.element);
+					if(list.dbug_mode || dbug){c.log('Nuevo elemento', response.element)}
+					list.update(response.element);
+				}
+				if(list.dbug_mode || dbug){c.lof('finaliza la funcion edit de factory', '#F35')}
+			})
+		}
 	},
 }
 
@@ -835,115 +869,265 @@ const factory = {
 
 
 
+/*
+=production
+
+responsable del menu inferior de produccion de elementos y editar
+metodos:
+- abrir
+- cerrar
+- crear
+- editar
+*/
+const production = {
+	dbug_mode:false,
+	editing:false,
+
+	menu:d.querySelector('.add_new'),
+	text:d.querySelector('.add_new_text'),
+
+	/*
+	=production.open
+
+	abre el menu
+	*/
+	open:()=>{
+		if(production.menu.classList.contains('open')){return}
+		production.menu.classList.add('open')
+		// d.querySelector('.colrOpt[value="5"]').checked = true;
+		d.querySelector('.add_new_text').focus()
+	},
+
+	/*
+	=production.close
+
+	cierra el menu
+	*/
+	close:()=>{
+		if(production.menu.classList.contains('open')){
+			production.menu.classList.remove('open')
+			production.editing = false;
+		}
+	},
+
+	/*
+	=production.create
+
+	crea un nuevo elemento
+	*/
+	create:()=>{
+		// let inputs=d.querySelector('.add_new').elements;
+		let text = production.text.value;
+		let color= d.querySelector('.colrOpt:checked') ? d.querySelector('.colrOpt:checked').value : 5;
+		let date = '';
+		let user = '';
+		let base = JSON.parse(accounts.logged[0].base);
+		let home = JSON.parse(accounts.logged[0].home);
+		factory.create(
+			text,
+			color,
+			date,
+			user,
+			base.element_id,
+			// TODO: cambiar home.pky por el elemento actual
+			history.list[0].element.element_id,
+			// create:(text,priority,date,user,base,parent,group)
+			'',
+		);
+		d.querySelector(".add_new_text").value="";
+	},
+
+	/*
+	=production.prepare_edit
+
+	prepara el menu production para editar elementos con todo el poder del menu
+	de crear elementos
+	*/
+	prepare_edit:()=>{
+		// cierra el menu action
+		d.querySelector('.action_menu').classList.remove('action_menu_active');
+		// SETEAR TODOS LOS PARAMETROS DE EDICION POSIBLES IGUAL A LOS ELEMENTOS SELECCIONADOS
+		// es decir, si son todos iguales ponerlo en production menu, si no nada
+		// sets the text in the text input
+		if ( selection.current.every( element => element.txt === selection.current[0].txt ) ) {
+			production.text.value = selection.current[0].txt
+		} else {
+			production.text.value = '';
+		}
+		// sets the color in the color selector
+		if ( selection.current.every( element => element.pty === selection.current[0].pty ) ) {
+			d.querySelector('.colrOpt[value="'+selection.current[0].pty+'"]').checked = true;
+		} else {
+			if(d.querySelector('.colrOpt:checked')){
+				d.querySelector('.colrOpt:checked').checked = false;
+			}
+		}
+
+		production.editing = true;
+	},
+
+	/*
+	=production.deep_edit
+
+	enviar los cambios como edit a factory solo si el usuario cambió algo y
+	solo si son diferentes a lo que ya tiene el elemento
+	*/
+	deep_edit:()=>{
+		selection.current.forEach( element => {
+			if (production.text.value){
+				factory.edit(element, 'txt', production.text.value)
+			}
+			if (d.querySelector('.colrOpt:checked')){
+				factory.edit(element, 'pty', d.querySelector('.colrOpt:checked').value)
+			}
+			// c.log(element);
+		})
+		production.text.value = '';
+		production.editing = false;
+	},
+}
 
 
+/*
+=main_button
 
 
-
-
-
-
+*/
 const main_button = {
 	dbug_mode:false,
-	// ESTADOS:
-	// 0 = signo "+": abre y cierra el menu de nuevo elemento
-	old:false,
 	state: 0,
-	setState:(state = false)=>{
+
+	/*
+	=main_button.style
+
+	selecciona el estilo del boton verde de abajo a la derecha
+	*/
+	style: design => {
+		altClassFromSelector(design, '.button_zero', ['btn_round', 'button_zero', 'active', design])
+	},
+
+	/*
+	=main_button.state_sync
+
+	sincroniza el estado actual del boton con el que deberia tener
+	*/
+	state_sync: () => {
 		let dbug = 0; // debug mode
-		if(main_button.dbug_mode || dbug){c.lof('comienza la funcion setState de button Zero', '#5FA')}
-		if(main_button.dbug_mode || dbug){c.log('queremos setear el boton al estado: ', state)}
-		let addNew = d.querySelector('.add_new');
-		let button = d.querySelector('.button_zero');
-		if(state === false){state = main_button.old}
-		switch (state) {
+		if(main_button.dbug_mode || dbug){c.lof('comienza la funcion state_sync de main_button', '#5FA')}
+		if(main_button.dbug_mode || dbug){c.log('queremos setear el boton al estado: ', main_button.state)}
+
+		switch (main_button.state) {
 			case 0:
-				button.classList.remove('send')
-				button.classList.remove('check')
-				button.classList.remove('close')
-				addNew.classList.remove('alt')
+				main_button.style('plus');
+				production.close();
 				break;
 			case 1:
-				button.classList.remove('send')
-				button.classList.add('check')
-				button.classList.remove('close')
-				addNew.classList.remove('alt')
+				main_button.style('check');
+				production.close();
 				break;
 			case 2:
-				if (d.querySelector('.add_new_text').value) {
-					main_button.setState(3);
-					return;
-				}
-				button.classList.remove('send')
-				button.classList.remove('check')
-				button.classList.add('close')
-				addNew.classList.add('alt')
-				d.querySelector('.add_new_text').focus()
-				break;
 			case 3:
-				button.classList.add('send')
-				button.classList.remove('check')
-				button.classList.remove('close')
-				addNew.classList.add('alt')
-				d.querySelector('.add_new_text').focus()
+				if(d.querySelector('.add_new_text').value){
+					if(production.editing){
+						main_button.state = 4;
+					} else {
+						main_button.state = 3;
+					}
+					main_button.style('send');
+				} else {
+					main_button.style('close');
+					main_button.state = 2;
+				}
+				production.open();
+				break;
+			case 4:
+				if(!production.editing){
+					production.prepare_edit();
+				}
+				main_button.style('send');
+				production.open();
 				break;
 			default:
 				main_button.setState(0);
 				break;
 		}
-		if (main_button.old!=main_button.state) {
-			main_button.old=main_button.state;
-		}
-		if(main_button.dbug_mode || dbug){c.log('old: ', main_button.old)}
+		if(main_button.dbug_mode || dbug){c.lof('finaliza la funcion state_sync de main_button', '#F35')}
+	},
 
+
+	// ESTADOS:
+	// 0 = signo "+": abre y cierra el menu de nuevo elemento
+	setState:(state = false)=>{
+		let dbug = 0; // debug mode
+		if(main_button.dbug_mode || dbug){c.lof('comienza la funcion setState de button Zero', '#5FA')}
+		if(main_button.dbug_mode || dbug){c.log('queremos setear el boton al estado: ', state)}
+		switch (state) {
+			case 0:
+				main_button.style('plus');
+				production.close();
+				break;
+			case 1:
+				main_button.style('check');
+				production.close();
+				break;
+			case 2:
+				main_button.style('close');
+				production.open();
+				break;
+			case 3:
+				main_button.style('send');
+				production.open();
+				break;
+			case 4:
+				production.prepare_edit();
+				main_button.style('send');
+				production.open();
+				break;
+			default:
+				main_button.setState(0);
+				break;
+		}
 		main_button.state=state
 
 		if(main_button.dbug_mode || dbug){c.lof('finaliza la funcion setState de button Zero', '#F35')}
 	},
 	action:()=>{
+		let is_empty = selection.current == 0 ? true : false;
 		switch (main_button.state) {
 			case 0:
-				// altClassFromSelector('alt', '#addNew')
-				main_button.setState(2);
+				if(production.text.value){
+					main_button.setState(3);
+				} else {
+					main_button.setState(2);
+				}
 				break;
 			case 1:
 				selection.current.forEach(element => {
-					let new_state = d.querySelector('.element_'+element.element_id).getAttribute("tck") == 0 ? 1 : 0;
-					factory.edit(element, 'tck', new_state);
+					let new_tck = element.tck == 0 ? 1 : 0;
+					factory.edit(element, 'tck', new_tck);
 				})
 				break;
 			case 2:
-				// altClassFromSelector('alt', '#addNew');
-				main_button.setState(0);
+				if(is_empty==0){
+					main_button.setState(1);
+				} else {
+					main_button.setState(0);
+				}
 				break;
 			case 3:
-				let inputs=d.querySelector('.add_new').elements;
-				let text=d.querySelector('.add_new_text').value;
-				let color=d.querySelector('.colrOpt:checked').value;
-				let date = '';
-				let user = '';
-				let base = JSON.parse(accounts.logged[0].base);
-				let home = JSON.parse(accounts.logged[0].home);
-				// c.log(text);
-				// c.log(color);
-				// c.log(base.bse);
-				// c.log(base.pky);
-				factory.create(
-						text,
-						color,
-						date,
-						user,
-						base.element_id,
-						// TODO: cambiar home.pky por el elemento actual
-						history.list[0].element.element_id,
-						// create:(text,priority,date,user,base,parent,group)
-						'',
-				);
-				// altClassFromSelector('alt', '#addNew');
+				production.create();
 				main_button.setState(2);
-				d.querySelector(".add_new_text").value="";
+				break;
+			case 4:
+				if(is_empty==0){
+					main_button.setState(1);
+				} else {
+					main_button.setState(0);
+				}
+				production.deep_edit();
 				break;
 			default:
+				main_button.setState(2);
 				c.log('caso default de estado');
 		}
 	},
@@ -954,8 +1138,90 @@ const main_button = {
 
 
 
+/*
+=log Handler
+
+Se encarga de manejar el estado del formulario de log in y log out
+*/
+const log = {
+	state:0,
+	old:0,
+
+	/*
+	=log.clear
+
+	borra todos los datos entrados en el formulario hasta ahora
+	*/
+	clear:()=>{
+		d.querySelector('#log_input_mail').value = '';
+		d.querySelector('#log_input_pass').value = '';
+		d.querySelector('#log_input_pas2').value = '';
+		d.querySelector('#log_input_nick').value = '';
+		d.querySelector('#log_input_name').value = '';
+		d.querySelector('#log_input_last').value = '';
+	},
+
+	/*
+	=log.message
+
+	para morstrar mensajes al usuario
+	*/
+	message: (content, color) => {
+		let log_message = d.querySelector('.log_message');
+		log_message.innerText = content;
+		log_message.style.color = color;
+	},
+
+	set_state: state => {
+
+		var message = d.querySelector('.log_message');
+		var log_screen   = d.querySelector('.log');
+		var left_button  = d.querySelector('#log_left_button');
+		var right_button = d.querySelector('#log_right_button');
 
 
+		log.old = log.state ? log.state : log.old;
+		log.state = state;
+
+
+		switch (state) {
+			case 0:
+					log_screen.classList.remove('log_in');
+					log_screen.classList.remove('log_out');
+					left_button.innerText  = 'Sign Up';
+					left_button.setAttribute('onclick', "log.set_state(2)")
+					right_button.innerText = 'Sign In';
+					right_button.setAttribute('onclick', "log.set_state(1)")
+					log.message('Hi, welcome!', 'white');
+				break;
+			case 1:
+					log_screen.classList.add('log_in');
+					left_button.innerText  = 'Cancel';
+					left_button.setAttribute('onclick', "log.set_state(0)")
+					right_button.innerText = 'Enter';
+					right_button.setAttribute('onclick', "accounts.log_in(d.querySelector('#log_input_mail').value,d.querySelector('#log_input_pass').value)")
+					log.message('U have an account, u know what to do...', 'white');
+					if(log.state != log.old){
+						log.clear();
+					}
+				break;
+			case 2:
+					log_screen.classList.add('log_out');
+					left_button.innerText  = 'Cancel';
+					left_button.setAttribute('onclick', "log.set_state(0)")
+					right_button.innerText = 'Create';
+					right_button.setAttribute('onclick', "accounts.create_user(0)")
+					log.message('First timer!... WOW', 'white');
+					if(log.state != log.old){
+						log.clear();
+					}
+				break;
+			default:
+		}
+		// if( state == 0 ){
+		// }
+	},
+}
 
 
 
@@ -980,7 +1246,7 @@ Handles all account related:
 // TODO: -Change pass
 // TODO: -Recover Pass
 // TODO: -Confirm account
-accounts = {
+const accounts = {
     debugMode:0,
 
 		logged:[],
@@ -1025,6 +1291,10 @@ accounts = {
     */
     // TODO: -make this multiple account compatible
     log_in:(mail, password)=>{
+			if( !mail || !password ){
+				log.message('At least write something...', 'red');
+				return;
+			}
         let formData = new FormData();
 
         formData.append('log', mail);
@@ -1034,7 +1304,7 @@ accounts = {
 					if(response.title == 'Success'){
 						accounts.logged.push(response);
 						// notify(response.title, response.message);
-						// c.log(response)
+						c.log(response)
 						// c.log(accounts.logged);
 						user_base = JSON.parse(response.base);
 						user_home = JSON.parse(response.home);
@@ -1047,12 +1317,12 @@ accounts = {
 						// user_base.ppk = user_base.pky;
 
 						accounts.update_card(response);
-						favorites.draw(response.home, 0);
-						favorites.draw( response.home     , 0);
-						favorites.draw( response.favorites, 1);
-						favorites.draw( response.groups   , 2);
-						favorites.draw( response.friends  , 3);
-						// favorites.load();
+						// favorites.draw( response.home, 0);
+						favorites.draw( JSON.parse(response.home     ), 0);
+						favorites.draw( JSON.parse(response.favorites), 1);
+						favorites.draw( JSON.parse(response.groups   ), 2);
+						favorites.draw( JSON.parse(response.friends  ), 3);
+						favorites.load();
 						home_entry      = { element:JSON.parse(response.home), }
 						favorites_entry = { element:JSON.parse(response.favorites), }
 
@@ -1060,7 +1330,10 @@ accounts = {
 						history.go_to(first_entry)
 
 						select_view('view_main button0');
+						log.message('YEEEEEY!!', 'red');
 
+					} else {
+						log.message(response.message, 'red');
 					}
         })
     },
@@ -1122,12 +1395,12 @@ accounts = {
         const lasts = ["Moral", "Lovelace", "Anderson", "Curie", "Thomson", "Rutherford", "Heisenberg", "Einstein", "Gauss", "Newton", "Faraday", "Schrödinger"];
 
         // set back to defaults
-        if(!mail){mail = d.querySelector('signInputMail').value}
+        if(!mail){mail = d.querySelector('#log_input_mail').value}
         if(!user){user = mail}
         if(!name){name = random(names)}
         if(!last){last = random(lasts)}
-        if(!pwd1){pwd1 = d.querySelector('signInputPass').value}
-        if(!pwd2){pwd2 = d.querySelector('signInputPas2').value}
+        if(!pwd1){pwd1 = d.querySelector('#log_input_pass').value}
+        if(!pwd2){pwd2 = d.querySelector('#log_input_pas2').value}
 
 
         if(accounts.debugMode || debugMode){c.log('mail:', mail)}
@@ -1151,14 +1424,13 @@ accounts = {
 
 
                 ajax2(formData, 'inc/addUser.inc.php').then(response => {
-                    // c.log(response)
-                    notify(response.title, response.message);
+									log.message(response.message, 'red');
                 })
             }else{
-                notify('Error', "email field doesn't have a valid format");
+							log.message("Use a real mail, cmon...", 'red');
             }
         }else{
-            notify('Error', "passwords don't match");
+					log.message("passwords don't match", 'red');
         }
         if(accounts.debugMode || debugMode){c.lof('----------------------------\nfinaliza la funcion register\n----------------------------', '#F35')}
     },
@@ -1274,6 +1546,7 @@ class Element {
 			color.style.background = "var(--clrPty" + this.pty + ")";
 			count.style.color = "var(--clrPty" + this.pty + ")";
 			title.textContent = this.txt;
+			// title.innerHTML = this.txt;
 			// Insert it into the document in the right place
 			let parent = d.querySelector( parent_query );
 			parent.insertBefore(draw, parent.children[ index ]);
@@ -1284,41 +1557,6 @@ class Element {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1367,4 +1605,4 @@ async function ajax3(formData, url) {
 // TODO: chequear codigo de cookie handling
 function new_cookie (n,value,days){if(days){var date=new Date();date.setTime(date.getTime()+(days*24*60*60*1000));var expires="; expires="+date.toUTCString();}else var expires="";d.cookie=n+"="+value+expires+"; path=/";}
 function get_cookie (n){var m=n+"=",a=d.cookie.split(';');for(var i=0;i<a.length;i++){var c=a[i];while(c.charAt(0)==' ')c=c.substring(1,c.length);if(c.indexOf(m)==0)return c.substring(m.length,c.length);}return null;}
-function edit_cookie(n){createCookie(n,"",-1)}
+function delete_cookie(n){createCookie(n,"",-1)}

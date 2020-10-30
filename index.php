@@ -29,7 +29,7 @@
 	<!-- <div class="element" onfocusout="if(box.slct[0]){selection.sendEdit(selection.current[0])}" tabindex="1"> -->
 	<template id="listElement">
 
-		<div class="element" onfocusout="selection.send_text_edit(selection.current[0])" tabindex="1">
+		<div class="element" tabindex="1">
 			<div class="element_color"></div>
 			<p   class="element_count"></p>
 			<p   class="element_title" contenteditable="false"></p>
@@ -106,20 +106,24 @@
 		<h2 class="log_title">list<br><span class="log_titleA">A</span></h2>
 		<!-- <div id="blockView"></div> -->
 		<form class="log_form">
-			<input class="log_input" id="logInputMail" name="eml" type="text"     placeholder="E-mail*"         >
-			<input class="log_input" id="logInputPass" name="pwd" type="password" placeholder="Password*"       >
-			<input class="log_input" id="logInputPas2" name="pw2" type="password" placeholder="Repeat password*">
-			<input class="log_input" id="logInputNick" name="uid" type="text"     placeholder="Nick name"       >
-			<input class="log_input" id="logInputName" name="fst" type="text"     placeholder="First name"      >
-			<input class="log_input" id="logInputLast" name="lst" type="text"     placeholder="Last name"       >
+			<p class="log_message"></p>
+			<!-- cool article -->
+			<!-- https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-autocomplete-name%20exhaustive%20list%20of%20autocomplete/autofill%20tags%20for%20html%20form%20inputs -->
+			<input class="log_input" id="log_input_mail" name="log" type="text"     placeholder="E-mail*"          autocomplete="username">
+			<input class="log_input" id="log_input_pass" name="pwd" type="password" placeholder="Password*"        autocomplete="current-password">
+			<input class="log_input" id="log_input_pas2" name="pw2" type="password" placeholder="Repeat password*">
+			<input class="log_input" id="log_input_nick" name="uid" type="text"     placeholder="Nick name"       >
+			<input class="log_input" id="log_input_name" name="fst" type="text"     placeholder="First name"      >
+			<input class="log_input" id="log_input_last" name="lst" type="text"     placeholder="Last name"       >
 			<p class="log_conditions">
 				By registering to our site you accept the still unexisting
 				<span>privacy policy</span> and <span>data handling.</span>
 			</p>
 		</form>
 
-		<button class="btn" id="" onclick="accounts.create_user()">sign up</button>
-		<button class="btn btn_special" id="" onclick="accounts.log_in(d.getElementById('logInputMail').value,d.getElementById('logInputPass').value)">sign in</button>
+		<button class="btn" id="log_left_button" onclick="log.set_state(2)"></button>
+		<button class="btn btn_special" id="log_right_button" onclick="log.set_state(1)"></button>
+		<!-- <button class="btn btn_special" id="" onclick="accounts.log_in(d.getElementById('logInputMail').value,d.getElementById('logInputPass').value)">sign in</button> -->
 	</view>
 
 
@@ -171,12 +175,12 @@
 							</button> -->
 
 						</div>
-						<menu class="action_submenu">
+						<div class="element title">
+							<!-- <div class="element_color"></div> -->
+							<p   class="element_title" contenteditable="false">Selection</p>
+						</div>
+						<menu class="action_submenu selection_menu">
 							<!-- <p class="action_submenu_title">Selection</p> -->
-							<div class="element title">
-								<!-- <div class="element_color"></div> -->
-								<p   class="element_title" contenteditable="false">Selection</p>
-							</div>
 
 							<div class="element" onclick="selection.select_all()" tabindex="1">
 								<!-- <div class="element_color"></div> -->
@@ -198,9 +202,10 @@
 								<!-- <div class="element_color"></div> -->
 								<p   class="element_title" contenteditable="false">Edit</p>
 							</div>
-							<div class="element" onclick="selection.enable_text_edit(selection.current[0])">
+							<!-- <div class="element" onclick="production.prepare_edit()"> -->
+							<div class="element" onclick="main_button.setState(4)">
 								<!-- <div class="element_color"></div> -->
-								<p   class="element_title" contenteditable="false">Edit text</p>
+								<p   class="element_title">Deep edit</p>
 							</div>
 
 							<!-- <div class="action_menu_option"><button class="action_menu_button" onclick="selection.enable_text_edit(selection.current[0])">Edit text</button></div> -->
@@ -260,21 +265,22 @@
 					<div class="mainButtonBar" id="mainButtonBar2"></div>
 				</div>
 
+				<!-- oninput="
+				if(this.value){
+					if(main_button.old){
+						main_button.old=main_button.state;
+					}
+					main_button.setState(3);
+				}else{
+					main_button.setState(2);
+				};" -->
+				<!-- 日本語！！ -->
 				<textarea
 					class="add_new_text"
 					type="text"
-					placeholder="Write"
+					placeholder="Title"
 					autocomplete="off"
-					oninput="
-					if(this.value){
-						if(main_button.old){
-							main_button.old=main_button.state;
-						}
-						main_button.setState(3);
-					}else{
-						main_button.setState();
-						d.querySelector('#button0').classList.remove('send');
-					};"
+					oninput="main_button.state_sync();"
 					onkeydown="if (this.clientHeight < this.scrollHeight) this.style.height=this.scrollHeight+'px';"></textarea>
 
 				<!-- <span class="addNewButton" id="addNewFrnd">
@@ -335,29 +341,31 @@
 
 
 		<script type="text/javascript">
-			let session = <?php echo json_encode($_SESSION); ?>;
-			// console.log(session)
+			<?php if ($_SESSION) { ?>
+				let session = <?php echo json_encode($_SESSION); ?>;
+				// console.log(session)
 
-			accounts.logged.push(session);
-
-
-			user_base = JSON.parse(session.base);
-			user_home = JSON.parse(session.home);
+				accounts.logged.push(session);
 
 
-									accounts.update_card(session);
-									favorites.draw(JSON.parse( session.home     ), 0);
-									favorites.draw(JSON.parse( session.favorites), 1);
-									favorites.draw(JSON.parse( session.groups   ), 2);
-									favorites.draw(JSON.parse( session.friends  ), 3);
-									favorites.load();
-									home_entry      = { element:JSON.parse(session.home), }
-									favorites_entry = { element:JSON.parse(session.favorites), }
+				user_base = JSON.parse(session.base);
+				user_home = JSON.parse(session.home);
 
-									first_entry     = { element:JSON.parse(session.home), }
-									history.go_to(first_entry)
 
-									select_view('view_main button0');
+				accounts.update_card(session);
+				favorites.draw(JSON.parse( session.home      ), 0);
+				favorites.draw(JSON.parse( session.favorites ), 1);
+				favorites.draw(JSON.parse( session.groups    ), 2);
+				favorites.draw(JSON.parse( session.friends   ), 3);
+				favorites.load();
+				home_entry      = { element:JSON.parse(session.home), }
+				favorites_entry = { element:JSON.parse(session.favorites), }
+
+				first_entry     = { element:JSON.parse(session.home), }
+				history.go_to(first_entry)
+
+				select_view('view_main button0');
+			<?php } ?>
 		</script>
 </body>
 </html>

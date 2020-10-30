@@ -35,4 +35,6 @@ $pdo_dsn='mysql:dbname=list-a;host=localhost'; $pdo_user='list-a_master'; $pdo_p
 // pass = 2epOrRrPEvXHjYG6
 $conn = mysqli_connect($dbServerName, $dbUserName, $dbPassword, $dbName);
 $conn2 = new PDO($pdo_dsn, $pdo_user, $pdo_password);
+
+$conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
