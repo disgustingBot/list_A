@@ -155,7 +155,7 @@ if (empty($log) || empty($pwd)) {
 	$respuesta['title'] = 'Error';
 	$respuesta['message'] = 'Empty fields are not valid';
 	echo json_encode($respuesta);
-	$_SESSION['status'] = "login empty";
+	// $_SESSION['status'] = "login empty";
 	// echo json_encode($_SESSION);
 	exit();
 } else {
@@ -164,10 +164,10 @@ if (empty($log) || empty($pwd)) {
 	$resultCheck = mysqli_num_rows($result);
 	if ($resultCheck < 1) {
 		// echo "login nodata";
-		$_SESSION['status'] = "login nodata";
+		// $_SESSION['status'] = "login nodata";
 		// echo json_encode($_SESSION);
 		$respuesta['title'] = 'Error';
-		$respuesta['message'] = 'usuario y/o contraseña incorrectos';
+		$respuesta['message'] = 'Try again...';
 		echo json_encode($respuesta);
 		exit();
 	} else {
@@ -176,10 +176,10 @@ if (empty($log) || empty($pwd)) {
 			$hashedPwdCheck = password_verify($pwd, $row['pwd']);
 			if ($hashedPwdCheck == false) {
 				// echo "login error";
-				$_SESSION['status'] = "login error";
+				// $_SESSION['status'] = "login error";
 				// echo json_encode($_SESSION);
 				$respuesta['title'] = 'Error';
-				$respuesta['message'] = 'usuario y/o contraseña incorrectos';
+				$respuesta['message'] = 'User and/or pass are WRONG!';
 				echo json_encode($respuesta);
 				exit();
 			} elseif ($hashedPwdCheck == true) {
