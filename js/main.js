@@ -8,7 +8,9 @@ w.addEventListener("load",()=>{
 	log.set_state(0);
 	d.getElementById("load").style.top="-100vh";
 });
-
+// list.current.forEach(element => {
+// 	console.log(element.element_id)
+// })
 
 
 
@@ -45,8 +47,8 @@ w.addEventListener('keydown', event =>{
 	if (event.keyCode == 13 && !event.shiftKey) {
 		if (d.querySelector('body').classList.contains('view_log')){
 			// c.log('hi there')
-			// accounts.log_in('mail@testing.com', 'pass')
-			accounts.log_in(d.querySelector('#log_input_mail'), d.querySelector('#log_input_pass'));
+			accounts.log_in('mail@testing.com', 'pass')
+			// accounts.log_in(d.querySelector('#log_input_mail'), d.querySelector('#log_input_pass'));
 		} else {
 			main_button.action();
 		}
@@ -210,6 +212,8 @@ const favorites = {
 			let formData = new FormData();
 
 			formData.append('ppk', element.element_id);
+			// TODO: aca deberia enviar un token generado en el login
+			formData.append('user_id', accounts.logged[0].data.pky);
 
 			ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 
@@ -354,6 +358,8 @@ const favorites = {
 
 		let formData = new FormData();
 		formData.append('ppk', favs.element_id);
+		// TODO: aca deberia enviar un token generado en el login
+		formData.append('user_id', accounts.logged[0].data.pky);
 
 		ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 			response.forEach(element => {
@@ -538,6 +544,8 @@ const list = {
 			let formData = new FormData();
 
 			formData.append('ppk', element.element_id);
+			// TODO: aca deberia enviar un token generado en el login
+			formData.append('user_id', accounts.logged[0].data.pky);
 
 			ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 
@@ -548,7 +556,7 @@ const list = {
 	},
 
 	/*
-	clear
+	=list.clear
 
 	vacía la lista actual dejandola vacia. Se encarga tambien de quitar elementos
 	de la pantalla
@@ -569,6 +577,7 @@ const list = {
 	},
 
 	/*
+	=list.add
 	adds element to list
 
 	añade elemento a la lista actual y lo dibuja en la pantalla
@@ -613,7 +622,7 @@ const list = {
 
 
 	/*
-	update element
+	=list.update element
 
 	actualiza el dibujo del elemento seleccionado
 	PARAMETROS:
@@ -645,7 +654,7 @@ const list = {
 				// TODO: ahora el tema es que al eliminar y volver a crear me quita tambien la seleccion
 				list.remove(element)
 				list.add(element, index)
-				selection.select(element)
+				// selection.select(element)
 			}
 		}
 
@@ -656,7 +665,7 @@ const list = {
 
 
 	/*
-	remove element from list
+	=list.remove element from list
 
 	quita el elemento de la lista actual, lo remueve de la pantalla
 	y de la seleccion actual
@@ -692,13 +701,18 @@ const list = {
 	},
 
 
-
+	/*
+	=list.load
+	*/
 	// TODO: hacer un filtro de priority
 	load:(parent = false)=>{
 		// c.log(parent.pky);
 		let formData = new FormData();
 
 		formData.append('ppk', parent.element_id);
+		// TODO: aca deberia enviar un token generado en el login
+		formData.append('user_id', accounts.logged[0].data.pky);
+
 
 		ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 			// c.log(response);
@@ -757,7 +771,7 @@ const factory = {
 			- group => TODO: ver que hace esto
 	*/
 	create:(text,priority,date,user,base,parent,group)=>{
-		let dbug = 0; // debug mode
+		let dbug = 1; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion create de factory', '#5FA')}
 
 		if(!text){return}
@@ -780,6 +794,8 @@ const factory = {
 		// if(upk == ''){upk = null}
 		// c.log(dte);
     let formData = new FormData();
+		// TODO: aca deberia enviar un token generado en el login
+		formData.append('user_id', accounts.logged[0].data.pky);
 
 		formData.append('text', text);
 		formData.append('priority', priority);
@@ -790,10 +806,15 @@ const factory = {
 		formData.append('group', group);
 
     ajax2(formData, 'inc/create_element.inc.php').then(response => {
-			if(list.dbug_mode || dbug){c.log('respuesta: ', response)}
-			if(list.dbug_mode || dbug){c.log('elemento a añadir: ', response.element)}
-			list.add(response.element);
-			if(list.dbug_mode || dbug){c.lof('finaliza la funcion create de factory', '#F35')}
+			if (response.title == "Error"){
+				notify(response.title, response.message);
+			} else {
+
+				if(list.dbug_mode || dbug){c.log('respuesta: ', response)}
+				if(list.dbug_mode || dbug){c.log('elemento a añadir: ', response.element)}
+				list.add(response.element);
+				if(list.dbug_mode || dbug){c.lof('finaliza la funcion create de factory', '#F35')}
+			}
 		});
 	},
 
@@ -830,7 +851,7 @@ const factory = {
 			- remove => si es true se elimina el elemento de la lista
 	*/
 	edit: (element, key, value, remove = false) => {
-		let dbug = 0; // debug mode
+		let dbug = 1; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion edit de factory', '#5FA')}
 
 		if(element[key] != value){
@@ -843,19 +864,22 @@ const factory = {
 			formData.append('value', value);
 
 			ajax2(formData, 'inc/edit_element.inc.php').then(response => {
-				// c.log(response)
-				if( remove ){
-					if(list.dbug_mode || dbug){c.lof('remover elemento de la pantalla', '#5AF')}
-					list.remove(element);
-					// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
+				if (response.title == "Error"){
+					notify(response.title, response.message);
 				} else {
-					if(list.dbug_mode || dbug){c.lof('actualizar elemento en la pantalla', '#5AF')}
-					// response.element.element_id = response.element.element_id;
-					// c.log(response.element);
-					if(list.dbug_mode || dbug){c.log('Nuevo elemento', response.element)}
-					list.update(response.element);
+					if( remove ){
+						if(list.dbug_mode || dbug){c.lof('remover elemento de la pantalla', '#5AF')}
+						list.remove(element);
+						// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
+					} else {
+						if(list.dbug_mode || dbug){c.lof('actualizar elemento en la pantalla', '#5AF')}
+						// response.element.element_id = response.element.element_id;
+						// c.log(response.element);
+						if(list.dbug_mode || dbug){c.log('Nuevo elemento', response.element)}
+						list.update(response.element);
+					}
+					if(list.dbug_mode || dbug){c.lof('finaliza la funcion edit de factory', '#F35')}
 				}
-				if(list.dbug_mode || dbug){c.lof('finaliza la funcion edit de factory', '#F35')}
 			})
 		}
 	},
@@ -984,6 +1008,7 @@ const production = {
 		})
 		production.text.value = '';
 		production.editing = false;
+		// selection.clear();
 	},
 }
 
@@ -1301,10 +1326,10 @@ const accounts = {
         formData.append('pwd', password);
 
         ajax2(formData, 'inc/log_in.inc.php').then(response => {
+					c.log(response)
 					if(response.title == 'Success'){
 						accounts.logged.push(response);
 						// notify(response.title, response.message);
-						c.log(response)
 						// c.log(accounts.logged);
 						user_base = JSON.parse(response.base);
 						user_home = JSON.parse(response.home);
@@ -1320,8 +1345,8 @@ const accounts = {
 						// favorites.draw( response.home, 0);
 						favorites.draw( JSON.parse(response.home     ), 0);
 						favorites.draw( JSON.parse(response.favorites), 1);
-						favorites.draw( JSON.parse(response.groups   ), 2);
-						favorites.draw( JSON.parse(response.friends  ), 3);
+						// favorites.draw( JSON.parse(response.groups   ), 2);
+						// favorites.draw( JSON.parse(response.friends  ), 3);
 						favorites.load();
 						home_entry      = { element:JSON.parse(response.home), }
 						favorites_entry = { element:JSON.parse(response.favorites), }

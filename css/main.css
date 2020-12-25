@@ -44,7 +44,8 @@ Version: 1.0
 6.6.3) =element_navigate:
 6.6.4) =btn_round:
 6.6.5) =action_btn:
-6.6.6) =back_btn
+6.6.6) =back_btn:
+6.6.7) =burger:
 
 6.8) =MENUS:
 6.8.0) =main_menu:
@@ -102,8 +103,8 @@ FIN DE MAPA DE CONTENIDOS */
   --greyf:#FFFFFF;
 
 
-  --color1:#4cff62;
   /* --color1:#FECC00; */
+  --color1:#4cff62;
   --color2:#1C1B17;
   --color3:#424242;
   --color4:#5B5B5B;
@@ -113,12 +114,16 @@ FIN DE MAPA DE CONTENIDOS */
 
   /* Colores de "priority" */
   /* --clrPty1:#FECC00; */
-  --clrPty1:#4cff62;
-  --clrPty2:#F44336;
-  --clrPty3:#ffc107;
-  --clrPty4:#42A5F5;
-  --clrPty5:#FEFEFE;
-  --clrPty6:#434242;
+  --clrPty1:#424242;
+  --clrPty2:#FEFEFE;
+
+  --clrPty3:#e40303;
+  --clrPty4:#ff8c00;
+  --clrPty5:#ffed00;
+  --clrPty6:#008026;
+  --clrPty7:#004dff;
+  --clrPty8:#750787;
+
 
   --DP0:  0px 0px 0px  rgba(0, 0, 0, 0.0),  0px 0px 0px  rgba(0, 0, 0, 0.00), 0px 0px 0px   rgba(0, 0, 0, 0.00);
   --DP1:  0px 1px 3px  rgba(0, 0, 0, 0.2),  0px 2px 2px  rgba(0, 0, 0, 0.12), 0px 0px 2px   rgba(0, 0, 0, 0.14);
@@ -144,13 +149,15 @@ FIN DE MAPA DE CONTENIDOS */
       1.2) =Variables de cambio visual relacionado a al ancho de la pantalla
   ------------------------------------------------------------------------------
   --------------------------------------------------------------------------- */
+  --onlyMobileF:flex;
+
 
     /* ?btn_round */
     --btn_round_X:calc(.5rem + 16px);
     --btn_round_radius:25px;
 
     /* ?action_btn */
-    --action_btn_X:calc(.5rem + 16px);
+    --action_btn_X:.5rem;
     --action_btn_radius:25px;
 
 
@@ -173,6 +180,10 @@ FIN DE MAPA DE CONTENIDOS */
     --addNewBottom:-85px;
     --addNewWidth:100%;
     --addNewGC:1;
+
+
+    /* ?element */
+    --element-title_padding_left:3rem;
 }
 
 
@@ -196,6 +207,11 @@ FIN DE MAPA DE CONTENIDOS */
 --------------------------------------------------------------------------- */
 @media screen and (min-width: 576px) {
   :root {
+    --onlyMobileF:none;
+
+
+    --action_btn_X:calc(.5rem + 16px);
+
     /* login View */
     /* --signFormMarginBottom:-240px; */
     --mainGTC:250px 1fr;
@@ -216,6 +232,9 @@ FIN DE MAPA DE CONTENIDOS */
     --addNewBottom:0;
     --addNewGC:2;
     --addNewWidth:calc(100% - 200px);
+
+    /* ?element */
+    --element-title_padding_left:0;
   }
 }
 
@@ -555,6 +574,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   box-shadow: var(--DP24);
   position:sticky;
   top:0;
+  padding-left: var(--element-title_padding_left);
 }
 .element.title .element_title{
   font-size:1.3rem;
@@ -1011,6 +1031,62 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 .back_btn_bar1{transform:rotate( 30deg);margin-top:   -1px}
 .back_btn_bar2{transform:rotate(-30deg);margin-bottom:-1px}
 
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                          6.6.2) =burger:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.main_menu_active .burger{
+  left:calc(100vw - 30px - .5rem);
+  transition-delay: .1s;
+}
+.burger{
+  background: transparent;
+  box-sizing: border-box;
+  border: none;
+  cursor: pointer;
+  height: 20px;
+  display: var(--onlyMobileF);
+  padding:0;
+  position: absolute;
+  left:.5rem;
+  top: .8rem;
+  transition: .5s;
+  width:  30px;
+  z-index: 25;
+}
+.burger:focus{outline: none;}
+.main_menu_active .burgerBar{background: var(--grey2)}
+.burgerBar{
+  position:absolute;
+  /* border: var(--grey6) solid 1px; */
+  box-shadow: 0 0 2px rgba(0, 0, 0, .7);
+  top:   0;
+  left:  0;
+  right: 0;
+  bottom:0;
+  margin: auto;
+  height: 4px;
+  width: 100%;
+  border-radius: 3px;
+  background: var(--greyf);
+  transform-origin: center;
+  transition: .3s;
+  transition-delay: .2s;
+}
+.burgerBar:nth-child(1){transform: translateY(8px)}
+.burgerBar:nth-child(2){transform: translateY(0)}
+.burgerBar:nth-child(3){transform: translateY(-8px)}
+.main_menu_active .burgerBar:nth-child(1){transform: rotate( 45deg)}
+.main_menu_active .burgerBar:nth-child(2){transform: scaleX(0)}
+.main_menu_active .burgerBar:nth-child(3){transform: rotate(-45deg)}
+
+
+
+
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
                               6.8) =MENUS:
@@ -1041,7 +1117,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
   z-index: 24;
 }
 /* #mainMenuButton:focus + #mainMenu,#mainMenu:focus{left:0;} */
-.main_menu.active{left:0}
+.main_menu_active .main_menu{left:0}
 
 
 
@@ -1127,8 +1203,17 @@ body:not(.view_main) .action_menu {
   display: flex;
   border-bottom: solid 1px var(--color4);
   flex-direction: column;
-  /* max-height: 0; */
-
+  max-height: 0;
+  /* transform:scaleY(0); */
+  transition:.3s;
+}
+.selection_menu.alt{
+  max-height: 117px;
+  /* transform:scaleY(1); */
+}
+.edit_menu.alt{
+  max-height: 320px;
+  /* transform:scaleY(1); */
 }
 
 /* ---------------------------------------------------------------------------
@@ -1213,18 +1298,18 @@ body:not(.view_main) .add_new {
 .add_new_prty {grid-column:5/6; border-radius: 10px 0 0 0;}
 .add_new_colr {
   position:fixed;
-  z-index: 9;
   right:0;
-  bottom:-250px;
-  /*bottom:84px;*/
+  bottom:-320px;
+  /* bottom:100px; */
   background: var(--color3);
   display: flex;
   flex-direction: column;
   text-align: left;
   border-radius: 8px 8px 0 0;
   transition: .5s;
+  z-index: -1;
 }
-.add_new_prty:focus + .add_new_colr, .add_new_colr:focus {bottom:84px;}
+.add_new_prty:focus + .add_new_colr, .add_new_colr:focus {bottom:100px;}
 .noSelect {
     -webkit-touch-callout:none;
     -webkit-user-select:  none;
@@ -1265,12 +1350,14 @@ input:checked ~ .colrOptP {background-color: var(--color4);}
 .colrOption:selected {background-color: #ccc;}
 
 
-#amrCirc {background-color: var(--clrPty1);}
-#rojCirc {background-color: var(--clrPty2);}
-#verCirc {background-color: var(--clrPty3);}
-#azlCirc {background-color: var(--clrPty4);}
-#blcCirc {background-color: var(--clrPty5);}
-#njaCirc {background-color: var(--clrPty6);box-shadow:none;}
+.bg_color_1 {background-color: var(--clrPty1);}
+.bg_color_2 {background-color: var(--clrPty2);box-shadow:none;}
+.bg_color_3 {background-color: var(--clrPty3);}
+.bg_color_4 {background-color: var(--clrPty4);}
+.bg_color_5 {background-color: var(--clrPty5);}
+.bg_color_6 {background-color: var(--clrPty6);}
+.bg_color_7 {background-color: var(--clrPty7);}
+.bg_color_8 {background-color: var(--clrPty8);}
 
 .checkmark {
   position: absolute;
@@ -1278,7 +1365,7 @@ input:checked ~ .colrOptP {background-color: var(--color4);}
   left:18px;
   height: 24px;
   width:  24px;
-  background-color: #eee;
+  /* background-color: #eee; */
   border-radius: 50%;
   box-shadow: 0px  10px  10px  1px rgba(0, 0, 0, 0.2),   0px 0px  8px  4px  rgba(0, 0, 0, 0.14);
 }

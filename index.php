@@ -130,6 +130,13 @@
 
 	<view class="main">
 		<?php // echo json_encode($_SESSION); ?>
+
+		<button class="burger" onclick="altClassFromSelector('main_menu_active', '.main')">
+			<div class="burgerBar"></div>
+			<div class="burgerBar"></div>
+			<div class="burgerBar"></div>
+		</button>
+
 		<menu class="main_menu">
 			<!-- TODO: account -->
 			<!-- <figure id="mainMenuProfile" onclick="box.loadElements(box.base)"> -->
@@ -140,7 +147,7 @@
 					<p class="user_card_key"></p>
 				</figcaption>
 
-				<!-- <button class="mainMenuClose" onclick="altClassFromSelector('active', '#mainMenu')">
+				<!-- <button class="mainMenuClose" onclick="altClassFromSelector('main_menu_active', '.main_menu')">
 					<div class="mainMenuCloseBar"></div>
 					<div class="mainMenuCloseBar"></div>
 				</button> -->
@@ -175,7 +182,7 @@
 							</button> -->
 
 						</div>
-						<div class="element title">
+						<div class="element title" onclick="altClassFromSelector('alt', '.selection_menu')">
 							<!-- <div class="element_color"></div> -->
 							<p   class="element_title" contenteditable="false">Selection</p>
 						</div>
@@ -196,12 +203,12 @@
 							</div>
 
 						</menu>
-						<menu class="action_submenu">
+						<div class="element title" onclick="altClassFromSelector('alt', '.edit_menu')">
+							<!-- <div class="element_color"></div> -->
+							<p   class="element_title" contenteditable="false">Edit</p>
+						</div>
+						<menu class="action_submenu edit_menu">
 
-							<div class="element title">
-								<!-- <div class="element_color"></div> -->
-								<p   class="element_title" contenteditable="false">Edit</p>
-							</div>
 							<!-- <div class="element" onclick="production.prepare_edit()"> -->
 							<div class="element" onclick="main_button.setState(4)">
 								<!-- <div class="element_color"></div> -->
@@ -210,30 +217,38 @@
 
 							<!-- <div class="action_menu_option"><button class="action_menu_button" onclick="selection.enable_text_edit(selection.current[0])">Edit text</button></div> -->
 
-
 							<div class="element" onclick="selection.edit('pty', 1)" tabindex="1">
 								<div class="element_color" style="background:var(--clrPty1)"></div>
-								<p class="element_title">Bolt</p>
+								<p class="element_title">Nice</p>
 							</div>
 							<div class="element" onclick="selection.edit('pty', 2)" tabindex="1">
 								<div class="element_color" style="background:var(--clrPty2)"></div>
-								<p class="element_title">Fire</p>
+								<p class="element_title">忍者</p>
 							</div>
+
 							<div class="element" onclick="selection.edit('pty', 3)" tabindex="1">
 								<div class="element_color" style="background:var(--clrPty3)"></div>
-								<p class="element_title">Gold</p>
+								<p class="element_title">L</p>
 							</div>
 							<div class="element" onclick="selection.edit('pty', 4)" tabindex="1">
 								<div class="element_color" style="background:var(--clrPty4)"></div>
-								<p class="element_title">Marine</p>
+								<p class="element_title">G</p>
 							</div>
 							<div class="element" onclick="selection.edit('pty', 5)" tabindex="1">
 								<div class="element_color" style="background:var(--clrPty5)"></div>
-								<p class="element_title">Void</p>
+								<p class="element_title">B</p>
 							</div>
 							<div class="element" onclick="selection.edit('pty', 6)" tabindex="1">
 								<div class="element_color" style="background:var(--clrPty6)"></div>
-								<p class="element_title">Ninja</p>
+								<p class="element_title">T</p>
+							</div>
+							<div class="element" onclick="selection.edit('pty', 7)" tabindex="1">
+								<div class="element_color" style="background:var(--clrPty7)"></div>
+								<p class="element_title">Q</p>
+							</div>
+							<div class="element" onclick="selection.edit('pty', 8)" tabindex="1">
+								<div class="element_color" style="background:var(--clrPty8)"></div>
+								<p class="element_title">+</p>
 							</div>
 							<!-- <button for="amrSM" class="colrOption" onclick="selection.edit('pty', 1)"><span id="amrCirc" class="checkmark"></span><p class="colrOptP">Bolt  </p></button>
 							<button for="rojSM" class="colrOption" onclick="selection.edit('pty', 2)"><span id="rojCirc" class="checkmark"></span><p class="colrOptP">Fire  </p></button>
@@ -301,12 +316,14 @@
 				</span>
 
 				<div class="add_new_colr">
-					<label for="ver" class="colrOption"><input type="radio" name="colr" id="ver" class="colrOpt" value="1"        ><span id="amrCirc" class="checkmark"></span><p class="colrOptP">Bolt  </p></label>
-					<label for="roj" class="colrOption"><input type="radio" name="colr" id="roj" class="colrOpt" value="2"        ><span id="rojCirc" class="checkmark"></span><p class="colrOptP">Fire  </p></label>
-					<label for="amr" class="colrOption"><input type="radio" name="colr" id="amr" class="colrOpt" value="3"        ><span id="verCirc" class="checkmark"></span><p class="colrOptP">Gold  </p></label>
-					<label for="azl" class="colrOption"><input type="radio" name="colr" id="azl" class="colrOpt" value="4"        ><span id="azlCirc" class="checkmark"></span><p class="colrOptP">Marine</p></label>
-					<label for="blc" class="colrOption"><input type="radio" name="colr" id="blc" class="colrOpt" value="5" checked><span id="blcCirc" class="checkmark"></span><p class="colrOptP">Void  </p></label>
-					<label for="nja" class="colrOption"><input type="radio" name="colr" id="nja" class="colrOpt" value="6"        ><span id="njaCirc" class="checkmark"></span><p class="colrOptP">Ninja </p></label>
+					<label for="color_1" class="colrOption"><input type="radio" name="colr" id="color_1" class="colrOpt" value="1" checked><span class="checkmark bg_color_1"></span><p class="colrOptP">Nice  </p></label>
+					<label for="color_2" class="colrOption"><input type="radio" name="colr" id="color_2" class="colrOpt" value="2"        ><span class="checkmark bg_color_2"></span><p class="colrOptP">忍者   </p></label>
+					<label for="color_3" class="colrOption"><input type="radio" name="colr" id="color_3" class="colrOpt" value="3"        ><span class="checkmark bg_color_3"></span><p class="colrOptP">L</p></label>
+					<label for="color_4" class="colrOption"><input type="radio" name="colr" id="color_4" class="colrOpt" value="4"        ><span class="checkmark bg_color_4"></span><p class="colrOptP">G</p></label>
+					<label for="color_5" class="colrOption"><input type="radio" name="colr" id="color_5" class="colrOpt" value="5"        ><span class="checkmark bg_color_5"></span><p class="colrOptP">B</p></label>
+					<label for="color_6" class="colrOption"><input type="radio" name="colr" id="color_6" class="colrOpt" value="6"        ><span class="checkmark bg_color_6"></span><p class="colrOptP">T</p></label>
+					<label for="color_7" class="colrOption"><input type="radio" name="colr" id="color_7" class="colrOpt" value="6"        ><span class="checkmark bg_color_7"></span><p class="colrOptP">Q</p></label>
+					<label for="color_8" class="colrOption"><input type="radio" name="colr" id="color_8" class="colrOpt" value="6"        ><span class="checkmark bg_color_8"></span><p class="colrOptP">+</p></label>
 				</div>
 
 				<!-- <span class="addNewButton" id="addNewSend">
@@ -336,7 +353,6 @@
 
 
 
-	<!-- <script type="text/javascript" src="js/custom.js?v=<?= $version; ?>"></script> -->
 	<script type="text/javascript" src="js/main.js?v=<?= $version; ?>"></script>
 
 
@@ -355,7 +371,7 @@
 				accounts.update_card(session);
 				favorites.draw(JSON.parse( session.home      ), 0);
 				favorites.draw(JSON.parse( session.favorites ), 1);
-				favorites.draw(JSON.parse( session.groups    ), 2);
+				// favorites.draw(JSON.parse( session.groups    ), 2);
 				favorites.draw(JSON.parse( session.friends   ), 3);
 				favorites.load();
 				home_entry      = { element:JSON.parse(session.home), }

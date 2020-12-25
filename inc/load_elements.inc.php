@@ -1,7 +1,14 @@
 <?php
+session_start();
 include_once 'dbh.inc.php';
 
-$ppk = $_POST['ppk'];
+$parent_id = $_POST['ppk'];
+// $user_id = $_POST['user_id'];
+$user_id = $_SESSION['data']['pky'];
+
+
+
+
 // $tdy = $_POST['tdy'];
 // if ($tdy) {
 	// $qry = "SELECT DISTINCT *
@@ -16,11 +23,12 @@ $ppk = $_POST['ppk'];
 // } else {
 	$qry = "SELECT DISTINCT *
 		FROM
-		elements a, elementparent b
+		elements a, elementparent b, permissions c
 		WHERE (
-		a.element_id = b.epk AND a.del = 0 AND
-		b.ppk = $ppk  AND b.onf = 1
-	);";
+			a.element_id = b.epk AND a.del = 0 AND
+			b.ppk = $parent_id  AND b.onf = 1 AND
+			a.element_id = c.element_id AND c.user_id = $user_id AND c.permission >= 1
+		);";
 // }
 // echo var_dump($tdy);
 // aca la idea es que las tablas relacionales son los hilos de donde tiro, y vienen pegados los elementos relacionados

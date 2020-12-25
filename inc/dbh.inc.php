@@ -38,3 +38,5 @@ $conn2 = new PDO($pdo_dsn, $pdo_user, $pdo_password);
 
 $conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 $conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// include 'session_handler.php';

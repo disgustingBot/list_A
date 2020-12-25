@@ -1,43 +1,54 @@
 <?php
+// TODO: checkear por permisos primero
+session_start();
 include_once 'dbh.inc.php';
 
 $element_id = $_POST['element_id'];
 $key = $_POST['key'];
 $value = $_POST['value'];
+$user_id = $_SESSION['data']['pky'];
 
 $respuesta = array();
-$respuesta['test'] = 'test';
+
+// Check for user permissions
+$get_permission = "SELECT * FROM permissions WHERE (user_id = '$user_id' AND element_id = $element_id);";
+$permission = mysqli_fetch_assoc(mysqli_query($conn, $get_permission));
+$required = 4;
+$message = "edit";
+if($key == 'del'){
+	$required = 8;
+	$message = "delete";
+}
+if($permission AND $permission['permission'] & $required){
+	$respuesta['permission'] = 'can do it';
+} else {
+	$respuesta['title'] = 'Error';
+	$respuesta['message'] = "You don't have permissions to $message that";
+	echo json_encode($respuesta);
+	// if user don't have permissions, prevent further execution
+	exit();
+}
 
 try {
-	$update_query = "UPDATE elements SET $key = '$value' WHERE ( element_id = $element_id );";
+	$update_query = "UPDATE elements SET $key = :value WHERE ( element_id = $element_id );";
 	$select_query = "SELECT * FROM elements WHERE ( element_id = $element_id AND del = 0 );";
 
-	// $qry=$conn2->prepare("UPDATE elements SET $key = '$value' WHERE ( pky = $element_id );");
-	// $qry->execute();
 	$respuesta['title'] = 'Success';
 	$respuesta['message'] = 'Elemento editado';
 	// $respuesta['query'] = $query;
 
+	$update =  $conn2->prepare( $update_query );
+	$update -> execute( ['value' => $value] );
 
-	// $qry = "SELECT DISTINCT * FROM elements WHERE (pky = $element_id AND del = 0 );";
-	$ress = $conn->query($update_query);
-	$ress = $conn->query("COMMIT;");
 	$ress = $conn->query($select_query);
 	$resp = $ress->fetch_all(MYSQLI_ASSOC);
 
 	$respuesta['element'] = $resp[0];
-	// echo "hola!";
-	// echo $e;
-	// echo json_encode($resp);
-
 
 
 } catch (PDOException $e) {
-	// echo 'Error: '.$e->getMessage()." file: ".$e->getFile()." line: ".$e->getLine();
 	$respuesta['title'] = 'Error';
 	$respuesta['message'] = 'Error: '.$e->getMessage()." file: ".$e->getFile()." line: ".$e->getLine();
-	// exit;
 }
 
 echo json_encode($respuesta);
-// echo $element_id;

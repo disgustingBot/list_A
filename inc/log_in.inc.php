@@ -105,13 +105,14 @@
 // "[Flags]
 // public enum Permission
 // {
-//     VIEWUSERS     =  1, // 2^0 // 0000 0001
-//     EDITUSERS     =  2, // 2^1 // 0000 0010
-//     VIEWPRODUCTS  =  4, // 2^2 // 0000 0100
-//     EDITPRODUCTS  =  8, // 2^3 // 0000 1000
-//     VIEWCLIENTS   = 16, // 2^4 // 0001 0000
-//     EDITCLIENTS   = 32, // 2^5 // 0010 0000
-//     DELETECLIENTS = 64, // 2^6 // 0100 0000
+//     ver elemento       =   1, // 2^0 // 0000 0001
+//     crear hijo         =   2, // 2^1 // 0000 0010
+//     editar elemento    =   4, // 2^2 // 0000 0100
+//     eliminar elemento  =   8, // 2^3 // 0000 1000
+//     ver permisos       =  16, // 2^4 // 0001 0000
+//     agregar usuarios   =  32, // 2^6 // 0010 0000
+//     editar permisos    =  64, // 2^5 // 0100 0000
+//     eliminar usuarios  = 128, // 2^5 // 1000 0000
 // }"
 
 
@@ -183,11 +184,18 @@ if (empty($log) || empty($pwd)) {
 				echo json_encode($respuesta);
 				exit();
 			} elseif ($hashedPwdCheck == true) {
+				// create authentication token
+				// $create_token = "INSERT INTO permissions (user_id, element_id, permission) VALUES ('$user_id', '$element_id', '63');";
+				// $qry=$conn2->prepare($save_parent);
+				// $qry->execute();
+
+
 				// Log in the user here
 				$upk = $row['pky'];
 				$_SESSION['status'] = "ok";
 
 				$_SESSION['data'] =  array(
+					'sid' => session_id(),
 					'pky' => $row['pky'],
 					'nick_name' => $row['uid'],
 					'first_name' => $row['fst'],
@@ -200,6 +208,8 @@ if (empty($log) || empty($pwd)) {
 				// $_SESSION['u_lst'] = $row['lst'];
 				// $_SESSION['u_eml'] = $row['eml'];
 				$respuesta['data'] = array(
+					'sid' => session_id(),
+					'save_path' => session_save_path(),
 					'pky' => $row['pky'],
 					'nick_name' => $row['uid'],
 					'first_name' => $row['fst'],
