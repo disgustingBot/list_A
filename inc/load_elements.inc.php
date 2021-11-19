@@ -2,9 +2,10 @@
 session_start();
 include_once 'dbh.inc.php';
 
+// TODO: sanitizar
 $parent_id = $_POST['ppk'];
 // $user_id = $_POST['user_id'];
-$user_id = $_SESSION['data']['pky'];
+$user_id = $_SESSION['data']['user_id'];
 
 
 

@@ -143,30 +143,28 @@
 session_start();
 include 'dbh.inc.php';
 
-// $uid = mysqli_real_escape_string($conn, $_POST['uid']);
-// $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
+// TODO: sanitizar datos
 $log = $_POST['log'];
 $pwd = $_POST['pwd'];
 $respuesta = array();
 
 // Error handlers
 // Check if inputs are empty
+// TODO: validar datos de entrada
 if (empty($log) || empty($pwd)) {
-	// echo "login empty";
+
+	$respuesta['status'] = 'report';
 	$respuesta['title'] = 'Error';
 	$respuesta['message'] = 'Empty fields are not valid';
 	echo json_encode($respuesta);
-	// $_SESSION['status'] = "login empty";
-	// echo json_encode($_SESSION);
 	exit();
 } else {
+	// como vas a poner una cosa que viene del usuario en tu base de datos sin proteccion?
 	$sql = "SELECT * FROM users WHERE uid='$log' OR eml='$log'";
 	$result = mysqli_query($conn, $sql);
 	$resultCheck = mysqli_num_rows($result);
 	if ($resultCheck < 1) {
-		// echo "login nodata";
-		// $_SESSION['status'] = "login nodata";
-		// echo json_encode($_SESSION);
+		$respuesta['status'] = 'report';
 		$respuesta['title'] = 'Error';
 		$respuesta['message'] = 'Try again...';
 		echo json_encode($respuesta);
@@ -191,12 +189,12 @@ if (empty($log) || empty($pwd)) {
 
 
 				// Log in the user here
-				$upk = $row['pky'];
+				$upk = $row['user_id'];
 				$_SESSION['status'] = "ok";
 
 				$_SESSION['data'] =  array(
 					'sid' => session_id(),
-					'pky' => $row['pky'],
+					'user_id' => $row['user_id'],
 					'nick_name' => $row['uid'],
 					'first_name' => $row['fst'],
 					'last_name' => $row['lst'],
@@ -210,7 +208,7 @@ if (empty($log) || empty($pwd)) {
 				$respuesta['data'] = array(
 					'sid' => session_id(),
 					'save_path' => session_save_path(),
-					'pky' => $row['pky'],
+					'user_id' => $row['user_id'],
 					'nick_name' => $row['uid'],
 					'first_name' => $row['fst'],
 					'last_name' => $row['lst'],

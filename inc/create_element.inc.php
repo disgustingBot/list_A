@@ -55,6 +55,8 @@ $protected_columns .= ':bse)';
 $columns .= 'bse)';
 $new_creation_query = "INSERT INTO elements $columns VALUES $protected_columns;";
 
+$respuesta['query_test'] = $new_creation_query;
+
 
 
 	// Error handlers

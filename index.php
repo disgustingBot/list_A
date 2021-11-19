@@ -1,7 +1,7 @@
 <?php session_start(); ?>
 <?php
 	// version de List-A
-	$version='5.0';
+	$version='6.0.0';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +28,6 @@
 	<!-- <div class="element" onfocusout="if(box.slct[0]){box.slct[0].sendEdit()}" tabindex="1"> -->
 	<!-- <div class="element" onfocusout="if(box.slct[0]){selection.sendEdit(selection.current[0])}" tabindex="1"> -->
 	<template id="listElement">
-
 		<div class="element" tabindex="1">
 			<div class="element_color"></div>
 			<p   class="element_count"></p>
@@ -69,7 +68,13 @@
 		</div>
 	</template>
 
+	<template id="friend_template">
 
+			<div class="friend">
+				<p class="friend_name"></p>
+				<svg class="friend_delete" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"></path></svg>
+			</div>
+	</template>
 
 
 
@@ -89,11 +94,12 @@
 	<!-- <div class="redDot test" onclick="accounts.log_out();"></div> -->
 
 	<div class="alert" id="alert">
-		<button class="btn_close" onclick="altClassFromSelector('visible', '.alert')">
-			<div class="btn_close_bar"></div>
-			<div class="btn_close_bar"></div>
-		</button>
 		<h4 class="alert_title">alert title</h4>
+		<button class="btn_arrow" onclick="altClassFromSelector('visible', '.alert')">
+			<div class="btn_arrow_bar"></div>
+			<div class="btn_arrow_bar"></div>
+			<div class="btn_arrow_bar"></div>
+		</button>
 		<p class="alert_txt">alert text</p>
 	</div>
 
@@ -165,6 +171,7 @@
 			</div>
 		</menu>
 
+		<?php include 'multiplayer.php' ?>
 
 
 					<menu class="action_menu">
@@ -296,7 +303,7 @@
 					placeholder="Title"
 					autocomplete="off"
 					oninput="main_button.state_sync();"
-					onkeydown="if (this.clientHeight < this.scrollHeight) this.style.height=this.scrollHeight+'px';"></textarea>
+					onkeydown="this.style.height=this.scrollHeight+'px';"></textarea>
 
 				<!-- <span class="addNewButton" id="addNewFrnd">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
@@ -354,6 +361,8 @@
 
 
 	<script type="text/javascript" src="js/main.js?v=<?= $version; ?>"></script>
+	<script type="text/javascript" src="js/friends.js?v=<?= $version; ?>"></script>
+	<script type="text/javascript" src="js/shortcodes.js?v=<?= $version; ?>"></script>
 
 
 		<script type="text/javascript">

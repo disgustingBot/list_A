@@ -3,6 +3,11 @@ d=document;w=window;c=console;
 // estos 3 quedan asi porque me permiten trabajar mas rapido
 
 
+
+// import { hello } from './module.js'; // Or it could be simply `hello.js`
+// hello('world');
+// TODO: deprecar las "bases"...  implementar eliminacion recurrente a los hijos
+
 // Asi comienza nuestra historia,
 w.addEventListener("load",()=>{
 	log.set_state(0);
@@ -11,52 +16,6 @@ w.addEventListener("load",()=>{
 // list.current.forEach(element => {
 // 	console.log(element.element_id)
 // })
-
-
-
-
-
-
-
-// =SHORTCODES
-// space opens the action menu
-// delete goes back on the history
-// escape clears the selection
-// enter does main button action (green buton bottom left), in log screen does log_in
-w.addEventListener('keydown', event =>{
-	// c.log(event.keyCode);
-	// space opens the action menu
-	if (event.keyCode ==  32){
-		if((main_button.state != 0 && main_button.state != 1) || d.querySelector('body').classList.contains('view_log')){return}
-		altClassFromSelector('action_menu_active','.action_menu')
-		event.preventDefault();
-	}
-	// delete goes back on the history
-	if (event.keyCode ==  8){
-		// if(d.querySelector('body').classList.contains('view_log'))
-		if((main_button.state != 0 && main_button.state != 1) || d.querySelector('body').classList.contains('view_log')){return}
-		history.go_back();
-		event.preventDefault();
-	}
-	// escape clears the selection
-	if (event.keyCode ==  27){
-		selection.clear();
-		d.querySelector('.action_menu').classList.remove('action_menu_active');
-	}
-	// enter does main button action (green buton bottom left), in log screen does log_in
-	if (event.keyCode == 13 && !event.shiftKey) {
-		if (d.querySelector('body').classList.contains('view_log')){
-			// c.log('hi there')
-			accounts.log_in('mail@testing.com', 'pass')
-			// accounts.log_in(d.querySelector('#log_input_mail'), d.querySelector('#log_input_pass'));
-		} else {
-			main_button.action();
-		}
-    event.preventDefault();
-  }
-})
-
-
 
 
 
@@ -652,6 +611,7 @@ const list = {
 				// list.current.splice(index, 1, new Element(element));
 
 				// TODO: ahora el tema es que al eliminar y volver a crear me quita tambien la seleccion
+				// TODO: actualizar solo la parte distinta, no todo el elemento
 				list.remove(element)
 				list.add(element, index)
 				// selection.select(element)
@@ -748,6 +708,7 @@ const list = {
 
 
 
+
 /*
 =factory
 
@@ -771,7 +732,7 @@ const factory = {
 			- group => TODO: ver que hace esto
 	*/
 	create:(text,priority,date,user,base,parent,group)=>{
-		let dbug = 1; // debug mode
+		let dbug = 0; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion create de factory', '#5FA')}
 
 		if(!text){return}
@@ -806,6 +767,7 @@ const factory = {
 		formData.append('group', group);
 
     ajax2(formData, 'inc/create_element.inc.php').then(response => {
+			// c.log(response)
 			if (response.title == "Error"){
 				notify(response.title, response.message);
 			} else {
@@ -851,7 +813,7 @@ const factory = {
 			- remove => si es true se elimina el elemento de la lista
 	*/
 	edit: (element, key, value, remove = false) => {
-		let dbug = 1; // debug mode
+		let dbug = 0; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion edit de factory', '#5FA')}
 
 		if(element[key] != value){
@@ -953,7 +915,6 @@ const production = {
 			date,
 			user,
 			base.element_id,
-			// TODO: cambiar home.pky por el elemento actual
 			history.list[0].element.element_id,
 			// create:(text,priority,date,user,base,parent,group)
 			'',
@@ -1326,7 +1287,7 @@ const accounts = {
         formData.append('pwd', password);
 
         ajax2(formData, 'inc/log_in.inc.php').then(response => {
-					c.log(response)
+					// c.log(response)
 					if(response.title == 'Success'){
 						accounts.logged.push(response);
 						// notify(response.title, response.message);
@@ -1352,7 +1313,9 @@ const accounts = {
 						favorites_entry = { element:JSON.parse(response.favorites), }
 
 						first_entry     = { element:JSON.parse(response.home), }
-						history.go_to(first_entry)
+
+						// history.go_to(first_entry)
+						c.log('load all users')
 
 						select_view('view_main button0');
 						log.message('YEEEEEY!!', 'red');
@@ -1480,9 +1443,6 @@ const notify = (title, message)=>{
 }
 
 
-// notify ('testeos', 'aqui va el mensaje');
-
-
 
 
 
@@ -1514,9 +1474,6 @@ const notify = (title, message)=>{
 // se crea el elemento dandole de comer "elementValues", que es un objecto
 class Element {
 	constructor(v){
-		// TODO: quitar la propiedad "values" y reemplazar por nueva implementacion
-		// this.values = v;
-		// this.favorite = { tbl: "elementparent", col: "ppk", val: box.base.pky+2 , element_id: v.element_id };
 		// Esta parte define las propiedades del elemento como vienen del objeto v
 		for(var k in v){Object.defineProperty(this,k,{enumerable: true,value:v[k]})}
 	}
@@ -1555,9 +1512,6 @@ class Element {
 			let enter = 'history.go_to('+JSON.stringify(entry)+')';
 			buton.setAttribute('onclick', enter);
 
-			// history.go(first_entry)
-			// element.setAttribute('onclick', 'selection.select('+JSON.stringify(this)+')');
-			// element.setAttribute('ondblclick', 'history.go_to('+JSON.stringify(entry)+')');
 			if( enter_with_simple_click ){
 				element.setAttribute('onclick', enter);
 
@@ -1571,7 +1525,7 @@ class Element {
 			color.style.background = "var(--clrPty" + this.pty + ")";
 			count.style.color = "var(--clrPty" + this.pty + ")";
 			title.textContent = this.txt;
-			// title.innerHTML = this.txt;
+
 			// Insert it into the document in the right place
 			let parent = d.querySelector( parent_query );
 			parent.insertBefore(draw, parent.children[ index ]);
@@ -1582,6 +1536,13 @@ class Element {
 		}
 	}
 }
+
+
+
+
+
+
+
 
 
 
@@ -1601,30 +1562,19 @@ c.lof = (message, farbe = false)=>{
 };
 
 
+
 async function ajax2(formData, url) {
 	try{
-		let response = await fetch(url, {
-			method: 'POST',
-			body: formData,
-			// mode: 'no-cors',
-		});
+		let response = await fetch(url, { method: 'POST', body: formData, });
 		return await response.json();
-	}catch(err){
-		console.error(err);
-	}
+	} catch ( err ) { console.error(err); }
 }
 
 async function ajax3(formData, url) {
 	try{
-		let response = await fetch(url, {
-			method: 'POST',
-			body: formData,
-		});
-	// return await response.json();
+		let response = await fetch(url, { method: 'POST', body: formData, });
 		return await response.text();
-	}catch(err){
-		console.error(err);
-	}
+	} catch ( err ) { console.error(err); }
 }
 
 // TODO: chequear codigo de cookie handling

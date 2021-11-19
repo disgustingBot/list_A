@@ -3,7 +3,7 @@ Theme Name: List-A
 Author: Lattedev
 Author URI: https://www.lattedev.com
 Description: The official theme for List-A
-Version: 1.0
+Version: 6.0.0
 */
 
 
@@ -37,20 +37,26 @@ Version: 1.0
 6.4) =MULTICARDS:
 6.4.0) =element:
 6.4.1) =user_card:
+6.4.2) =friend:
 
 6.6) =BUTTONS:
 6.6.1) =btn:
 6.6.2) =btn_close:
-6.6.3) =element_navigate:
-6.6.4) =btn_round:
-6.6.5) =action_btn:
-6.6.6) =back_btn:
-6.6.7) =burger:
+6.6.3) =btn_arrow:
+6.6.4) =element_navigate:
+6.6.5) =btn_round:
+6.6.6) =action_btn:
+6.6.7) =back_btn:
+6.6.8) =burger:
 
 6.8) =MENUS:
 6.8.0) =main_menu:
 6.8.1) =action_menu:
 6.8.2) =add_new:
+
+6.42) =multiplayer:
+6.42.1) =multiplayer_header:
+6.42.2) =multiplayer_button:
 
 6.69) =redDot:
 
@@ -320,6 +326,21 @@ FIN DE MAPA DE CONTENIDOS */
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+*::-webkit-scrollbar-track{
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+	border-radius: 3px;
+	background-color: transparent;
+}
+*::-webkit-scrollbar{
+	width: 4px;
+  position:relative;
+  background-color: transparent;
+}
+*::-webkit-scrollbar-thumb{
+	border-radius: 2px;
+	/* -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,.3); */
+	background-color: hsl(127, 50%, 32.5%);
 }
 body{
   background: var(--grey2);
@@ -730,6 +751,28 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
+                              6.4.2) =friend:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.friend{
+  --delete_size:20px;
+  display:grid;
+  grid-template-columns:1fr var(--delete_size);
+}
+.friend:hover .friend_delete{opacity:1}
+.friend_delete:hover{color:red}
+.friend_delete{
+  opacity:0;
+  transition:.3s;
+  cursor:pointer;
+  width:var(--delete_size);
+  height:var(--delete_size);
+}
+
+
+
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
                               6.6) =BUTTONS:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
@@ -802,7 +845,61 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                              6.6.3) =element_navigate:
+                              6.6.3) =btn_arrow:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+
+.btn_arrow{
+  --size:40px;
+  --color:var(--color1);
+  align-items:center;
+  background:none;
+  border:none;
+  cursor:pointer!important;
+  display:grid;
+  height:var(--size);
+  margin: auto;
+  /* margin-right: 15px; */
+  padding:0;
+  position: relative;
+  /* right:.5rem; */
+  /* top:.5rem; */
+  width: var(--size);
+}
+.btn_arrow_bar{
+  background:var(--color);
+  border-radius:3px;
+  height: 6px;
+  grid-column: 1;
+  grid-row:1;
+  margin-bottom:auto;
+  /* position:absolute; */
+  transform-origin: var(--origin);
+  transform: rotate(calc(var(--rotation) * 1deg));
+  width: 50%;
+}
+/* direction */
+.btn_arrow_bar:nth-child(1){
+  border-radius:2px;
+  height: calc(var(--size) - 6px);
+  margin:auto;
+  margin-bottom:0;
+  width:4px;
+}
+/* pointer 2 */
+.btn_arrow_bar:nth-child(2){
+  --rotation:45;
+  --origin:top left;
+  margin-left:auto;
+}
+/* pointer 3 */
+.btn_arrow_bar:nth-child(3){
+  --rotation:-45;
+  --origin:top right;
+}
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.6.4) =element_navigate:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
@@ -850,7 +947,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                              6.6.4) =btn_round:
+                              6.6.5) =btn_round:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
@@ -946,7 +1043,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                              6.6.5) =action_btn:
+                              6.6.6) =action_btn:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
@@ -990,7 +1087,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                              6.6.6) =back_btn:
+                              6.6.7) =back_btn:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
@@ -1035,7 +1132,7 @@ input:-webkit-autofill{-webkit-text-fill-color: var(--color1);-webkit-box-shadow
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
-                          6.6.2) =burger:
+                          6.6.8) =burger:
 ------------------------------------------------------------------------------
 --------------------------------------------------------------------------- */
 
@@ -1414,6 +1511,7 @@ input:checked ~ .colrOptP {background-color: var(--color4);}
 
 
 
+
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
                               6.32) =alert:
@@ -1423,25 +1521,118 @@ input:checked ~ .colrOptP {background-color: var(--color4);}
   transform:translate(-50%, 0);
 }
 .alert{
-  position: fixed;
-  top:0;
-  left:50%;
-  transform:translate(-50%, -100%);
+  background:var(--grey3);
   border-radius:0 0 4px 4px;
   color:var(--greyf);
-  min-width: 50%;
   display: grid;
   grid-gap:.5rem;
+  /* --hide_size:; */
+  grid-template-columns: 1fr min-content;
+  left:50%;
+  min-width: 50%;
   padding:.7rem 1.4rem;
-  z-index:99;
+  position: fixed;
+  top:0;
+  transform:translate(-50%, -100%);
   transition:.5s;
-  background:var(--grey4);
+  z-index:99;
 }
 .alert_title{
   font-size:1.2rem;
 }
+.alert .btn_close{
+  position:relative;
+}
+.alert .btn_arrow{
+  grid-row:1/3;
+  grid-column:2;
+}
+.alert_txt{
+  /* grid-column:1/-1; */
+}
 
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.42) =multiplayer:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.multiplayer{
+  display:grid;
+  grid-gap:.5rem;
+  position:absolute;
+  left:50%;
+  top: 50%;
+  transform:translate(-50%, -50%);
+  background: white;
+  border-radius:8px;
+  box-shadow:var(--DP8);
+  padding:1rem 2rem;
+  max-height:calc(100vh - 4rem);
+  overflow: scroll;
+  z-index:24;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.multiplayer::-webkit-scrollbar {
+  display: none;
+}
 
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.42.1) =multiplayer_header:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.multiplayer_header{
+  display:grid;
+  grid-template-columns: 1fr 20px;
+  grid-gap:1rem;
+}
+.multiplayer_add:focus::after{}
+.multiplayer_add{
+  grid-column: 1/-1;
+  background: transparent;
+  position: relative;
+  color:var(--grey3);
+  padding:.5rem 1rem;
+}
+.multiplayer_add::after{
+  position:absolute;
+  background: red;
+  content:'';
+  width:100%;
+  height: 2px;
+  bottom:-1px;
+  left:0;
+
+}
+/* ---------------------------------------------------------------------------
+------------------------------------------------------------------------------
+                              6.42.2) =multiplayer_button:
+------------------------------------------------------------------------------
+--------------------------------------------------------------------------- */
+.multiplayer_button{
+  display:grid;
+  align-items: center;
+  width:20px;
+}
+.multiplayer_button_bar{
+  grid-column:1;
+  grid-row:1;
+  width:100%;
+  box-shadow:var(--DP1);
+  border-radius:2px;
+  height:4px;
+  transition:.3s;
+  transform-origin: center;
+  background: var(--grey2);
+}
+.multiplayer_button_bar:nth-child(2){
+  transform: rotate(90deg)
+}
+
+.multiplayer_button:hover .multiplayer_button_bar{
+  box-shadow:var(--DP4);
+}
 
 /* ---------------------------------------------------------------------------
 ------------------------------------------------------------------------------
