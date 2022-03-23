@@ -1,18 +1,3 @@
 # list_A
 
-Version 2.1 of List-A include:
-
--Multi-element selection and edit
--Text edit
--New arquitecture with OOP
--Favorite alternate
-
-
-I will try to get this WebbApp to be here in GitHub
-
-### next feature:
-
-_permits on elements_
-_friends_
-**better data structure**
-
+A way to own your data in the cloud, without thirdparties. This web app tries to be an interface with a database in the shape of relational lists.
