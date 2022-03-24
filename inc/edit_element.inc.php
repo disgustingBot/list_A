@@ -1,4 +1,5 @@
 <?php
+// TODO: checkear por permisos primero
 include_once 'dbh.inc.php';
 
 $element_id = $_POST['element_id'];
@@ -9,7 +10,9 @@ $respuesta = array();
 $respuesta['test'] = 'test';
 
 try {
-	$update_query = "UPDATE elements SET $key = '$value' WHERE ( element_id = $element_id );";
+	// TODO: largar queries con la otra conexion (PDO) para poder editar con comillas
+	// $update_query = "UPDATE elements SET $key = '$value' WHERE ( element_id = $element_id );";
+	$update_query = "UPDATE elements SET $key = :value WHERE ( element_id = $element_id );";
 	$select_query = "SELECT * FROM elements WHERE ( element_id = $element_id AND del = 0 );";
 
 	// $qry=$conn2->prepare("UPDATE elements SET $key = '$value' WHERE ( pky = $element_id );");
@@ -20,8 +23,13 @@ try {
 
 
 	// $qry = "SELECT DISTINCT * FROM elements WHERE (pky = $element_id AND del = 0 );";
-	$ress = $conn->query($update_query);
-	$ress = $conn->query("COMMIT;");
+	// $ress = $conn->query($update_query);
+	// $ress = $conn->query("COMMIT;");
+
+	$qry=$conn2->prepare( $update_query );
+	$qry->execute( ['value' => $value] );
+
+
 	$ress = $conn->query($select_query);
 	$resp = $ress->fetch_all(MYSQLI_ASSOC);
 
