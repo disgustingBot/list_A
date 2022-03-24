@@ -8,8 +8,9 @@ w.addEventListener("load",()=>{
 	log.set_state(0);
 	d.getElementById("load").style.top="-100vh";
 });
-
-
+// list.current.forEach(element => {
+// 	console.log(element.element_id)
+// })
 
 
 
@@ -45,8 +46,8 @@ w.addEventListener('keydown', event =>{
 	if (event.keyCode == 13 && !event.shiftKey) {
 		if (d.querySelector('body').classList.contains('view_log')){
 			// c.log('hi there')
-			// accounts.log_in('mail@testing.com', 'pass')
-			accounts.log_in(d.querySelector('#log_input_mail'), d.querySelector('#log_input_pass'));
+			accounts.log_in('mail@testing.com', 'pass')
+			// accounts.log_in(d.querySelector('#log_input_mail'), d.querySelector('#log_input_pass'));
 		} else {
 			main_button.action();
 		}
@@ -164,8 +165,10 @@ const history = {
 		if(history.dbug_mode || dbug){c.log('OLD history: ', history.list)}
 		if(history.dbug_mode || dbug){c.log('OLD current list: ', list.current)}
 
-
+		// console.log(history.list[0]);
 		if(history.list[0]){
+			// console.log(history.list[0].element);
+			// console.log('.list .element_' + history.list[0].element.element_id);
 			d.querySelector('.list .element_' + history.list[0].element.element_id).classList.remove('title')
 		}
 
@@ -210,6 +213,8 @@ const favorites = {
 			let formData = new FormData();
 
 			formData.append('ppk', element.element_id);
+			// TODO: aca deberia enviar un token generado en el login
+			formData.append('user_id', accounts.logged[0].data.pky);
 
 			ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 
@@ -354,6 +359,8 @@ const favorites = {
 
 		let formData = new FormData();
 		formData.append('ppk', favs.element_id);
+		// TODO: aca deberia enviar un token generado en el login
+		formData.append('user_id', accounts.logged[0].data.pky);
 
 		ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 			response.forEach(element => {
@@ -538,6 +545,8 @@ const list = {
 			let formData = new FormData();
 
 			formData.append('ppk', element.element_id);
+			// TODO: aca deberia enviar un token generado en el login
+			formData.append('user_id', accounts.logged[0].data.pky);
 
 			ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 
@@ -548,7 +557,7 @@ const list = {
 	},
 
 	/*
-	clear
+	=list.clear
 
 	vacía la lista actual dejandola vacia. Se encarga tambien de quitar elementos
 	de la pantalla
@@ -569,6 +578,7 @@ const list = {
 	},
 
 	/*
+	=list.add
 	adds element to list
 
 	añade elemento a la lista actual y lo dibuja en la pantalla
@@ -613,7 +623,7 @@ const list = {
 
 
 	/*
-	update element
+	=list.update element
 
 	actualiza el dibujo del elemento seleccionado
 	PARAMETROS:
@@ -645,7 +655,7 @@ const list = {
 				// TODO: ahora el tema es que al eliminar y volver a crear me quita tambien la seleccion
 				list.remove(element)
 				list.add(element, index)
-				selection.select(element)
+				// selection.select(element)
 			}
 		}
 
@@ -656,7 +666,7 @@ const list = {
 
 
 	/*
-	remove element from list
+	=list.remove element from list
 
 	quita el elemento de la lista actual, lo remueve de la pantalla
 	y de la seleccion actual
@@ -692,13 +702,18 @@ const list = {
 	},
 
 
-
+	/*
+	=list.load
+	*/
 	// TODO: hacer un filtro de priority
 	load:(parent = false)=>{
 		// c.log(parent.pky);
 		let formData = new FormData();
 
 		formData.append('ppk', parent.element_id);
+		// TODO: aca deberia enviar un token generado en el login
+		formData.append('user_id', accounts.logged[0].data.pky);
+
 
 		ajax2(formData, 'inc/load_elements.inc.php').then(response => {
 			// c.log(response);
@@ -757,7 +772,7 @@ const factory = {
 			- group => TODO: ver que hace esto
 	*/
 	create:(text,priority,date,user,base,parent,group)=>{
-		let dbug = 0; // debug mode
+		let dbug = 1; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion create de factory', '#5FA')}
 
 		if(!text){return}
@@ -780,6 +795,8 @@ const factory = {
 		// if(upk == ''){upk = null}
 		// c.log(dte);
     let formData = new FormData();
+		// TODO: aca deberia enviar un token generado en el login
+		formData.append('user_id', accounts.logged[0].data.pky);
 
 		formData.append('text', text);
 		formData.append('priority', priority);
@@ -790,10 +807,15 @@ const factory = {
 		formData.append('group', group);
 
     ajax2(formData, 'inc/create_element.inc.php').then(response => {
-			if(list.dbug_mode || dbug){c.log('respuesta: ', response)}
-			if(list.dbug_mode || dbug){c.log('elemento a añadir: ', response.element)}
-			list.add(response.element);
-			if(list.dbug_mode || dbug){c.lof('finaliza la funcion create de factory', '#F35')}
+			if (response.title == "Error"){
+				notify(response.title, response.message);
+			} else {
+
+				if(list.dbug_mode || dbug){c.log('respuesta: ', response)}
+				if(list.dbug_mode || dbug){c.log('elemento a añadir: ', response.element)}
+				list.add(response.element);
+				if(list.dbug_mode || dbug){c.lof('finaliza la funcion create de factory', '#F35')}
+			}
 		});
 	},
 
@@ -830,7 +852,7 @@ const factory = {
 			- remove => si es true se elimina el elemento de la lista
 	*/
 	edit: (element, key, value, remove = false) => {
-		let dbug = 0; // debug mode
+		let dbug = 1; // debug mode
 		if(list.dbug_mode || dbug){c.lof('comienza la funcion edit de factory', '#5FA')}
 
 		if(element[key] != value){
@@ -843,19 +865,22 @@ const factory = {
 			formData.append('value', value);
 
 			ajax2(formData, 'inc/edit_element.inc.php').then(response => {
-				// c.log(response)
-				if( remove ){
-					if(list.dbug_mode || dbug){c.lof('remover elemento de la pantalla', '#5AF')}
-					list.remove(element);
-					// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
+				if (response.title == "Error"){
+					notify(response.title, response.message);
 				} else {
-					if(list.dbug_mode || dbug){c.lof('actualizar elemento en la pantalla', '#5AF')}
-					// response.element.element_id = response.element.element_id;
-					// c.log(response.element);
-					if(list.dbug_mode || dbug){c.log('Nuevo elemento', response.element)}
-					list.update(response.element);
+					if( remove ){
+						if(list.dbug_mode || dbug){c.lof('remover elemento de la pantalla', '#5AF')}
+						list.remove(element);
+						// d.querySelector(".list").removeChild(d.querySelector('.element_'+element.element_id));
+					} else {
+						if(list.dbug_mode || dbug){c.lof('actualizar elemento en la pantalla', '#5AF')}
+						// response.element.element_id = response.element.element_id;
+						// c.log(response.element);
+						if(list.dbug_mode || dbug){c.log('Nuevo elemento', response.element)}
+						list.update(response.element);
+					}
+					if(list.dbug_mode || dbug){c.lof('finaliza la funcion edit de factory', '#F35')}
 				}
-				if(list.dbug_mode || dbug){c.lof('finaliza la funcion edit de factory', '#F35')}
 			})
 		}
 	},
@@ -1291,6 +1316,7 @@ const accounts = {
     */
     // TODO: -make this multiple account compatible
     log_in:(mail, password)=>{
+			console.log('history zero', history.list[0]);
 			if( !mail || !password ){
 				log.message('At least write something...', 'red');
 				return;
@@ -1301,40 +1327,43 @@ const accounts = {
         formData.append('pwd', password);
 
         ajax2(formData, 'inc/log_in.inc.php').then(response => {
-					if(response.title == 'Success'){
-						accounts.logged.push(response);
-						// notify(response.title, response.message);
-						c.log(response)
-						// c.log(accounts.logged);
-						user_base = JSON.parse(response.base);
-						user_home = JSON.parse(response.home);
+			c.log(response)
+			if(response.title == 'Success'){
+				accounts.logged.push(response);
+				// notify(response.title, response.message);
+				// c.log(accounts.logged);
+				user_base = JSON.parse(response.base);
+				user_home = JSON.parse(response.home);
 
 
 
-						// TODO: aqui hay un problema
-						// c.log(user_base);
-						// c.log('home: ', user_home);
-						// user_base.ppk = user_base.pky;
+				// TODO: aqui hay un problema
+				// c.log(user_base);
+				// c.log('home: ', user_home);
+				// user_base.ppk = user_base.pky;
+				console.log('groups: ', JSON.parse(response.groups   ));
 
-						accounts.update_card(response);
-						// favorites.draw( response.home, 0);
-						favorites.draw( JSON.parse(response.home     ), 0);
-						favorites.draw( JSON.parse(response.favorites), 1);
-						favorites.draw( JSON.parse(response.groups   ), 2);
-						favorites.draw( JSON.parse(response.friends  ), 3);
-						favorites.load();
-						home_entry      = { element:JSON.parse(response.home), }
-						favorites_entry = { element:JSON.parse(response.favorites), }
+				accounts.update_card(response);
+				// favorites.draw( response.home, 0);
+				favorites.draw( JSON.parse(response.home     ), 0);
+				favorites.draw( JSON.parse(response.favorites), 1);
+				// favorites.draw( JSON.parse(response.groups   ), 2);
+				// favorites.draw( JSON.parse(response.friends  ), 3);
+				favorites.load();
+				home_entry      = { element:JSON.parse(response.home), }
+				favorites_entry = { element:JSON.parse(response.favorites), }
 
-						first_entry     = { element:JSON.parse(response.home), }
-						history.go_to(first_entry)
+				console.log(response.home);
+				console.log(JSON.parse(response.home));
+				first_entry     = { element:JSON.parse(response.home), }
+				history.go_to(first_entry)
 
-						select_view('view_main button0');
-						log.message('YEEEEEY!!', 'red');
+				select_view('view_main button0');
+				log.message('YEEEEEY!!', 'red');
 
-					} else {
-						log.message(response.message, 'red');
-					}
+			} else {
+				log.message(response.message, 'red');
+			}
         })
     },
 
@@ -1583,6 +1612,7 @@ async function ajax2(formData, url) {
 			body: formData,
 			// mode: 'no-cors',
 		});
+		// return await response.text();
 		return await response.json();
 	}catch(err){
 		console.error(err);
@@ -1603,6 +1633,23 @@ async function ajax3(formData, url) {
 }
 
 // TODO: chequear codigo de cookie handling
-function new_cookie (n,value,days){if(days){var date=new Date();date.setTime(date.getTime()+(days*24*60*60*1000));var expires="; expires="+date.toUTCString();}else var expires="";d.cookie=n+"="+value+expires+"; path=/";}
-function get_cookie (n){var m=n+"=",a=d.cookie.split(';');for(var i=0;i<a.length;i++){var c=a[i];while(c.charAt(0)==' ')c=c.substring(1,c.length);if(c.indexOf(m)==0)return c.substring(m.length,c.length);}return null;}
-function delete_cookie(n){createCookie(n,"",-1)}
+function new_cookie (n,value,days){
+	if(days){
+		var date=new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires="; expires="+date.toUTCString();
+	} else var expires="";
+	d.cookie=n+"="+value+expires+"; path=/";
+}
+function get_cookie (n){
+	var m=n+"=",a=d.cookie.split(';');
+	for(var i=0;i<a.length;i++){
+		var c=a[i];
+		while(c.charAt(0)==' ')c=c.substring(1,c.length);
+		if(c.indexOf(m)==0)return
+		c.substring(m.length,c.length);
+	}return null;
+}
+function delete_cookie(n){
+	createCookie(n,"",-1)
+}

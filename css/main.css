@@ -102,8 +102,8 @@ FIN DE MAPA DE CONTENIDOS */
   --greyf:#FFFFFF;
 
 
-  --color1:#4cff62;
   /* --color1:#FECC00; */
+  --color1:#4cff62;
   --color2:#1C1B17;
   --color3:#424242;
   --color4:#5B5B5B;
@@ -113,12 +113,16 @@ FIN DE MAPA DE CONTENIDOS */
 
   /* Colores de "priority" */
   /* --clrPty1:#FECC00; */
-  --clrPty1:#4cff62;
-  --clrPty2:#F44336;
-  --clrPty3:#ffc107;
-  --clrPty4:#42A5F5;
-  --clrPty5:#FEFEFE;
-  --clrPty6:#434242;
+  --clrPty1:#424242;
+  --clrPty2:#FEFEFE;
+
+  --clrPty3:#e40303;
+  --clrPty4:#ff8c00;
+  --clrPty5:#ffed00;
+  --clrPty6:#008026;
+  --clrPty7:#004dff;
+  --clrPty8:#750787;
+
 
   --DP0:  0px 0px 0px  rgba(0, 0, 0, 0.0),  0px 0px 0px  rgba(0, 0, 0, 0.00), 0px 0px 0px   rgba(0, 0, 0, 0.00);
   --DP1:  0px 1px 3px  rgba(0, 0, 0, 0.2),  0px 2px 2px  rgba(0, 0, 0, 0.12), 0px 0px 2px   rgba(0, 0, 0, 0.14);
@@ -1127,8 +1131,17 @@ body:not(.view_main) .action_menu {
   display: flex;
   border-bottom: solid 1px var(--color4);
   flex-direction: column;
-  /* max-height: 0; */
-
+  max-height: 0;
+  /* transform:scaleY(0); */
+  transition:.3s;
+}
+.selection_menu.alt{
+  max-height: 117px;
+  /* transform:scaleY(1); */
+}
+.edit_menu.alt{
+  max-height: 320px;
+  /* transform:scaleY(1); */
 }
 
 /* ---------------------------------------------------------------------------
@@ -1213,18 +1226,18 @@ body:not(.view_main) .add_new {
 .add_new_prty {grid-column:5/6; border-radius: 10px 0 0 0;}
 .add_new_colr {
   position:fixed;
-  z-index: 9;
   right:0;
-  bottom:-250px;
-  /*bottom:84px;*/
+  bottom:-320px;
+  /* bottom:100px; */
   background: var(--color3);
   display: flex;
   flex-direction: column;
   text-align: left;
   border-radius: 8px 8px 0 0;
   transition: .5s;
+  z-index: -1;
 }
-.add_new_prty:focus + .add_new_colr, .add_new_colr:focus {bottom:84px;}
+.add_new_prty:focus + .add_new_colr, .add_new_colr:focus {bottom:100px;}
 .noSelect {
     -webkit-touch-callout:none;
     -webkit-user-select:  none;
@@ -1265,12 +1278,14 @@ input:checked ~ .colrOptP {background-color: var(--color4);}
 .colrOption:selected {background-color: #ccc;}
 
 
-#amrCirc {background-color: var(--clrPty1);}
-#rojCirc {background-color: var(--clrPty2);}
-#verCirc {background-color: var(--clrPty3);}
-#azlCirc {background-color: var(--clrPty4);}
-#blcCirc {background-color: var(--clrPty5);}
-#njaCirc {background-color: var(--clrPty6);box-shadow:none;}
+.bg_color_1 {background-color: var(--clrPty1);}
+.bg_color_2 {background-color: var(--clrPty2);box-shadow:none;}
+.bg_color_3 {background-color: var(--clrPty3);}
+.bg_color_4 {background-color: var(--clrPty4);}
+.bg_color_5 {background-color: var(--clrPty5);}
+.bg_color_6 {background-color: var(--clrPty6);}
+.bg_color_7 {background-color: var(--clrPty7);}
+.bg_color_8 {background-color: var(--clrPty8);}
 
 .checkmark {
   position: absolute;
@@ -1278,7 +1293,7 @@ input:checked ~ .colrOptP {background-color: var(--color4);}
   left:18px;
   height: 24px;
   width:  24px;
-  background-color: #eee;
+  /* background-color: #eee; */
   border-radius: 50%;
   box-shadow: 0px  10px  10px  1px rgba(0, 0, 0, 0.2),   0px 0px  8px  4px  rgba(0, 0, 0, 0.14);
 }
