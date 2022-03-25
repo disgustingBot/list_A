@@ -137,7 +137,7 @@
 					method: 'POST',
 					body: formData,
 				});
-				console.log(await response.json())
+				console.log(await response.text())
 			})();
 
 
