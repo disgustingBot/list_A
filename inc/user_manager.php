@@ -3,13 +3,14 @@
 
 CRUD for users
 
-
-
 */
+include_once 'dbh.inc.php';
+
 
 
 
 class UserManager {
+    
     public $defaults = array(
         'mail' => 'default_mail',
         'nick' => 'default_nick',
@@ -19,13 +20,12 @@ class UserManager {
     );
    
    
-    // function create($user = $this->default) {
     function create($user) {
         $user = $this->set_defaults($user);
         if( $this->is_invalid_mail ($user['mail'])){ return False; }
         if( $this->is_mail_taken   ($user['mail'])){ return False; }
 
-        return $user['mail'];
+        return $this->is_mail_taken($user['mail']);
     }
     function read(){
         return 1;
@@ -48,6 +48,10 @@ class UserManager {
 
     function is_invalid_mail($mail){ return !filter_var($mail, FILTER_VALIDATE_EMAIL); }
     function is_mail_taken($mail){
-        return False;
+        $conn = get_db_connection();
+	    $query = "SELECT * FROM users WHERE eml = '$mail';";
+        $response = $conn->query($query)->fetchAll();
+
+        return (count($response) > 0);
     }
 }

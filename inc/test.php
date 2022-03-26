@@ -4,7 +4,7 @@ include_once 'user_manager.php';
 
 $users = new UserManager();
 $user = array(
-    'mail' => 'a@a.c',
+    'mail' => 'molinerozadkiel@gmail.com',
     // 'nick' => '',
     'pass' => '',
 );

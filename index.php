@@ -127,7 +127,7 @@
 
 		<button class="btn" id="log_left_button" onclick="log.set_state(2)"></button>
 		<button class="btn btn_special" id="log_right_button" onclick="log.set_state(1)"></button>
-		<!-- <button class="btn" style="grid-column:1/-1" onclick="
+		<button class="btn" style="grid-column:1/-1" onclick="
 			
 			let formData = new FormData();
 			formData.append('key', 'value');
@@ -141,7 +141,7 @@
 			})();
 
 
-		">Test</button> -->
+		">Test</button>
 		<!-- <button class="btn btn_special" id="" onclick="accounts.log_in(d.getElementById('logInputMail').value,d.getElementById('logInputPass').value)">sign in</button> -->
 	</view>
 
