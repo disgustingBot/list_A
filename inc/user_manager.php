@@ -10,22 +10,13 @@ include_once 'dbh.inc.php';
 
 
 class UserManager {
-    
-    public $defaults = array(
-        'mail' => 'default_mail',
-        'nick' => 'default_nick',
-        'pass' => 'default_pass',
-        'name' => 'default_name',
-        'last' => 'default_last',
-    );
-   
    
     function create($user) {
-        $user = $this->set_defaults($user);
-        if( $this->is_invalid_mail ($user['mail'])){ return False; }
-        if( $this->is_mail_taken   ($user['mail'])){ return False; }
+        if( $this->is_invalid_mail ($user['mail'])){ throw new InvalidMail("provided email doesn't look like an e-mail"); }
+        if( $this->is_mail_taken   ($user['mail'])){ throw new TakenMail("it seems there already is an account with that email"); }
+        if( strlen($user['pass']) < 6 )            { throw new PasswordError("you forgot to add password security"); }
 
-        return $this->is_mail_taken($user['mail']);
+        return strlen($user['pass']);
     }
     function read(){
         return 1;
@@ -39,12 +30,6 @@ class UserManager {
 
 
 
-    function set_defaults($data){
-        foreach ( $this->defaults as $key => $value ) {
-            if( !isset($data[$key] )){ $data[$key] = $value; }
-        }
-        return $data;
-    }
 
     function is_invalid_mail($mail){ return !filter_var($mail, FILTER_VALIDATE_EMAIL); }
     function is_mail_taken($mail){
@@ -54,4 +39,22 @@ class UserManager {
 
         return (count($response) > 0);
     }
+}
+
+
+
+
+
+
+/**
+ * Definir una clase de excepción personalizada
+ */
+class TakenMail extends Exception {
+    protected $code = 400;                        // código de excepción definido por el usuario
+}
+class InvalidMail extends Exception {
+    protected $code = 401;                        // código de excepción definido por el usuario
+}
+class PasswordError extends Exception {
+    protected $code = 402;                        // código de excepción definido por el usuario
 }
