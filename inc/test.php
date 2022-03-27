@@ -2,11 +2,20 @@
 include_once 'user_manager.php';
 
 
-$users = new UserManager();
 $user = array(
-    'mail' => 'molinerozadkiel@gmail.com',
+    'mail' => 'molinerozadkiel@gmailcom',
     // 'nick' => '',
-    'pass' => '',
+    'pass' => '123',
 );
-$bar = $users->create($user);
+
+// daily commit
+
+try {
+    $user_manager = new UserManager();
+    $bar = $user_manager->create($user);
+} catch (InvalidMail $e) {
+    $bar = $e->getCode();
+    // $bar = $e->getMessage();
+}
+
 echo json_encode(['test' => $bar]);
