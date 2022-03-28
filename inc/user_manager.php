@@ -16,7 +16,14 @@ class UserManager {
         if( $this->is_mail_taken   ($user['mail'])){ throw new TakenMail("it seems there already is an account with that email"); }
         if( strlen($user['pass']) < 6 )            { throw new PasswordError("you forgot to add password security"); }
 
-        return strlen($user['pass']);
+        $user['hash'] = password_hash($user['pass'], PASSWORD_DEFAULT); // Hashing the password
+
+        $conn = get_db_connection();
+        $sql = "INSERT INTO users (uid,fst,lst,eml,pwd) VALUES ('$user[nick]','$user[name]','$user[last]','$user[mail]','$user[hash]');";
+        // $qry=$conn->prepare($sql);
+        // $qry->execute();
+
+        return "'$user[hash]'";
     }
     function read(){
         return 1;
