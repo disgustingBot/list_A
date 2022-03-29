@@ -2,10 +2,18 @@
 include_once 'user_manager.php';
 
 
+// $user = array(
+//     'mail' => 'molinerozadkiel@gmail.om',
+//     // 'nick' => '',
+//     'pass' => '123123123',
+// );
+
 $user = array(
-    'mail' => 'molinerozadkiel@gmail.om',
-    // 'nick' => '',
-    'pass' => '123123123',
+    'mail' => 'user@manager.net',
+    'nick' => 'user',
+    'pass' => 'salibaba',
+    'name' => 'oh my',
+    'last' => 'goat',
 );
 
 

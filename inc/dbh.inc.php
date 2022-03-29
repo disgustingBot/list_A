@@ -12,11 +12,11 @@ function get_db_connection(){
     $db_name = $config["access_data"]["name"];
 
     $pdo_dsn='mysql:dbname='.$db_name.';host='.$db_host;
-    $conn2 = new PDO($pdo_dsn, $db_user, $db_pass);
+    $db = new PDO($pdo_dsn, $db_user, $db_pass);
     
-    $conn2->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    $conn2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    return $conn2;
+    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $db;
 }
 
 // echo $config["access_data"]["host"];
