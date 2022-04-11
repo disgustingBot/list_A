@@ -3,7 +3,7 @@
 	// version de List-A
 	$version='5.01';
 
-	
+
 	// $config_file = "inc/config.ini";
 	// $config = parse_ini_file($config_file, true);
 ?>
@@ -22,7 +22,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css?v=<?= $version; ?>">
 	<!-- <link rel="stylesheet" type="text/css" href="css/style.css?v=<?= $version; ?>"> -->
 
-	<!-- longer comment -->
+	<!-- daily commit? hehehe -->
 
 
 
@@ -128,7 +128,7 @@
 		<button class="btn" id="log_left_button" onclick="log.set_state(2)"></button>
 		<button class="btn btn_special" id="log_right_button" onclick="log.set_state(1)"></button>
 		<button class="btn" style="grid-column:1/-1" onclick="
-			
+
 			let formData = new FormData();
 			formData.append('key', 'value');
 
