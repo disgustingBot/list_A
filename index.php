@@ -1,7 +1,7 @@
 <?php session_start(); ?>
 <?php
 	// version de List-A
-	$version='5.01';
+	$version='5.01.00';
 
 
 	// $config_file = "inc/config.ini";
@@ -22,7 +22,7 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css?v=<?= $version; ?>">
 	<!-- <link rel="stylesheet" type="text/css" href="css/style.css?v=<?= $version; ?>"> -->
 
-	<!-- daily commit? hehehe -->
+	<!-- some of these commits are doomed to be trivial, I guess -->
 
 
 
