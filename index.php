@@ -1,11 +1,22 @@
 <?php session_start(); ?>
 <?php
-	// version de List-A
-	$version='5.01.00';
+// version de List-A
+$version='5.01.00';
 
 
-	// $config_file = "inc/config.ini";
-	// $config = parse_ini_file($config_file, true);
+
+
+
+
+
+
+// I don't have a static IP, will have to ask for one or find a different solution
+
+
+
+
+// $config_file = "inc/config.ini";
+// $config = parse_ini_file($config_file, true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
