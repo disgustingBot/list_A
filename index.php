@@ -29,7 +29,7 @@ $version='5.01.00';
 	<link rel="stylesheet" type="text/css" href="css/main.css?v=<?= $version; ?>">
 	<!-- <link rel="stylesheet" type="text/css" href="css/style.css?v=<?= $version; ?>"> -->
 
-	<!-- some of these commits are doomed to be trivial, I guess -->
+	<!-- hehe -->
 	<!-- I need to come back to this project pretty soon, but I cannot find the motivation -->
 
 
